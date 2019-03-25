@@ -7,6 +7,7 @@ from model.cdn import CDN
 from model.functions import *
 import tensorflow as tf
 
+
 if __name__=="__main__":
 
     """
@@ -51,17 +52,12 @@ if __name__=="__main__":
 
     # Training mode
     if mode == "train":
-        with tf.Session() as sess:
-            cdn = CDN(sess=sess,
-                      model_dir=model_dir,
-                      model_name=model_name,
-                      batch_size=batch_size,
-                      learning_rate=learning_rate,
-                      num_steps=num_steps)
-
-            # Start training
-            cdn.train(input_path=data_path)
-
+        training(data_path=data_path,
+                 model_dir=model_dir,
+                 model_name=model_name,
+                 batch_size=batch_size,
+                 learning_rate=learning_rate,
+                 num_steps=num_steps)
 
     """
     PREDICTION

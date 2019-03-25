@@ -7,6 +7,99 @@ import numpy as np
 import tensorflow as tf
 from sklearn import preprocessing as pp
 import pandas as pd
+from model.cdn import CDN
+
+"""
+PARAMETERS
+"""
+# ==========================================#
+SMALL_HIDDEN_UNITS = [256, 128, 64, 32]
+MID_HIDDEN_UNITS = [512, 256, 128, 64]
+LARGE_HIDDEN_UNITS = [1024, 512, 256, 128]
+SMALL_DO_RATES = [0, 0, 0, 0]
+MID_DO_RATES = [0, 0.3, 0.2, 0.1]
+LARGE_DO_RATES = [0, 0.6, 0.3, 0.1]
+
+
+# ==========================================#
+
+
+def training(data_path, model_dir, model_name, batch_size, learning_rate, num_steps):
+    """
+    Perform training of one CDN ensemble
+    :param model_dir:
+    :param model_name:
+    :param batch_size:
+    :param learning_rate:
+    :param num_steps:
+    :return:
+    """
+    # Training of small model
+    with tf.Session() as sess:
+        cdn256 = CDN(sess=sess,
+                     model_dir=model_dir,
+                     model_name=model_name,
+                     batch_size=batch_size,
+                     learning_rate=learning_rate,
+                     num_steps=num_steps)
+        cdn256.train(input_path=data_path)
+
+    # Training of mid model
+    with tf.Session() as sess:
+        cdn512 = CDN(sess=sess,
+                     model_dir=model_dir,
+                     model_name=model_name,
+                     batch_size=batch_size,
+                     learning_rate=learning_rate,
+                     num_steps=num_steps)
+        cdn512.hidden_units = MID_HIDDEN_UNITS
+        cdn512.do_rates = MID_DO_RATES
+        cdn512.train(input_path=data_path)
+
+    # Training of large model
+    with tf.Session() as sess:
+        cdn1024 = CDN(sess=sess,
+                      model_dir=model_dir,
+                      batch_size=batch_size,
+                      learning_rate=learning_rate,
+                      num_steps=num_steps)
+        cdn1024.hidden_units = LARGE_HIDDEN_UNITS
+        cdn1024.do_rates = LARGE_DO_RATES
+        cdn1024.train(input_path=data_path)
+
+
+def prediction(model_dir, model_name, batch_size, learning_rate, scaling_option):
+    """
+    Perform prediction using a trained CDN ensemble
+    :return:
+    """
+
+    # Small model predictions
+    with tf.Session() as sess:
+        cdn256 = CDN(sess=sess,
+                     model_dir=model_dir,
+                     model_name=model_name,
+                     batch_size=batch_size,
+                     learning_rate=learning_rate,
+                     scaling=scaling_option)
+
+
+    # Mid model predictions
+
+    # Large model predictions
+
+    with tf.Session() as sess:
+        cdn = CDN(sess=sess,
+                  model_dir=model_dir,
+                  model_name=model_name,
+                  batch_size=batch_size,
+                  learning_rate=learning_rate,
+                  scaling=scaling_option)
+
+        # Predict ratios
+        cdn.predict(input_path=data_path, out_dir=out_dir, out_name=out_name, training_data=training_data)
+
+    return None
 
 
 def dummy_labels(m, labels):
