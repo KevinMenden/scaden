@@ -38,8 +38,10 @@ class CDN(object):
         self.eval_freq = 1000
         self.report_freq = 200
         self.eval_steps = 1
+        self.hidden_units=[256, 128, 64, 32]
+        self.do_rates=[0,0,0,0]
 
-    def model_fn(self, X, n_classes, hidden_units=[256, 128, 64, 32], do_rates=[0, 0, 0, 0], reuse=False):
+    def model_fn(self, X, n_classes,reuse=False):
         """
         Neural network model function
         :param X: input batch
@@ -51,14 +53,14 @@ class CDN(object):
         activation = tf.nn.relu
         with tf.variable_scope("cdn_model", reuse=reuse):
 
-            layer1 = tf.layers.dense(X, units=hidden_units[0], activation=activation , name="dense1")
-            do1 = tf.layers.dropout(layer1, rate=do_rates[0], training=self.training_mode, name="dropout1")
-            layer2 = tf.layers.dense(do1, units=hidden_units[1], activation=activation , name="dense2")
-            do2 = tf.layers.dropout(layer2, rate=do_rates[1], training=self.training_mode, name="dropout2")
-            layer3 = tf.layers.dense(do2, units=hidden_units[2], activation=activation , name="dense3")
-            do3 = tf.layers.dropout(layer3, rate=do_rates[2], training=self.training_mode, name="dropout3")
-            layer4 = tf.layers.dense(do3, units=hidden_units[3], activation=activation , name="dense4")
-            do4 = tf.layers.dropout(layer4, rate=do_rates[3], training=self.training_mode, name="dropout4")
+            layer1 = tf.layers.dense(X, units=self.hidden_units[0], activation=activation , name="dense1")
+            do1 = tf.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode, name="dropout1")
+            layer2 = tf.layers.dense(do1, units=self.hidden_units[1], activation=activation , name="dense2")
+            do2 = tf.layers.dropout(layer2, rate=self.do_rates[1], training=self.training_mode, name="dropout2")
+            layer3 = tf.layers.dense(do2, units=self.hidden_units[2], activation=activation , name="dense3")
+            do3 = tf.layers.dropout(layer3, rate=self.do_rates[2], training=self.training_mode, name="dropout3")
+            layer4 = tf.layers.dense(do3, units=self.hidden_units[3], activation=activation , name="dense4")
+            do4 = tf.layers.dropout(layer4, rate=self.do_rates[3], training=self.training_mode, name="dropout4")
             logits = tf.layers.dense(do4, units=n_classes, activation=tf.nn.softmax, name="logits_layer")
 
             return logits
