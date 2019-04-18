@@ -10,9 +10,10 @@ Contains code to
 
 # Imports
 import tensorflow as tf
-import pandas as pd
+import scanpy.api as sc
 from CDN.model.architectures import architectures
 from CDN.model.cdn import CDN
+from CDN.model.functions import *
 
 """
 PARAMETERS
@@ -87,6 +88,9 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 def prediction(model_dir, data_path, out_name):
     """
     Perform prediction using a trained CDN ensemble
+    :param model_dir: the directory containing the models
+    :param data_path: the path to the gene expression file
+    :param out_name: name of the output prediction file
     :return:
     """
 
@@ -132,3 +136,20 @@ def prediction(model_dir, data_path, out_name):
     preds.to_csv(out_name, sep="\t")
 
 
+def processing(data_path, training_data, processed_path):
+    """
+    Process a training dataset to contain only the genes also available in the prediction data
+    :param data_path: path to prediction data
+    :param training_data: path to training data (h5ad file)
+    :param processed_path: name of processed file
+    :return:
+    """
+    # Get the common genes (signature genes)
+    raw_input = sc.read_h5ad(training_data)
+    sig_genes_complete = list(raw_input.var_names)
+    sig_genes = get_signature_genes(input_path=data_path, sig_genes_complete=sig_genes_complete)
+
+    # Pre-process data with new signature genes
+    preprocess_h5ad_data(raw_input_path=training_data,
+                         processed_path=processed_path,
+                         sig_genes=sig_genes)

@@ -26,6 +26,7 @@ if __name__=="__main__":
     parser.add_argument("--learning_rate", "-l", type=float, help="Learning rate. Default: 0.0001", default=0.0001)
     parser.add_argument("--steps", type=int, help="Number of steps to use for training", default=1000)
     parser.add_argument("--processed_path", type=str, help="Out path for processed data", default="./processed.h5ad")
+    parser.add_argument("--training_data", type=str, help="The training dataset that should be processed.")
     parser.add_argument("--scaling", type=str, help="Scaling option. Default: log_min_max", default="log_min_max")
     parser.add_argument("--outname", type=str, help="Name of the prediction output file. Default: cdn_predictions.txt", default="cdn_predictions.txt")
     parser.add_argument("--datasets", type=str, nargs='+', help="Datasets to use for training", default=['data6k', 'data8k', 'donorA', 'donorC', 'GSE65133'])
@@ -42,6 +43,7 @@ if __name__=="__main__":
     scaling_option = args.scaling
     out_name = args.outname
     train_datasets = args.datasets
+    training_data = args.training_data
 
     # Training mode
     if mode == "train":
@@ -60,5 +62,7 @@ if __name__=="__main__":
 
     # Processing mode
     if mode == "process":
-        pass
+        cdn_main.processing(data_path=data_path,
+                            training_data=training_data,
+                            processed_path=processed_path)
 

@@ -43,8 +43,7 @@ def sample_scaling(x, scaling_option):
 
 
 
-def preprocess_h5ad_data(raw_input_path, scaling_option, processed_path,
-                         group_small=True, signature_genes=True, alt_sig_genes=None):
+def preprocess_h5ad_data(raw_input_path, processed_path, scaling_option="log_min_max",  sig_genes=None):
     """
     Preprocess raw input data for the model
     :param raw_input_path:
@@ -56,25 +55,9 @@ def preprocess_h5ad_data(raw_input_path, scaling_option, processed_path,
     print("Pre-processing raw data ...")
     raw_input = sc.read_h5ad(raw_input_path)
 
-    print("Grouping small cell types ...")
-    # Group unknown celltypes together if desired
-    if group_small:
-        for cell_type in raw_input.uns['unknown'][1:]:
-            raw_input.obs[raw_input.uns['unknown'][0]] += raw_input.obs[cell_type]
-            del raw_input.obs[cell_type]
-
-        new_cell_types = list(raw_input.obs.columns)
-        new_cell_types.remove('ds')
-        new_cell_types.remove('batch')
-        raw_input.uns['cell_types'] = np.array(new_cell_types)
-
     print("Subsetting genes ...")
     # Select features go use
-    if signature_genes:
-        if alt_sig_genes == None:
-            raw_input = raw_input[:, raw_input.uns['sig_genes']]
-        else:
-            raw_input = raw_input[:, alt_sig_genes]
+    raw_input = raw_input[:, sig_genes]
 
     print("Scaling using " + str(scaling_option))
     # Scaling
@@ -96,9 +79,10 @@ def get_signature_genes(input_path, sig_genes_complete, var_cutoff=0.1):
     data = pd.read_table(input_path, index_col=0)
     keep = data.var(axis=1) > var_cutoff
     data = data.loc[keep]
-    print(data.shape)
     available_genes = list(data.index)
     new_sig_genes = list(set(available_genes).intersection(sig_genes_complete))
+    n_sig_genes = len(new_sig_genes)
+    print(f"Found {n_sig_genes} common genes.")
     return new_sig_genes
 
 
