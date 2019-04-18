@@ -89,10 +89,6 @@ def prediction(model_dir, data_path, out_name):
     Perform prediction using a trained CDN ensemble
     :return:
     """
-    preds_256 = None
-    preds_512 = None
-    preds_1024 = None
-
 
     # Small model predictions
     tf.reset_default_graph()
@@ -134,7 +130,5 @@ def prediction(model_dir, data_path, out_name):
     # Average predictions
     preds = (preds_256 + preds_512 + preds_1024) / 3
     preds.to_csv(out_name, sep="\t")
-
-    return None
 
 

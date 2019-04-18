@@ -8,6 +8,7 @@ import pandas as pd
 import scanpy.api as sc
 import collections
 from .functions import dummy_labels, sample_scaling
+from tqdm import tqdm
 
 class CDN(object):
     """
@@ -31,7 +32,6 @@ class CDN(object):
         self.scaling="log_min_max"
         self.sig_genes=None
         self.sample_names=None
-        self.report_freq = 200
         self.hidden_units = [256, 128, 64, 32]
         self.do_rates = [0, 0, 0, 0]
 
@@ -265,12 +265,13 @@ class CDN(object):
         self.load_weights(self.model_dir)
 
         # Training loop
-        for step in range(self.num_steps):
+        pbar = tqdm(range(self.num_steps))
+        for _ in pbar:
             _, loss, summary = self.sess.run([self.optimizer, self.loss, self.merged_summary_op])
-
             self.writer.add_summary(summary, tf.train.global_step(self.sess, self.global_step))
-            if step % self.report_freq == 0:
-                print("Step: " +  str(tf.train.global_step(self.sess, self.global_step)) + ", Loss: " + str(loss))
+            description = "Step: " + str(tf.train.global_step(self.sess, self.global_step)) + ", Loss: {:4.3f}".format(
+                loss)
+            pbar.set_description(desc=description)
 
         # Save the trained model
         self.saver.save(self.sess, model, global_step=self.global_step)
