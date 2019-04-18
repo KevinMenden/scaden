@@ -12,8 +12,6 @@ from CDN.model.functions import *
 import tensorflow as tf
 from CDN import cdn_main
 
-
-
 if __name__=="__main__":
 
     # Argument parser
