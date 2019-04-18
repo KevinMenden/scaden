@@ -1,70 +1,61 @@
 """
-CDN Model
-author: Kevin Menden
-"""
-
-"""
 Cell Deconvolutional Network (CDN) class
 """
 import os
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-from model.functions import *
+import scanpy.api as sc
+import collections
+from .functions import dummy_labels, sample_scaling
 
 class CDN(object):
     """
     CDN class
     """
 
-    def __init__(self, sess, model_dir, batch_size, learning_rate, model_name, num_steps=1000, scaling="log_min_max"):
+    def __init__(self, sess, model_dir, model_name, batch_size=128, learning_rate=0.0001,  num_steps=1000):
         self.sess=sess
         self.model_dir=model_dir
         self.batch_size=batch_size
         self.model_name=model_name
         self.beta1=0.9
         self.beta2=0.999
-        self.alpha_0=learning_rate
-        self.alpha_final=learning_rate/10
+        self.learning_rate=learning_rate
         self.data=None
         self.n_classes=None
         self.labels=None
         self.x=None
         self.y=None
         self.num_steps=num_steps
-        self.scaling=scaling
+        self.scaling="log_min_max"
         self.sig_genes=None
         self.sample_names=None
-        self.eval_freq = 1000
         self.report_freq = 200
-        self.eval_steps = 1
-        self.hidden_units=[256, 128, 64, 32]
-        self.do_rates=[0,0,0,0]
+        self.hidden_units = [256, 128, 64, 32]
+        self.do_rates = [0, 0, 0, 0]
 
-    def model_fn(self, X, n_classes,reuse=False):
+
+    def model_fn(self, X, n_classes, reuse=False):
         """
-        Neural network model function
-        :param X: input batch
-        :param n_classes: number of fractions to predict
-        :param hidden_units: list of hidden units for each layer
-        :param do_rates: list of drop-out rates for each layer
-        :return: logits
+        Model function
+        :param params:
+        :param mode:
+        :return:
         """
         activation = tf.nn.relu
         with tf.variable_scope("cdn_model", reuse=reuse):
-
             layer1 = tf.layers.dense(X, units=self.hidden_units[0], activation=activation , name="dense1")
-            do1 = tf.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode, name="dropout1")
+            do1 = tf.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode)
             layer2 = tf.layers.dense(do1, units=self.hidden_units[1], activation=activation , name="dense2")
-            do2 = tf.layers.dropout(layer2, rate=self.do_rates[1], training=self.training_mode, name="dropout2")
+            do2 = tf.layers.dropout(layer2, rate=self.do_rates[1], training=self.training_mode)
             layer3 = tf.layers.dense(do2, units=self.hidden_units[2], activation=activation , name="dense3")
-            do3 = tf.layers.dropout(layer3, rate=self.do_rates[2], training=self.training_mode, name="dropout3")
+            do3 = tf.layers.dropout(layer3, rate=self.do_rates[2], training=self.training_mode)
             layer4 = tf.layers.dense(do3, units=self.hidden_units[3], activation=activation , name="dense4")
-            do4 = tf.layers.dropout(layer4, rate=self.do_rates[3], training=self.training_mode, name="dropout4")
+            do4 = tf.layers.dropout(layer4, rate=self.do_rates[3], training=self.training_mode)
             logits = tf.layers.dense(do4, units=n_classes, activation=tf.nn.softmax, name="logits_layer")
 
             return logits
-
 
     def compute_loss(self, logits, targets):
         """
@@ -76,6 +67,16 @@ class CDN(object):
         loss = tf.reduce_mean(np.abs(logits - targets))
         return loss
 
+    def compute_accuracy(self, logits, targets, pct_cut=0.05):
+        """
+        Compute prediction accuracy
+        :param targets:
+        :param pct_cut:
+        :return:
+        """
+        equality = tf.less_equal(np.abs(np.subtract(logits, targets)), pct_cut)
+        accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
+        return accuracy
 
     def correlation_coefficient(self, logits, targets):
         """
@@ -124,6 +125,11 @@ class CDN(object):
         eval_metrics["mae_total"] = tf.metrics.mean_relative_error(targets,
                                                                    logits,
                                                                    targets)[1]
+
+        eval_metrics["accuracy01"] = self.compute_accuracy(logits, targets, pct_cut=0.01)
+        eval_metrics["accuracy05"] = self.compute_accuracy(logits, targets, pct_cut=0.05)
+        eval_metrics["accuracy1"] = self.compute_accuracy(logits, targets, pct_cut=0.1)
+
         # Create summary scalars
         for key, value in eval_metrics.items():
             tf.summary.scalar(key, value)
@@ -134,50 +140,35 @@ class CDN(object):
 
         return merged_summary_op
 
-    def load_h5ad_file(self, input_path, batch_size, datasets):
+    def load_h5ad_file(self, input_path, batch_size, datasets=['data6k', 'data8k', 'donorA', 'donorC', 'GSE65133']):
         """
         Load input data from a h5ad file and divide into training and test set
-        Creat TensorFlow Dataset objects and placeholder to set everything up for training
         :param input_path: path to h5ad file
         :param batch_size: batch size to use for training
-        :param datasets: the list of datasets to use for training from the file (the rest will be used for evaluation)
+        :param datasets: a list of datasets to extract from the file
         :return: Dataset object
         """
         raw_input = sc.read_h5ad(input_path)
-        test_input = raw_input.copy()
 
         # divide dataset in train and test data
         all_ds = collections.Counter(raw_input.obs['ds'])
         for ds in all_ds:
-            if ds in datasets:
-                test_input = test_input[test_input.obs['ds'] != ds].copy()
-            else:
+            if ds not in datasets:
                 raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
 
         # Create training dataset
         ratios = [raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']]
         self.x_data = raw_input.X.astype(np.float32)
         self.y_data = np.array(ratios, dtype=np.float32).transpose()
-
         # create placeholders
         self.x_data_ph = tf.placeholder(self.x_data.dtype, self.x_data.shape, name="x_data_ph")
         self.y_data_ph = tf.placeholder(self.y_data.dtype, self.y_data.shape, name="y_data_ph")
-
-        # Create training dataset from placeholders, shuffle and repat, create batches
         self.data = tf.data.Dataset.from_tensor_slices((self.x_data_ph, self.y_data_ph))
         self.data = self.data.shuffle(1000).repeat().batch(batch_size=batch_size)
 
-        # Create test dataset
-        ratios = [test_input.obs[ctype] for ctype in test_input.uns['cell_types']]
-        self.x_test = test_input.X.astype(np.float32)
-        self.y_test = np.array(ratios, dtype=np.float32).transpose()
-        self.x_test_ph = tf.placeholder(self.x_test.dtype, self.x_test.shape)
-        self.y_test_ph = tf.placeholder(self.y_test.dtype, self.y_test.shape)
-        self.data_test = tf.data.Dataset.from_tensor_slices((self.x_test_ph, self.y_test_ph))
-        self.data_test = self.data_test.batch(batch_size=test_input.shape[0])
-
-        # Extract info
+        # Extract celltype and feature info
         self.labels = raw_input.uns['cell_types']
+        self.sig_genes = list(raw_input.var_names)
 
     def load_prediction_file(self, input_path, sig_genes, labels, scaling=None):
         """
@@ -207,7 +198,7 @@ class CDN(object):
 
         return sample_names
 
-    def build_model(self, input_path, mode="train", reuse=False):
+    def build_model(self, input_path, train_datasets, mode="train"):
         """
         Build the model graph
         :param reuse:
@@ -217,7 +208,7 @@ class CDN(object):
 
         # Load data
         if mode=="train":
-            self.load_h5ad_file(input_path=input_path, batch_size=self.batch_size)
+            self.load_h5ad_file(input_path=input_path, batch_size=self.batch_size, datasets=train_datasets)
 
         if mode=="predict":
             self.sample_names = self.load_prediction_file(input_path=input_path, sig_genes=self.sig_genes,
@@ -227,8 +218,6 @@ class CDN(object):
         iter = tf.data.Iterator.from_structure(self.data.output_types, self.data.output_shapes)
         next_element = iter.get_next()
         self.data_init_op = iter.make_initializer(self.data)
-        if mode=="train" or mode == "train_predict":
-            self.test_init_op = iter.make_initializer(self.data_test)
         self.x, self.y = next_element
         self.x = tf.cast(self.x, tf.float32)
 
@@ -246,22 +235,19 @@ class CDN(object):
             self.loss = self.compute_loss(self.logits, self.y)
             # Summary scalars
             self.merged_summary_op = self.visualization(tf.cast(self.logits, tf.float32), targets=tf.cast(self.y, tf.float32), classes=self.labels)
-
-            # Set learning rate
-            learning_rate = self.alpha_0
-
+            learning_rate = self.learning_rate
             # Optimizer
             self.optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.loss, global_step=self.global_step)
 
 
-    def train(self, input_path):
+    def train(self, input_path, train_datasets):
         """
         Train the model
         :param num_steps:
         :return:
         """
         # Build model graph
-        self.build_model(input_path=input_path, mode="train")
+        self.build_model(input_path=input_path, train_datasets=train_datasets, mode="train")
 
         # Init variables
         self.sess.run(tf.global_variables_initializer())
@@ -279,7 +265,6 @@ class CDN(object):
         self.load_weights(self.model_dir)
 
         # Training loop
-        print("Started training loop ...")
         for step in range(self.num_steps):
             _, loss, summary = self.sess.run([self.optimizer, self.loss, self.merged_summary_op])
 
@@ -287,37 +272,28 @@ class CDN(object):
             if step % self.report_freq == 0:
                 print("Step: " +  str(tf.train.global_step(self.sess, self.global_step)) + ", Loss: " + str(loss))
 
-            # Validation
-            if step % self.eval_freq == 0:
-                self.sess.run(self.test_init_op, feed_dict={self.x_test_ph: self.x_test, self.y_test_ph: self.y_test})
-                for i in range(self.eval_steps):
-                    loss, summary = self.sess.run([self.loss, self.merged_summary_op], feed_dict={self.training_mode: False})
-                    print("Validation loss: " + str(loss))
-                    self.eval_writer.add_summary(summary, tf.train.global_step(self.sess, self.global_step))
-
-                self.sess.run(self.data_init_op, feed_dict={self.x_data_ph: self.x_data, self.y_data_ph: self.y_data}) # reactivate training data
-
-
-
         # Save the trained model
         self.saver.save(self.sess, model, global_step=self.global_step)
-        print("Training finished successfully.")
+        # Save features and celltypes
+        pd.DataFrame(self.labels).to_csv(self.model_dir + "/celltypes.txt", sep="\t")
+        pd.DataFrame(self.sig_genes).to_csv(self.model_dir + "/genes.txt", sep="\t")
 
 
-    def predict(self, input_path, out_dir, training_data, out_name="cdn_predictions.txt"):
+    def predict(self, input_path, out_name="cdn_predictions.txt"):
         """
         Perform prediction with a pre-trained model
         :param out_dir: path to store results in
         :param training_data: the dataset used for training
         :return:
         """
-        # Extract sig genes and labels from training data
-        training_input = sc.read_h5ad(training_data)
-        self.sig_genes = list(training_input.var_names)
-        self.labels = training_input.uns['cell_types']
+        # Load signature genes and celltype labels
+        sig_genes = pd.read_table(self.model_dir + "/genes.txt", index_col=0)
+        self.sig_genes = list(sig_genes['0'])
+        labels = pd.read_table(self.model_dir + "/celltypes.txt", index_col=0)
+        self.labels = list(labels['0'])
 
         # Build model graph
-        self.build_model(input_path=input_path, mode="predict")
+        self.build_model(input_path=input_path, train_datasets=[], mode="predict")
 
         # Initialize variables
         self.sess.run(tf.global_variables_initializer())
@@ -336,9 +312,8 @@ class CDN(object):
 
         predictions = self.sess.run([self.logits], feed_dict={self.training_mode: False})
         pred_df = pd.DataFrame(predictions[0], columns=self.labels, index=self.sample_names)
-        pred_df.to_csv(os.path.join(out_dir, out_name), sep="\t")
-        print("Prediction finished successfully.")
-
+        #pred_df.to_csv(out_name, sep="\t")
+        return pred_df
 
     def load_weights(self, model_dir):
             """
