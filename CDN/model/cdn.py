@@ -140,7 +140,7 @@ class CDN(object):
 
         return merged_summary_op
 
-    def load_h5ad_file(self, input_path, batch_size, datasets=['data6k', 'data8k', 'donorA', 'donorC', 'GSE65133']):
+    def load_h5ad_file(self, input_path, batch_size, datasets=[]):
         """
         Load input data from a h5ad file and divide into training and test set
         :param input_path: path to h5ad file
@@ -150,11 +150,12 @@ class CDN(object):
         """
         raw_input = sc.read_h5ad(input_path)
 
-        # divide dataset in train and test data
-        all_ds = collections.Counter(raw_input.obs['ds'])
-        for ds in all_ds:
-            if ds not in datasets:
-                raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
+        # Subset dataset
+        if len(datasets) > 0:
+            all_ds = collections.Counter(raw_input.obs['ds'])
+            for ds in all_ds:
+                if ds not in datasets:
+                    raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
 
         # Create training dataset
         ratios = [raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']]

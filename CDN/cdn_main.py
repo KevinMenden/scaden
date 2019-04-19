@@ -84,6 +84,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
         cdn1024.do_rates = M1024_DO_RATES
         cdn1024.train(input_path=data_path, train_datasets=train_datasets)
 
+    print("Training finished.")
+
 
 def prediction(model_dir, data_path, out_name):
     """
