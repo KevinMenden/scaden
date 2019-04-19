@@ -1,9 +1,8 @@
 #!/usr/bin/env python
 
 from setuptools import setup, find_packages
-import sys
 
-version = '0.1'
+version = '1.0.0'
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -17,6 +16,16 @@ setup(
     author = 'Kevin Menden',
     author_email = 'kevin.menden@t-online.de',
     scripts = ['cdn'],
-    packages = find_packages()
-
+    packages = find_packages(),
+    install_requires = [
+        'pandas',
+        'numpy',
+        'scikit-learn',
+        'scipy',
+        'tensorflow=1.10.0',
+        'seaborn',
+        'scanpy=1.2.2',
+        'tqdm',
+        'click'
+    ]
 )
