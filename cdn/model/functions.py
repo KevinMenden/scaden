@@ -1,5 +1,5 @@
 """
-Functions used for the CDN model
+Functions used for the cdn model
 """
 import collections
 import scanpy.api as sc

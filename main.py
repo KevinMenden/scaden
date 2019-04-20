@@ -1,16 +1,16 @@
 """
-CDN
+cdn
 author: Kevin Menden, DZNE Tübingen
 
-This is the main file for executing the CDN program.
+This is the main file for executing the cdn program.
 """
 
 # imports
 import argparse
-from CDN.model.cdn import CDN
-from CDN.model.functions import *
+from cdn.model.cdn import CDN
+from cdn.model.functions import *
 import tensorflow as tf
-from CDN import cdn_main
+from cdn import cdn_main
 
 if __name__=="__main__":
 

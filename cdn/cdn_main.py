@@ -1,5 +1,5 @@
 """
-CDN Main functionality
+cdn Main functionality
 
 Contains code to
 - process a training datasets
@@ -11,9 +11,9 @@ Contains code to
 # Imports
 import tensorflow as tf
 import scanpy.api as sc
-from CDN.model.architectures import architectures
-from CDN.model.cdn import CDN
-from CDN.model.functions import *
+from cdn.model.architectures import architectures
+from cdn.model.cdn import CDN
+from cdn.model.functions import *
 
 """
 PARAMETERS
@@ -34,7 +34,7 @@ M1024_DO_RATES = architectures['m1024'][1]
 
 def training(data_path, train_datasets, model_dir, batch_size, learning_rate, num_steps):
     """
-    Perform training of three a CDN model ensemble consisting of three different models
+    Perform training of three a cdn model ensemble consisting of three different models
     :param model_dir:
     :param batch_size:
     :param learning_rate:
@@ -89,7 +89,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
 def prediction(model_dir, data_path, out_name):
     """
-    Perform prediction using a trained CDN ensemble
+    Perform prediction using a trained cdn ensemble
     :param model_dir: the directory containing the models
     :param data_path: the path to the gene expression file
     :param out_name: name of the output prediction file

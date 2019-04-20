@@ -1,5 +1,5 @@
 """
-Cell Deconvolutional Network (CDN) class
+Cell Deconvolutional Network (cdn) class
 """
 import os
 import tensorflow as tf
@@ -12,7 +12,7 @@ from tqdm import tqdm
 
 class CDN(object):
     """
-    CDN class
+    cdn class
     """
 
     def __init__(self, sess, model_dir, model_name, batch_size=128, learning_rate=0.0001,  num_steps=1000):
