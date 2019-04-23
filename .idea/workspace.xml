@@ -2,10 +2,10 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee81e382-f29b-4e56-a58e-93ed4bc2afbd" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/MANIFEST.in" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/cdn_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/cdn/cdn_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/model/cdn.py" beforeDir="false" afterPath="$PROJECT_DIR$/cdn/model/cdn.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cdn" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/cdn" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -36,11 +36,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/cdn/cdn_main.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="540">
-              <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="522">
+              <caret line="48" column="48" selection-start-line="48" selection-start-column="48" selection-end-line="48" selection-end-column="48" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/setup.py">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="414">
+              <caret line="23" column="31" lean-forward="true" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
             </state>
           </provider>
         </entry>
@@ -92,10 +101,13 @@
         <option value="$PROJECT_DIR$/scripts/cdn" />
         <option value="$PROJECT_DIR$/cdn/model/cdn.py" />
         <option value="$PROJECT_DIR$/cdn/cdn_main.py" />
+        <option value="$PROJECT_DIR$/MANIFEST.in" />
+        <option value="$PROJECT_DIR$/setup.py" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="2560" />
     <option name="y" value="-4" />
     <option name="width" value="2560" />
     <option name="height" value="1393" />
@@ -111,22 +123,6 @@
             <path>
               <item name="cdn-final" type="b2602c69:ProjectViewProjectNode" />
               <item name="cdn-final" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdn-final" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdn-final" type="462c0819:PsiDirectoryNode" />
-              <item name="cdn" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdn-final" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdn-final" type="462c0819:PsiDirectoryNode" />
-              <item name="cdn" type="462c0819:PsiDirectoryNode" />
-              <item name="model" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="cdn-final" type="b2602c69:ProjectViewProjectNode" />
-              <item name="cdn-final" type="462c0819:PsiDirectoryNode" />
-              <item name="scripts" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -171,7 +167,7 @@
       <updated>1553521054938</updated>
       <workItem from="1553521056328" duration="5868000" />
       <workItem from="1555505433979" duration="885000" />
-      <workItem from="1555574744521" duration="18214000" />
+      <workItem from="1555574744521" duration="21874000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1553523037761</created>
@@ -222,14 +218,21 @@
       <option name="project" value="LOCAL" />
       <updated>1555598530948</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="Fixed Bug in argument parsing (train_datsets input)">
+      <created>1556004302890</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1556004302890</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="24967000" />
+    <option name="totallyTimeSpent" value="28627000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-4" width="2560" height="1393" extended-state="6" />
+    <frame x="2560" y="-4" width="2560" height="1393" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17462212" />
@@ -266,7 +269,8 @@
     <MESSAGE value="Added automatic ensembling" />
     <MESSAGE value="Added progressbar and changed training output" />
     <MESSAGE value="Added data processing step" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added data processing step" />
+    <MESSAGE value="Fixed Bug in argument parsing (train_datsets input)" />
+    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug in argument parsing (train_datsets input)" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/preprocessing/bulk_simulation.py">
@@ -386,8 +390,37 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/cdn/cdn_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="540">
-          <caret line="49" lean-forward="true" selection-start-line="49" selection-end-line="49" />
+        <state relative-caret-position="522">
+          <caret line="48" column="48" selection-start-line="48" selection-start-column="48" selection-end-line="48" selection-end-column="48" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cdn.egg-info/dependency_links.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cdn.egg-info/PKG-INFO">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cdn.egg-info/top_level.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cdn.egg-info/SOURCES.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cdn.egg-info/requires.txt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/MANIFEST.in">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="18">
+          <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="414">
+          <caret line="23" column="31" lean-forward="true" selection-start-line="23" selection-start-column="31" selection-end-line="23" selection-end-column="31" />
         </state>
       </provider>
     </entry>
