@@ -30,7 +30,7 @@ Training mode
 )
 @click.option(
     '--train_datasets',
-    default = [],
+    default = '',
     help = 'Datasets used for training. Uses all by default.'
 )
 @click.option(

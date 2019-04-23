@@ -157,6 +157,7 @@ class CDN(object):
                 if ds not in datasets:
                     raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
 
+
         # Create training dataset
         ratios = [raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']]
         self.x_data = raw_input.X.astype(np.float32)

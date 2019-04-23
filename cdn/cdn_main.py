@@ -41,6 +41,13 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
     :param num_steps:
     :return:
     """
+    # Convert training datasets
+    if train_datasets == '':
+        train_datasets = []
+    else:
+        train_datasets = train_datasets.split()
+    print("Training on: " + str(train_datasets))
+
 
     # M256 model training
     print("Training M256 Model ...")
