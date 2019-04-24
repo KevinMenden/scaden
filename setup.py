@@ -19,6 +19,7 @@ setup(
     keywords = ['bioinformatics', 'deep learning', 'machine learning', 'single cell sequencing', 'deconvolution'],
     author = 'Kevin Menden',
     author_email = 'kevin.menden@t-online.de',
+    url='https://github.com/KevinMenden/scaden',
     license = license,
     scripts = ['scripts/scaden'],
     packages = find_packages(),
