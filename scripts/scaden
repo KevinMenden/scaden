@@ -9,8 +9,8 @@ This is the main file for executing the cdn program.
 
 # imports
 import click
-import cdn
-from cdn.cdn_main import training, prediction, processing
+import scaden
+from scaden.scaden_main import training, prediction, processing
 
 @click.group()
 @click.version_option('1.0.0')
@@ -121,15 +121,5 @@ def process(data_path, prediction_data, processed_path):
 
 if __name__ == '__main__':
 
-    click.echo(
-        click.style("\n    __   __   _   ", fg='green'))
-    click.echo(
-        click.style("   /  ` |  \ | \ |", fg='green'))
-    click.echo(
-        click.style("   \__, |__/ |  \|", fg='green'))
-    click.secho("                                          \n", fg='green')
-
-    click.echo(
-        click.style("Cell Deconvolutional Network", fg="blue"))
 
     cli()

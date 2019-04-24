@@ -1,5 +1,5 @@
 """
-Cell Deconvolutional Network (cdn) class
+Cell Deconvolutional Network (scaden) class
 """
 import os
 import tensorflow as tf
@@ -10,9 +10,9 @@ import collections
 from .functions import dummy_labels, sample_scaling
 from tqdm import tqdm
 
-class CDN(object):
+class Scaden(object):
     """
-    cdn class
+    scaden class
     """
 
     def __init__(self, sess, model_dir, model_name, batch_size=128, learning_rate=0.0001,  num_steps=1000):
@@ -44,7 +44,7 @@ class CDN(object):
         :return:
         """
         activation = tf.nn.relu
-        with tf.variable_scope("cdn_model", reuse=reuse):
+        with tf.variable_scope("scaden_model", reuse=reuse):
             layer1 = tf.layers.dense(X, units=self.hidden_units[0], activation=activation , name="dense1")
             do1 = tf.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode)
             layer2 = tf.layers.dense(do1, units=self.hidden_units[1], activation=activation , name="dense2")

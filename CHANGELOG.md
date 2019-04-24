@@ -6,6 +6,6 @@ Initial release of the CDN deconvolution package.
 
 Commands:
 
-* `cdn process`: Process a training dataset for training
-* `cdn train`: Train a CDN model
-* `cdn predict`: Predict cell type compositions of a given sample
+* `scaden process`: Process a training dataset for training
+* `scaden train`: Train a CDN model
+* `scaden predict`: Predict cell type compositions of a given sample

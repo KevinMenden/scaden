@@ -1,5 +1,5 @@
 """
-cdn Main functionality
+scaden Main functionality
 
 Contains code to
 - process a training datasets
@@ -11,9 +11,9 @@ Contains code to
 # Imports
 import tensorflow as tf
 import scanpy.api as sc
-from cdn.model.architectures import architectures
-from cdn.model.cdn import CDN
-from cdn.model.functions import *
+from scaden.model.architectures import architectures
+from scaden.model.scaden import Scaden
+from scaden.model.functions import *
 
 """
 PARAMETERS
@@ -34,7 +34,7 @@ M1024_DO_RATES = architectures['m1024'][1]
 
 def training(data_path, train_datasets, model_dir, batch_size, learning_rate, num_steps):
     """
-    Perform training of three a cdn model ensemble consisting of three different models
+    Perform training of three a scaden model ensemble consisting of three different models
     :param model_dir:
     :param batch_size:
     :param learning_rate:
@@ -53,7 +53,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
     print("Training M256 Model ...")
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn256 = CDN(sess=sess,
+        cdn256 = Scaden(sess=sess,
                      model_dir=model_dir+"/m256",
                      model_name='m256',
                      batch_size=batch_size,
@@ -67,7 +67,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
     print("Training M512 Model ...")
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn512 = CDN(sess=sess,
+        cdn512 = Scaden(sess=sess,
                      model_dir=model_dir+"/m512",
                      model_name='m512',
                      batch_size=batch_size,
@@ -81,7 +81,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
     print("Training M1024 Model ...")
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn1024 = CDN(sess=sess,
+        cdn1024 = Scaden(sess=sess,
                       model_dir=model_dir+"/m1024",
                       model_name='m1024',
                       batch_size=batch_size,
@@ -96,7 +96,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
 def prediction(model_dir, data_path, out_name):
     """
-    Perform prediction using a trained cdn ensemble
+    Perform prediction using a trained scaden ensemble
     :param model_dir: the directory containing the models
     :param data_path: the path to the gene expression file
     :param out_name: name of the output prediction file
@@ -106,7 +106,7 @@ def prediction(model_dir, data_path, out_name):
     # Small model predictions
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn256 = CDN(sess=sess,
+        cdn256 = Scaden(sess=sess,
                      model_dir=model_dir + "/m256",
                      model_name='m256')
         cdn256.hidden_units = M256_HIDDEN_UNITS
@@ -119,7 +119,7 @@ def prediction(model_dir, data_path, out_name):
     # Mid model predictions
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn512 = CDN(sess=sess,
+        cdn512 = Scaden(sess=sess,
                      model_dir=model_dir+"/m512",
                      model_name='m512')
         cdn512.hidden_units = M512_HIDDEN_UNITS
@@ -131,7 +131,7 @@ def prediction(model_dir, data_path, out_name):
     # Large model predictions
     tf.reset_default_graph()
     with tf.Session() as sess:
-        cdn1024 = CDN(sess=sess,
+        cdn1024 = Scaden(sess=sess,
                       model_dir=model_dir+"/m1024",
                       model_name='m1024')
         cdn1024.hidden_units = M1024_HIDDEN_UNITS

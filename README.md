@@ -1,3 +1,2 @@
-# Cell Deconvolutional Network
-Repository for CDN algorithm for cell type deconvolution.
-
+# Scaden
+Single-cell assisted deconvolutional network

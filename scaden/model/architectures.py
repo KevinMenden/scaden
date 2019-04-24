@@ -1,5 +1,5 @@
 """
-This file contains the three architectures used for the model ensemble in cdn
+This file contains the three architectures used for the model ensemble in scaden
 The architectures are stored in the dict 'architectures', each element of which is a tuple that consists
 of the hidden_unit sizes (element 0) and the respective dropout rates (element 1)
 """

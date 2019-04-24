@@ -1,6 +1,6 @@
 """
 Combine artificial bulk datasets and optionally other datasets into h5ad files
-usable for cdn training
+usable for scaden training
 
 When using additional datasets, they should be in similar format and best have the same output cell types.
 """

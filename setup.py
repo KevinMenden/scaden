@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '1.0.0'
+version = '0.9.0'
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -11,7 +11,7 @@ with open('LICENSE') as f:
     license = f.read()
 
 setup(
-    name = 'cdn',
+    name = 'scaden',
     version = version,
     description = "Cell type deconvolution using single cell data",
     long_description = long_description,
@@ -20,7 +20,7 @@ setup(
     author = 'Kevin Menden',
     author_email = 'kevin.menden@t-online.de',
     license = license,
-    scripts = ['scripts/cdn'],
+    scripts = ['scripts/scaden'],
     packages = find_packages(),
     include_package_data = True,
     install_requires = [
