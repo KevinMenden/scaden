@@ -2,9 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee81e382-f29b-4e56-a58e-93ed4bc2afbd" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/usage.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/usage.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/mkdocs.yml" beforeDir="false" afterPath="$PROJECT_DIR$/mkdocs.yml" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -15,22 +14,10 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/scaden/scaden_main.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="324">
-              <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-              <folding>
-                <element signature="e#129#152#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/mkdocs.yml">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="17" selection-start-column="17" selection-end-column="17" />
+            <state relative-caret-position="126">
+              <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
             </state>
           </provider>
         </entry>
@@ -47,7 +34,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/about.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -59,12 +46,24 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="18">
+                <caret line="1" selection-start-line="1" selection-end-line="1" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/installation.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
               <first_editor relative-caret-position="162">
-                <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+                <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
               </first_editor>
               <second_editor />
             </state>
@@ -95,7 +94,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scaden/model/scaden.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1552">
+            <state relative-caret-position="702">
               <caret line="46" column="38" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
             </state>
           </provider>
@@ -104,7 +103,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/scaden/model/functions.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="812">
+            <state relative-caret-position="1242">
               <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
               <folding>
                 <element signature="e#44#62#0" expanded="true" />
@@ -160,14 +159,14 @@
         <option value="$PROJECT_DIR$/scaden/model/scaden.py" />
         <option value="$PROJECT_DIR$/scaden/scaden_main.py" />
         <option value="$PROJECT_DIR$/scripts/scaden" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
-        <option value="$PROJECT_DIR$/mkdocs.yml" />
         <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/docs/installation.md" />
         <option value="$PROJECT_DIR$/docs/index.md" />
         <option value="$PROJECT_DIR$/docs/usage.md" />
         <option value="$PROJECT_DIR$/docs/about.md" />
+        <option value="$PROJECT_DIR$/mkdocs.yml" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -182,7 +181,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -190,10 +188,16 @@
               <item name="scaden" type="b2602c69:ProjectViewProjectNode" />
               <item name="scaden" type="462c0819:PsiDirectoryNode" />
             </path>
+            <path>
+              <item name="scaden" type="b2602c69:ProjectViewProjectNode" />
+              <item name="scaden" type="462c0819:PsiDirectoryNode" />
+              <item name="docs" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -235,6 +239,7 @@
       <workItem from="1555505433979" duration="885000" />
       <workItem from="1555574744521" duration="21874000" />
       <workItem from="1556110916912" duration="5567000" />
+      <workItem from="1556170827583" duration="333000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1553523037761</created>
@@ -310,12 +315,13 @@
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="34194000" />
+    <option name="totallyTimeSpent" value="34527000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="2560" y="-4" width="2560" height="1393" extended-state="6" />
+    <frame x="2559" y="-4" width="2562" height="1394" extended-state="6" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.1762132" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.17780429" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Favorites" order="2" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
@@ -370,13 +376,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/CDN/model/functions.py" />
-    <entry file="file://$PROJECT_DIR$/main.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="10" column="33" selection-start-line="10" selection-start-column="33" selection-end-line="10" selection-end-column="33" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/main.py" />
     <entry file="file://$PROJECT_DIR$/cdn.egg-info/dependency_links.txt" />
     <entry file="file://$PROJECT_DIR$/cdn.egg-info/PKG-INFO" />
     <entry file="file://$PROJECT_DIR$/cdn.egg-info/top_level.txt" />
@@ -386,36 +386,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scaden/model/scaden.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1552">
-          <caret line="46" column="38" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scaden/model/functions.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="812">
-          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
-          <folding>
-            <element signature="e#44#62#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/scaden/model/architectures.py">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="18">
-            <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
-          </first_editor>
-          <second_editor />
         </state>
       </provider>
     </entry>
@@ -444,35 +414,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/scaden/scaden_main.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="324">
+        <state relative-caret-position="252">
           <caret line="18" column="10" selection-start-line="18" selection-start-column="10" selection-end-line="18" selection-end-column="10" />
-          <folding>
-            <element signature="e#129#152#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/mkdocs.yml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="17" selection-start-column="17" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/installation.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="162">
-            <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
-          </first_editor>
-          <second_editor />
         </state>
       </provider>
     </entry>
@@ -481,6 +424,16 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="90">
             <caret line="5" selection-start-line="5" selection-end-line="5" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/installation.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="162">
+            <caret line="9" column="27" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
           </first_editor>
           <second_editor />
         </state>
@@ -496,11 +449,55 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scaden/model/scaden.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="702">
+          <caret line="46" column="38" selection-start-line="46" selection-start-column="38" selection-end-line="46" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scaden/model/functions.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1242">
+          <caret line="74" column="22" selection-start-line="74" selection-start-column="22" selection-end-line="74" selection-end-column="22" />
+          <folding>
+            <element signature="e#44#62#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/scaden/model/architectures.py">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
     <entry file="file://$PROJECT_DIR$/docs/about.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
           <first_editor>
             <caret column="7" selection-start-column="7" selection-end-column="7" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/mkdocs.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="126">
+          <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="18">
+            <caret line="1" selection-start-line="1" selection-end-line="1" />
           </first_editor>
           <second_editor />
         </state>

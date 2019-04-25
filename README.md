@@ -1,4 +1,4 @@
-# ![scaden](docs/images/scaden_log.png)
+![Scaden](docs/images/scaden_logo.png)
 
 # Scaden
 Single-cell assisted deconvolutional network
