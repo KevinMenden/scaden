@@ -1,3 +1,3 @@
-# Scaden
+# About
 
 under development

@@ -2,29 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee81e382-f29b-4e56-a58e-93ed4bc2afbd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/libraries/R_User_Library.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/docs/index.md" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/mkdocs.yml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scaden/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scaden/model/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/scaden/preprocessing/__init__.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/cdn-final.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/cdn-final.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/CHANGELOG.md" beforeDir="false" afterPath="$PROJECT_DIR$/CHANGELOG.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/usage.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/cdn_main.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/scaden_main.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/model/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/installation.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/model/architectures.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/model/architectures.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/model/cdn.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/model/scaden.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/model/functions.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/model/functions.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/preprocessing/__init__.py" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/preprocessing/bulk_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/preprocessing/bulk_simulation.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/cdn/preprocessing/create_h5ad_file.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/preprocessing/create_h5ad_file.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/scripts/cdn" beforeDir="false" afterPath="$PROJECT_DIR$/scripts/scaden" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/setup.py" beforeDir="false" afterPath="$PROJECT_DIR$/setup.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/about.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/about.md" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/docs/usage.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/usage.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -59,19 +39,21 @@
         <entry file="file://$PROJECT_DIR$/docs/index.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="18">
-                <caret line="1" selection-start-line="1" selection-end-line="1" />
+              <first_editor relative-caret-position="90">
+                <caret line="5" selection-start-line="5" selection-end-line="5" />
               </first_editor>
               <second_editor />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/docs/about.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor />
+              <first_editor>
+                <caret column="7" selection-start-column="7" selection-end-column="7" />
+              </first_editor>
               <second_editor />
             </state>
           </provider>
@@ -81,17 +63,21 @@
         <entry file="file://$PROJECT_DIR$/docs/installation.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor />
+              <first_editor relative-caret-position="162">
+                <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+              </first_editor>
               <second_editor />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/usage.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor />
+              <first_editor relative-caret-position="72">
+                <caret line="4" selection-start-line="4" selection-end-line="4" />
+              </first_editor>
               <second_editor />
             </state>
           </provider>
@@ -100,8 +86,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/setup.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="396">
-              <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
+            <state relative-caret-position="450">
+              <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
             </state>
           </provider>
         </entry>
@@ -171,14 +157,17 @@
         <option value="$PROJECT_DIR$/cdn/model/cdn.py" />
         <option value="$PROJECT_DIR$/cdn/cdn_main.py" />
         <option value="$PROJECT_DIR$/MANIFEST.in" />
-        <option value="$PROJECT_DIR$/setup.py" />
         <option value="$PROJECT_DIR$/scaden/model/scaden.py" />
         <option value="$PROJECT_DIR$/scaden/scaden_main.py" />
         <option value="$PROJECT_DIR$/scripts/scaden" />
         <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/CHANGELOG.md" />
         <option value="$PROJECT_DIR$/mkdocs.yml" />
+        <option value="$PROJECT_DIR$/setup.py" />
+        <option value="$PROJECT_DIR$/docs/installation.md" />
         <option value="$PROJECT_DIR$/docs/index.md" />
+        <option value="$PROJECT_DIR$/docs/usage.md" />
+        <option value="$PROJECT_DIR$/docs/about.md" />
       </list>
     </option>
   </component>
@@ -210,7 +199,7 @@
   <component name="PropertiesComponent">
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/docs/images" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
     <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
@@ -245,7 +234,7 @@
       <workItem from="1553521056328" duration="5868000" />
       <workItem from="1555505433979" duration="885000" />
       <workItem from="1555574744521" duration="21874000" />
-      <workItem from="1556110916912" duration="2009000" />
+      <workItem from="1556110916912" duration="5567000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1553523037761</created>
@@ -303,11 +292,25 @@
       <option name="project" value="LOCAL" />
       <updated>1556004302890</updated>
     </task>
-    <option name="localTasksCounter" value="9" />
+    <task id="LOCAL-00009" summary="Added documentation">
+      <created>1556113045471</created>
+      <option name="number" value="00009" />
+      <option name="presentableId" value="LOCAL-00009" />
+      <option name="project" value="LOCAL" />
+      <updated>1556113045471</updated>
+    </task>
+    <task id="LOCAL-00010" summary="update documentation">
+      <created>1556116137896</created>
+      <option name="number" value="00010" />
+      <option name="presentableId" value="LOCAL-00010" />
+      <option name="project" value="LOCAL" />
+      <updated>1556116137896</updated>
+    </task>
+    <option name="localTasksCounter" value="11" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="30636000" />
+    <option name="totallyTimeSpent" value="34194000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="2560" y="-4" width="2560" height="1393" extended-state="6" />
@@ -347,7 +350,9 @@
     <MESSAGE value="Added progressbar and changed training output" />
     <MESSAGE value="Added data processing step" />
     <MESSAGE value="Fixed Bug in argument parsing (train_datsets input)" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fixed Bug in argument parsing (train_datsets input)" />
+    <MESSAGE value="Added documentation" />
+    <MESSAGE value="update documentation" />
+    <option name="LAST_COMMIT_MESSAGE" value="update documentation" />
   </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/preprocessing/bulk_simulation.py" />
@@ -381,13 +386,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="18">
           <caret line="1" column="17" lean-forward="true" selection-start-line="1" selection-start-column="17" selection-end-line="1" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/setup.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="396">
-          <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
         </state>
       </provider>
     </entry>
@@ -461,11 +459,38 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/setup.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="450">
+          <caret line="25" column="32" selection-start-line="25" selection-start-column="32" selection-end-line="25" selection-end-column="32" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/installation.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="162">
+            <caret line="9" column="27" lean-forward="true" selection-start-line="9" selection-start-column="27" selection-end-line="9" selection-end-column="27" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/docs/index.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor relative-caret-position="18">
-            <caret line="1" selection-start-line="1" selection-end-line="1" />
+          <first_editor relative-caret-position="90">
+            <caret line="5" selection-start-line="5" selection-end-line="5" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/usage.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="72">
+            <caret line="4" selection-start-line="4" selection-end-line="4" />
           </first_editor>
           <second_editor />
         </state>
@@ -474,23 +499,9 @@
     <entry file="file://$PROJECT_DIR$/docs/about.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/installation.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/usage.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor />
+          <first_editor>
+            <caret column="7" selection-start-column="7" selection-end-column="7" />
+          </first_editor>
           <second_editor />
         </state>
       </provider>

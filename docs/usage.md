@@ -1,6 +1,7 @@
 # Usage
 
 For a typical deconvolution with Scaden you will have to perform three steps:
+
 * pre-processing of training data
 * training of Scaden model
 * prediction
