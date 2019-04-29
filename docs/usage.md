@@ -16,8 +16,9 @@ update this section when new datasets are added.
 The first step is to pre-process your training data. For this you need your training data and the dataset you want to perform deconvolution on.
 In this step, Scaden will create a new file for training which only contains the intersection of genes between the training and the prediction data.
 Furthermore, the training data will be log2-transformed and scaled to the range [0,1]. Use the following command for pre-processing:
-
-`scaden process <training data> <prediction data>`
+```
+scaden process <training data> <prediction data>
+```
 
 ## Training
 Now that your data is set-up, you can start training a Scaden ensemble model. Scaden consists of three deep neural network models. By default,
@@ -51,24 +52,6 @@ you have to tell Scaden where to look for them:
 You can also change the path and name of the output predictions file using the `outname` flag:
 
 `--outname <path/to/output.txt`
-
-
-
-## Datasets
-#### Mouse Brain
-* Link: soon :-)
-* Sample size:
-* No. Datsets:
-
-#### Human PBMC
-* Link: soon :-)
-* Sample size:
-* No. Datsets:
-
-#### Human Pancreas
-* Link: soon :-)
-* Sample size:
-* No. Datsets:
 
 
 ## Training data generation

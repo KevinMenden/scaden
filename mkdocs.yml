@@ -3,4 +3,5 @@ nav:
   - Home: index.md
   - Installation: installation.md
   - Usage: usage.md
+  - Datasets: datasets.md
 theme: readthedocs
