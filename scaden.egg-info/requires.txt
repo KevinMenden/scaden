@@ -1,0 +1,10 @@
+pandas==0.21
+numpy==1.14.5
+scikit-learn
+scipy
+seaborn
+tensorflow==1.10.0
+matplotlib
+scanpy==1.2.2
+tqdm
+click

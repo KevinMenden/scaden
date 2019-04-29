@@ -1,6 +1,7 @@
 ![Scaden](img/scaden_logo.png)
  
-Single-cell Assisted Deconvolutional Network
+## Single-cell Assisted Deconvolutional Network
 
-Scaden is a tool for bulk RNA-seq deconvolutional that uses a deep neural network ensemble trained
-on artificial bulk data simulated with scRNA-seq datasets. 
+Scaden is a tool for bulk RNA-seq cell type deconvolutional that uses a deep neural network ensemble trained
+on artificial bulk data simulated with scRNA-seq datasets. This method was developed in the [Genome Biology of Neurodegenerativ Diseases group](https://www.dzne.de/en/research/research-areas/fundamental-research/research-groups/heutink/research-areasfocus/)
+at the [DZNE Tübingen](https://www.dzne.de/en/about-us/sites/tuebingen/) and the [Medical Systems Biology](https://www.uke.de/english/departments-institutes/institutes/medical-systems-biology/team/index.html) group at the [ZMNH](https://www.uke.de/english/departments-institutes/centers/center-for-molecular-neurobiology-hamburg-(zmnh)/index.html). The main author is [Kevin Menden](https://github.com/KevinMenden).

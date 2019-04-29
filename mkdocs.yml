@@ -1,7 +1,6 @@
 site_name: Scaden
 nav:
   - Home: index.md
-  - About: about.md
   - Installation: installation.md
   - Usage: usage.md
 theme: readthedocs

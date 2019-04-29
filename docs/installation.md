@@ -1,10 +1,22 @@
 # Installation
-Scaden can be installed either using [pip](https://pypi.org/) or [Bioconda](https://bioconda.github.io/).
+Scaden be easily installed on a Linux system, and should also work on Mac. 
+There are currently two options for installing Scaden, either using [Bioconda](https://bioconda.github.io/) or via [pip](https://pypi.org/).
+
+
+## Bioconda
+Installation via Bioconda is the preferred route of installation, and we highly recommend using conda. To install Scaden, use:
+
+`conda install -c bioconda scaden`
+
+It is always recommended to create a separate conda environment for installation.
+
 
 ## pip
-To install with pip, use the following command:
+If you don't want to use conda, you can also install Scaden using pip:
 
 `pip install scaden`
 
-## Bioconda
-Installation with Bioconda is not yet supported, but will be soon added.
+
+## Docker
+If you don't want to install Scaden at all, but rather use a Docker container, we will soon provide that too.
+I will update the documentation with the corresponding link as soon as I uploaded the container on Dockerhub.
