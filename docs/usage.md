@@ -7,16 +7,17 @@ For a typical deconvolution with Scaden you will have to perform three steps:
 * prediction
 
 This assumes that you already have a training dataset. If not, Scaden contains functionality to create a dataset from one or several scRNA-seq datasets.
-Please refer to the [data generation](##Training-data-generation) section for instructions on how to create training datasets.
+Please refer to the [data generation](#training-data-generation) section for instructions on how to create training datasets.
 
-Note that we already provide datasets for certain tissues. All available datasets are listed in the [Datasets](##Datasets) section. We will
+Note that we already provide datasets for certain tissues. All available datasets are listed in the [Datasets](datasets) section. We will
 update this section when new datasets are added. 
 
 ## Pre-processing
 The first step is to pre-process your training data. For this you need your training data and the dataset you want to perform deconvolution on.
 In this step, Scaden will create a new file for training which only contains the intersection of genes between the training and the prediction data.
 Furthermore, the training data will be log2-transformed and scaled to the range [0,1]. Use the following command for pre-processing:
-```
+
+```console
 scaden process <training data> <prediction data>
 ```
 
@@ -25,35 +26,66 @@ Now that your data is set-up, you can start training a Scaden ensemble model. Sc
 each of them will be trained for 20,000 steps. You can train longer if you want, although we got good results with this number for datasets of 
 around 30,000 samples. Use the following command to just train a model for 20,000 steps:
 
-`scaden train <processed data>`
+
+```console
+scaden train <processed data>
+```
 
 This will save the model parameters in your working directory. If you want to create a specific directory for your trained models instead,
 and train for 30,00 steps, you can use this command:
 
-`scaden train <processed data> --model_dir <model dir> --steps 30000`
+
+```console
+scaden train <processed data> --model_dir <model dir> --steps 30000
+```
+
 
 You can also adjust the batch size and the learning rate, although we recommend using the default values. If you want to adjust them anyway, use these flages:
 
-`--batch_size <batch size>`
 
-`--learning_rate <learning rate>`
+```console
+--batch_size <batch size>
+
+--learning_rate <learning rate>
+```
 
 ## Prediction 
 Finally, after your model is trained, you can start the prediction. If you haven't specified any model directory and just trained a model
 in your current directory, you can use the following command to perform the deconvolution: 
 
-`scaden predict <prediction file>`
+```console
+scaden predict <prediction file>
+```
 
 Scaden will then generate a file called 'cdn_predictions.txt' (this name will change in future releases) in your current directory. If the models were saved elsewhere,
 you have to tell Scaden where to look for them:
 
-`scaden predict <prediction file> --model_dir <model dir>`
+```console
+scaden predict <prediction file> --model_dir <model dir>
+```
+
 
 You can also change the path and name of the output predictions file using the `outname` flag:
 
-`--outname <path/to/output.txt`
+```console
+--outname <path/to/output.txt
+```
 
+## File Formats
+For Scaden to work properly, your input files have to be correctly formatted. As long as you use Scadens inbuilt functionality to generate the training data, you should have no problem 
+with formatting there. The prediction file, however, you have to format yourself. This should be a file of shape m X n, where m are your features (genes) and n your samples. So each row corresponds to 
+a gene, and each column to a sample. Leave the column name for the genes empy (just put a `\t` there). This is a rather standard format to store gene expression tables, so you should have not much work assuring that the
+format fits.
+
+Your data can either be raw counts or normalized, just make sure that they are not in logarithmic space already. When loading a prediction file, Scaden applies its scaling procedure to it, which involves taking the logarithm of your counts.
+So as long as they are not already in logarithmic space, Scaden will be able to handle both raw and normalized counts / expression values.
 
 ## Training data generation
+As version 0.9.0 is a pre-release version of Scaden, generation of artificial bulk RNA-seq data is not nicely implemented yet, but Scaden still ships with all the scripts to do it. 
+There are generally three steps you have to do to generate training data, given you have a suitable scRNA-seq dataset:
+
+* Generate normalized counts and associated cell type labels
+* Generate artificial bulk samples
+* Merge all samples into a h5ad file
 
 ... coming soon ...
