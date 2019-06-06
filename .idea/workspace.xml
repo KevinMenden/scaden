@@ -2,11 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ee81e382-f29b-4e56-a58e-93ed4bc2afbd" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/kevin.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/docs/datasets.md" beforeDir="false" afterPath="$PROJECT_DIR$/docs/datasets.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scaden/model/scaden.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/model/scaden.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/scaden/preprocessing/bulk_simulation.py" beforeDir="false" afterPath="$PROJECT_DIR$/scaden/preprocessing/bulk_simulation.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
     </list>
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -25,7 +21,7 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/docs/datasets.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
@@ -53,8 +49,20 @@
         <entry file="file://$PROJECT_DIR$/docs/usage.md">
           <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
             <state split_layout="SPLIT">
-              <first_editor relative-caret-position="72">
-                <caret line="4" selection-start-line="4" selection-end-line="4" />
+              <first_editor relative-caret-position="90">
+                <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
+              </first_editor>
+              <second_editor />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/README.md">
+          <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+            <state split_layout="SPLIT">
+              <first_editor relative-caret-position="126">
+                <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
               </first_editor>
               <second_editor />
             </state>
@@ -145,8 +153,8 @@
         <option value="$PROJECT_DIR$/docs/usage.md" />
         <option value="$PROJECT_DIR$/docs/about.md" />
         <option value="$PROJECT_DIR$/mkdocs.yml" />
-        <option value="$PROJECT_DIR$/README.md" />
         <option value="$PROJECT_DIR$/docs/datasets.md" />
+        <option value="$PROJECT_DIR$/README.md" />
       </list>
     </option>
   </component>
@@ -220,7 +228,7 @@
       <workItem from="1556110916912" duration="5567000" />
       <workItem from="1556170827583" duration="333000" />
       <workItem from="1556172267391" duration="892000" />
-      <workItem from="1559809084641" duration="713000" />
+      <workItem from="1559809084641" duration="904000" />
     </task>
     <task id="LOCAL-00001" summary="initial commit">
       <created>1553523037761</created>
@@ -299,11 +307,18 @@
       <option name="project" value="LOCAL" />
       <updated>1556172544163</updated>
     </task>
-    <option name="localTasksCounter" value="12" />
+    <task id="LOCAL-00012" summary="Added logos; added link to doc">
+      <created>1559809826723</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1559809826723</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="36132000" />
+    <option name="totallyTimeSpent" value="36323000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="-4" width="2560" height="1393" extended-state="6" />
@@ -418,16 +433,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/README.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="18">
-            <caret line="1" selection-start-line="1" selection-end-line="1" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/docs/about.md">
       <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
         <state split_layout="SPLIT">
@@ -450,16 +455,6 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="342">
             <caret line="19" column="9" selection-start-line="19" selection-start-column="9" selection-end-line="19" selection-end-column="9" />
-          </first_editor>
-          <second_editor />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/docs/usage.md">
-      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
-        <state split_layout="SPLIT">
-          <first_editor relative-caret-position="72">
-            <caret line="4" selection-start-line="4" selection-end-line="4" />
           </first_editor>
           <second_editor />
         </state>
@@ -497,6 +492,26 @@
         <state split_layout="SPLIT">
           <first_editor relative-caret-position="396">
             <caret line="22" column="75" selection-start-line="22" selection-start-column="75" selection-end-line="22" selection-end-column="75" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/docs/usage.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="90">
+            <caret line="5" column="21" selection-start-line="5" selection-start-column="21" selection-end-line="5" selection-end-column="21" />
+          </first_editor>
+          <second_editor />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/README.md">
+      <provider selected="true" editor-type-id="split-provider[text-editor;markdown-preview-editor]">
+        <state split_layout="SPLIT">
+          <first_editor relative-caret-position="126">
+            <caret line="7" lean-forward="true" selection-start-line="7" selection-end-line="7" />
           </first_editor>
           <second_editor />
         </state>
