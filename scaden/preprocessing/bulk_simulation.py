@@ -87,7 +87,7 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
         sample, label = create_subsample(x, y, sample_size, celltypes, available_celltypes)
         X.append(sample)
         Y.append(label)
-        if i % 100 == 0:
+        if i % 1 == 0:
             print(i)
 
     # Create sparse samples
@@ -97,7 +97,7 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
         sample, label = create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=True)
         X.append(sample)
         Y.append(label)
-        if i % 100 == 0:
+        if i % 1 == 0:
             print(i)
     X = pd.concat(X, axis=1).T
     Y = pd.DataFrame(Y, columns=celltypes)

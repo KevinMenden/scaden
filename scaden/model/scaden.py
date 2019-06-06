@@ -64,7 +64,7 @@ class Scaden(object):
         :param targets:
         :return: L1 loss
         """
-        loss = tf.reduce_mean(np.abs(logits - targets))
+        loss = tf.reduce_mean(np.square(logits - targets))
         return loss
 
     def compute_accuracy(self, logits, targets, pct_cut=0.05):
