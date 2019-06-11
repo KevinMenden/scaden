@@ -18,5 +18,8 @@ If you don't want to use conda, you can also install Scaden using pip:
 
 
 ## Docker
-If you don't want to install Scaden at all, but rather use a Docker container, we will soon provide that too.
-I will update the documentation with the corresponding link as soon as I uploaded the container on Dockerhub.
+If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
+You can pull the [Scaden docker container](https://hub.docker.com/r/kevinmenden/scaden) with the following command (from Dockerhub):
+
+`docker pull kevinmenden/scaden`
+
