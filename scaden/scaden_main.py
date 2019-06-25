@@ -113,7 +113,7 @@ def prediction(model_dir, data_path, out_name):
         cdn256.do_rates = M256_DO_RATES
 
         # Predict ratios
-        preds_256 = cdn256.predict(input_path=data_path,  out_name='cdn_predictions_m256.txt')
+        preds_256 = cdn256.predict(input_path=data_path,  out_name='scaden_predictions_m256.txt')
 
 
     # Mid model predictions
@@ -126,7 +126,7 @@ def prediction(model_dir, data_path, out_name):
         cdn512.do_rates = M512_DO_RATES
 
         # Predict ratios
-        preds_512 = cdn512.predict(input_path=data_path, out_name='cdn_predictions_m512.txt')
+        preds_512 = cdn512.predict(input_path=data_path, out_name='scaden_predictions_m512.txt')
 
     # Large model predictions
     tf.reset_default_graph()
@@ -138,7 +138,7 @@ def prediction(model_dir, data_path, out_name):
         cdn1024.do_rates = M1024_DO_RATES
 
         # Predict ratios
-        preds_1024 = cdn1024.predict(input_path=data_path, out_name='cdn_predictions_m1024.txt')
+        preds_1024 = cdn1024.predict(input_path=data_path, out_name='scaden_predictions_m1024.txt')
 
     # Average predictions
     preds = (preds_256 + preds_512 + preds_1024) / 3

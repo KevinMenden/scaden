@@ -183,7 +183,15 @@ class Scaden(object):
         # Load data
         data = pd.read_table(input_path, sep="\t", index_col=0)
         sample_names = list(data.columns)
+
+        # check for duplicates
+        data_index = list(data.index)
+        if not (len(data_index) == len(set(data_index))):
+            print("Scaden Warning: Your mixture file conatins duplicate genes! The firs occuring gene will be used for every duplicate.")
+            data = data.loc[~data.index.duplicated(keep='first')]
+
         data = data.loc[sig_genes]
+
         self.x_data = data.T
         self.x_data = self.x_data.astype(np.float32)
         m = self.x_data.shape[0]
