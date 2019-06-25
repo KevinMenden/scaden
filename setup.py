@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9.0'
+version = '0.9.1'
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
@@ -30,7 +30,7 @@ setup(
         'scikit-learn',
         'scipy',
         'seaborn',
-        'tensorflow==1.10.0',
+        'tensorflow==1.12.1',
         'matplotlib',
         'scanpy==1.2.2',
         'tqdm',
