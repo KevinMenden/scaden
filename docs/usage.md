@@ -88,4 +88,11 @@ There are generally three steps you have to do to generate training data, given 
 * Generate artificial bulk samples
 * Merge all samples into a h5ad file
 
-... coming soon ...
+I'll quickly explain how to go about that currently. I plan to make this workflow much easier in the future.
+
+#### scRNA-seq data processing
+The first step is to process your scRNA-seq dataset(s) you want to use for training. I used Scanpy for this, and would therefore
+recommend to do the same, but you can of course use other software for this purpose. I've uploaded the scripts I used to preprocess
+the data used for the Scaden paper [here](https://doi.org/10.6084/m9.figshare.8234030.v1). Mainly you have to normalize your count data
+and create a file containing the cell type labels. The file for the cell type labels should be of size (n x 2), where n is the number of cells 
+you have in your data. The two columns correspond to a label for your cells, and a 'Celltype' column. It is important to name
