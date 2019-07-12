@@ -81,6 +81,7 @@ Your data can either be raw counts or normalized, just make sure that they are n
 So as long as they are not already in logarithmic space, Scaden will be able to handle both raw and normalized counts / expression values.
 
 ## Training data generation
+#### Under Development 
 As version 0.9.0 is a pre-release version of Scaden, generation of artificial bulk RNA-seq data is not nicely implemented yet, but Scaden still ships with all the scripts to do it. 
 There are generally three steps you have to do to generate training data, given you have a suitable scRNA-seq dataset:
 
@@ -88,4 +89,38 @@ There are generally three steps you have to do to generate training data, given 
 * Generate artificial bulk samples
 * Merge all samples into a h5ad file
 
-... coming soon ...
+I'll quickly explain how to go about that currently. I plan to make this workflow much easier in the future.
+
+#### scRNA-seq data processing
+The first step is to process your scRNA-seq dataset(s) you want to use for training. I used Scanpy for this, and would therefore
+recommend to do the same, but you can of course use other software for this purpose. I've uploaded the scripts I used to preprocess
+the data used for the Scaden paper [here](https://doi.org/10.6084/m9.figshare.8234030.v1). Mainly you have to normalize your count data
+and create a file containing the cell type labels. The file for the cell type labels should be of size (n x 2), where n is the number of cells 
+you have in your data. The two columns correspond to a label for your cells, and a 'Celltype' column. In fact, the only necessary column is the 'Celltype'
+column, which Scaden uses to extract the information. The count data should be of size (g x n), where g is the number of genes and n is the number of samples.
+The order must be the same as for the cell type labels.
+
+#### Bulk simulation
+Once the data is processed, you can use the script 'bulk_simulation.py' provided with Scaden (preprocessing subdirectory) to generate your artificial samples.
+Currently, for Scaden to properly load a dataset for simulation (or several datasets), it must be formatted like this:
+
+<dataset_name>_norm_counts_all.txt for the count data
+
+<dataset_name>_celltypes.txt for the cell type labels 
+
+In future iterations, you will probably have to specify the files directly - which avoids having to used specified file name patterns.
+As example, you can generate 1000 artificial bulk samples from 100 cells per samples with the following command:
+```console
+python bulk_simulation.py --cells 100 --samples 1000 --data <data_directory> 
+```
+This would create artificial samples in the current working directory.
+
+
+#### Create h5ad File
+As final step, you just have to combine your artificial samples in a h5ad file. The 'create_h5ad_file.py' script can be used for this.
+Here's an example:
+```console
+python create_h5ad_file.py --data <directory_with_artificial_samples> --out <name>.h5ad
+```
+
+If you get any errors with the above process, pleas don't hesitate to open an issue on GitHub.

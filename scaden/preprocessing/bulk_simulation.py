@@ -154,7 +154,7 @@ def filter_matrix_signature(mat, genes):
     mat = mat[genes]
     return mat
 
-def load_dataset(name, dir):
+def load_dataset(name, dir, pattern):
     """
     Load a dataset given its name and the directory
     :param name: name of the dataset
@@ -163,7 +163,7 @@ def load_dataset(name, dir):
     :return: X, Y
     """
     print("Loading " + name + " dataset ...")
-    x = pd.read_table(dir + name + "_norm_counts_all.txt", index_col=0)
+    x = pd.read_table(dir + name + pattern, index_col=0)
     y = pd.read_table(dir + name + "_celltypes.txt")
     return (x, y)
 
@@ -272,7 +272,7 @@ print("Datasets: " + str(datasets))
 # Load datasets
 xs, ys = [], []
 for i, n in enumerate(datasets):
-    x, y = load_dataset(n, data_path)
+    x, y = load_dataset(n, data_path, pattern=pattern)
     xs.append(x)
     ys.append(y)
 
