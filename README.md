@@ -5,9 +5,15 @@
 Scaden is a deep-learning based algorithm for cell type deconvolution of bulk RNA-seq samples. It was developed 
 at the DZNE Tübingen and the ZMNH in Hamburg. 
 A pre-print describing the method is available at Biorxiv:
- [Deep-learning based cell composition analysis from tissue expression profiles](https://www.biorxiv.org/content/10.1101/659227v1)
+ [Deep-learning based cell composition analysis from tissue expression profiles](https://www.biorxiv.org/content/10.1101/659227v2)
 
 A complete documentation is available [here](https://scaden.readthedocs.io)
+
+
+![Scaden](docs/img/figure1.png)
+Scaden overview. a) Generation of artificial bulk samples with known cell type composition from scRNA-seq data. b) Training 
+of Scaden model ensemble on simulated training data. c) Scaden ensemble architecture. d) A trained Scaden model can be used
+to deconvolve complex bulk mixtures.
 
 ### 1. System requirements
 Scaden was developed and tested on Linux (Ubuntu 16.04 and 18.04). It was not tested on Windows or Mac, but should
