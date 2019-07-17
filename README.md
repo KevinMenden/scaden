@@ -10,7 +10,8 @@ A pre-print describing the method is available at Biorxiv:
 A complete documentation is available [here](https://scaden.readthedocs.io)
 
 
-![Scaden](docs/img/figure1.png)
+![Figure1](docs/img/figure1.png)
+
 Scaden overview. a) Generation of artificial bulk samples with known cell type composition from scRNA-seq data. b) Training 
 of Scaden model ensemble on simulated training data. c) Scaden ensemble architecture. d) A trained Scaden model can be used
 to deconvolve complex bulk mixtures.
