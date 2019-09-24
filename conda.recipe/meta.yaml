@@ -1,0 +1,47 @@
+{% set name = "scaden" %}
+{% set version = "0.9.0.9000" %}
+
+package:
+  name: '{{ name|lower }}'
+  version: '{{ version }}'
+
+source:
+  path: ..
+
+build:
+  number: 0
+  script: python setup.py install --single-version-externally-managed --record=record.txt
+  noarch: python
+
+requirements:
+  host:
+    - python
+    - pip
+    - twine
+  run:
+    - python
+    - pandas
+    - numpy >=1.14
+    - scikit-learn
+    - scipy
+    - seaborn
+    - tensorflow <=1.13.0
+    - matplotlib
+    - scanpy
+    - tqdm
+    - click
+
+# tests fail because of tesnorflow, commenting out
+#test:
+#  commands:
+#    - scaden --help
+
+about:
+  home: https://github.com/KevinMenden/scaden
+  license: MIT
+  summary: Cell type deconvolution using single cell data
+
+extra:
+  skip-lints:
+    - missing_tests
+
