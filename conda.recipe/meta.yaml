@@ -1,25 +1,26 @@
-{% set name = "scaden" %}
-{% set version = "0.9.0.9000" %}
+{% set data = load_setup_py_data() %}
 
 package:
-  name: '{{ name|lower }}'
-  version: '{{ version }}'
+  name: 'scaden'
+  version: {{ data.get('version') }}
 
 source:
   path: ..
 
 build:
   number: 0
-  script: python setup.py install --single-version-externally-managed --record=record.txt
+  script: pip install . --no-deps --ignore-installed --no-cache-dir
   noarch: python
+  script_env:
+    - COVERAGE_DIR
 
 requirements:
   host:
-    - python
+    - python {{ python }}
     - pip
     - twine
   run:
-    - python
+    - python {{ python }}
     - pandas
     - numpy >=1.14
     - scikit-learn
@@ -30,6 +31,15 @@ requirements:
     - scanpy
     - tqdm
     - click
+
+test:
+  requires:
+    - coverage
+#  source_files:
+#    - .coveragerc
+  commands:
+    - scaden --help
+
 
 # tests fail because of tesnorflow, commenting out
 #test:
