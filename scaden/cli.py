@@ -1,5 +1,3 @@
-#!python
-
 """
 cdn Command Line Interface
 author: Kevin Menden, DZNE Tübingen
@@ -64,7 +62,7 @@ def train(data_path, train_datasets, model_dir, batch_size, learning_rate, steps
 
 
 """
-Predictin mode
+Prediction mode
 """
 @cli.command()
 @click.argument(
@@ -80,7 +78,7 @@ Predictin mode
 )
 @click.option(
     '--outname',
-    default = "cdn_predictions.txt",
+    default = "scaden_predictions.txt",
     help = 'Name of predictions file.'
 )
 def predict(data_path, model_dir, outname):
@@ -118,8 +116,15 @@ def process(data_path, prediction_data, processed_path):
                         training_data=data_path,
                         processed_path=processed_path)
 
+def main():
+    text = """
+     ____                _            
+    / ___|  ___ __ _  __| | ___ _ __  
+    \___ \ / __/ _` |/ _` |/ _ \ '_ \ 
+     ___) | (_| (_| | (_| |  __/ | | |
+    |____/ \___\__,_|\__,_|\___|_| |_|
 
-if __name__ == '__main__':
-
-
+    """
+    click.echo(click.style(text, fg='blue'))
     cli()
+

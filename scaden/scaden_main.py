@@ -62,6 +62,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
         cdn256.hidden_units = M256_HIDDEN_UNITS
         cdn256.do_rates = M256_DO_RATES
         cdn256.train(input_path=data_path, train_datasets=train_datasets)
+    del cdn256
 
     # Training of mid model
     print("Training M512 Model ...")
@@ -76,6 +77,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
         cdn512.hidden_units = M512_HIDDEN_UNITS
         cdn512.do_rates = M512_DO_RATES
         cdn512.train(input_path=data_path, train_datasets=train_datasets)
+    del cdn512
 
     # Training of large model
     print("Training M1024 Model ...")
@@ -90,6 +92,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
         cdn1024.hidden_units = M1024_HIDDEN_UNITS
         cdn1024.do_rates = M1024_DO_RATES
         cdn1024.train(input_path=data_path, train_datasets=train_datasets)
+    del cdn1024
 
     print("Training finished.")
 
