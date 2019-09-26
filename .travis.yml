@@ -1,0 +1,39 @@
+# Don't use language: python; this gives us an unnecessary virtualenv
+language: c
+
+
+env:
+  - BUILD_TARGET=3.6
+
+install:
+  - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
+  - bash miniconda.sh -b -p $HOME/miniconda
+  - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  - hash -r
+  - conda config --set always_yes yes --set changeps1 no
+  - conda update -q conda
+  - conda info -a
+  - export LANG=en_US.UTF-8
+  - export COVERAGE_DIR=":$HOME/htmlcov"
+  - printenv | sort
+  # Install conda-build and conda-verify
+  - conda install -q -c defaults -c conda-forge python=$BUILD_TARGET conda-build conda-verify codecov flake8
+
+script:
+  - source "$HOME/miniconda/etc/profile.d/conda.sh"
+  - >
+    conda build \
+      --override-channels -c defaults -c conda-forge -c r -c bioconda \
+      --python $BUILD_TARGET \
+      ./conda.recipe/
+  - > 
+    conda create \
+      -n install-environment \
+      --override-channels -c defaults -c conda-forge -c r -c local -c bioconda \
+      python=$BUILD_TARGET \
+      scaden conda codecov coverage
+  - conda activate install-environment && scaden --help
+
+after_success:
+  - codecov
+
