@@ -148,7 +148,7 @@ def prediction(model_dir, data_path, out_name):
     preds.to_csv(out_name, sep="\t")
 
 
-def processing(data_path, training_data, processed_path):
+def processing(data_path, training_data, processed_path, var_cutoff):
     """
     Process a training dataset to contain only the genes also available in the prediction data
     :param data_path: path to prediction data
@@ -159,7 +159,7 @@ def processing(data_path, training_data, processed_path):
     # Get the common genes (signature genes)
     raw_input = sc.read_h5ad(training_data)
     sig_genes_complete = list(raw_input.var_names)
-    sig_genes = get_signature_genes(input_path=data_path, sig_genes_complete=sig_genes_complete)
+    sig_genes = get_signature_genes(input_path=data_path, sig_genes_complete=sig_genes_complete, var_cutoff=var_cutoff)
 
     # Pre-process data with new signature genes
     preprocess_h5ad_data(raw_input_path=training_data,

@@ -110,11 +110,19 @@ Processing mode
     default = "processed.h5ad",
     help = 'Path of processed file. Must end with .h5ad'
 )
-def process(data_path, prediction_data, processed_path):
+@click.option(
+    '--var_cutoff',
+    default = 0.1,
+    help = 'Filter out genes with a variance less than the specified cutoff. A low cutoff is recommended,'
+           'this should only remove genes that are obviously uninformative.'
+)
+def process(data_path, prediction_data, processed_path, var_cutoff):
     """ Process a dataset for training """
     processing(data_path=prediction_data,
                         training_data=data_path,
-                        processed_path=processed_path)
+                        processed_path=processed_path,
+                        var_cutoff=var_cutoff
+               )
 
 def main():
     text = """
