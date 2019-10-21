@@ -1,6 +1,18 @@
-# CDN Changelog
+# Scaden Changelog
 
-## v1.0.0 Stalking Octopus  
+
+
+## v0.9.2
+
+* small code refactoring
+* RAM usage improvement
+
+## v0.9.1
+
+* added automatic removal of duplicate genes
+* changed name of prediction file
+
+## v0.9.0   
 
 Initial release of the CDN deconvolution package.
 
