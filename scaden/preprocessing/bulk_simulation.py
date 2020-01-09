@@ -162,6 +162,7 @@ def load_dataset(name, dir, pattern):
     :param sig_genes: the signature genes for filtering
     :return: X, Y
     """
+    pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
     x = pd.read_table(dir + name + pattern, index_col=0)
     y = pd.read_table(dir + name + "_celltypes.txt")
