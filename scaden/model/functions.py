@@ -2,7 +2,7 @@
 Functions used for the scaden model
 """
 import collections
-import scanpy.api as sc
+from anndata import read_h5ad
 import numpy as np
 import tensorflow as tf
 from sklearn import preprocessing as pp
@@ -53,7 +53,7 @@ def preprocess_h5ad_data(raw_input_path, processed_path, scaling_option="log_min
     :return:
     """
     print("Pre-processing raw data ...")
-    raw_input = sc.read_h5ad(raw_input_path)
+    raw_input = read_h5ad(raw_input_path)
 
     print("Subsetting genes ...")
     # Select features go use

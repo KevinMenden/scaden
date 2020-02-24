@@ -25,15 +25,16 @@ setup(
     packages=find_packages(),
     include_package_data=True,
     install_requires = [
-        'pandas==0.21',
-        'numpy==1.14.5',
+        'pandas',
+        'numpy',
         'scikit-learn',
         'scipy',
-        'seaborn',
         'tensorflow>=2.0',
-        'matplotlib',
-        'scanpy==1.2.2',
+        'anndata',
         'tqdm',
         'click'
-    ]
+    ],
+    extras_require = {
+        'scanpy':  ["scanpy", "matplotlib", "seaborn"]
+    }
 )
