@@ -1,13 +1,13 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
 from setuptools import setup, find_packages
 
 version = '0.9.2'
 
-with open("README.md", "r") as fh:
+with open("README.md", "r", encoding="UTF-8") as fh:
     long_description = fh.read()
 
-with open('LICENSE') as f:
+with open('LICENSE', encoding="UTF-8") as f:
     license = f.read()
 
 setup(
@@ -30,7 +30,7 @@ setup(
         'scikit-learn',
         'scipy',
         'seaborn',
-        'tensorflow==1.12.1',
+        'tensorflow>=2.0',
         'matplotlib',
         'scanpy==1.2.2',
         'tqdm',
