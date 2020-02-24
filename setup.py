@@ -30,7 +30,7 @@ setup(
         'scikit-learn',
         'scipy',
         'seaborn',
-        'tensorflow==1.12.1',
+        'tensorflow>=2.0',
         'matplotlib',
         'scanpy==1.2.2',
         'tqdm',
