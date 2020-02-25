@@ -44,16 +44,16 @@ class Scaden(object):
         :return:
         """
         activation = tf.nn.relu
-        with tf.variable_scope("scaden_model", reuse=reuse):
-            layer1 = tf.layers.dense(X, units=self.hidden_units[0], activation=activation , name="dense1")
-            do1 = tf.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode)
-            layer2 = tf.layers.dense(do1, units=self.hidden_units[1], activation=activation , name="dense2")
-            do2 = tf.layers.dropout(layer2, rate=self.do_rates[1], training=self.training_mode)
-            layer3 = tf.layers.dense(do2, units=self.hidden_units[2], activation=activation , name="dense3")
-            do3 = tf.layers.dropout(layer3, rate=self.do_rates[2], training=self.training_mode)
-            layer4 = tf.layers.dense(do3, units=self.hidden_units[3], activation=activation , name="dense4")
-            do4 = tf.layers.dropout(layer4, rate=self.do_rates[3], training=self.training_mode)
-            logits = tf.layers.dense(do4, units=n_classes, activation=tf.nn.softmax, name="logits_layer")
+        with tf.compat.v1.variable_scope("scaden_model", reuse=reuse):
+            layer1 = tf.compat.v1.layers.dense(X, units=self.hidden_units[0], activation=activation , name="dense1")
+            do1 = tf.compat.v1.layers.dropout(layer1, rate=self.do_rates[0], training=self.training_mode)
+            layer2 = tf.compat.v1.layers.dense(do1, units=self.hidden_units[1], activation=activation , name="dense2")
+            do2 = tf.compat.v1.layers.dropout(layer2, rate=self.do_rates[1], training=self.training_mode)
+            layer3 = tf.compat.v1.layers.dense(do2, units=self.hidden_units[2], activation=activation , name="dense3")
+            do3 = tf.compat.v1.layers.dropout(layer3, rate=self.do_rates[2], training=self.training_mode)
+            layer4 = tf.compat.v1.layers.dense(do3, units=self.hidden_units[3], activation=activation , name="dense4")
+            do4 = tf.compat.v1.layers.dropout(layer4, rate=self.do_rates[3], training=self.training_mode)
+            logits = tf.compat.v1.layers.dense(do4, units=n_classes, activation=tf.nn.softmax, name="logits_layer")
 
             return logits
 
@@ -64,7 +64,7 @@ class Scaden(object):
         :param targets:
         :return: L1 loss
         """
-        loss = tf.reduce_mean(np.square(logits - targets))
+        loss = tf.reduce_mean(input_tensor=tf.math.square(logits-targets))
         return loss
 
     def compute_accuracy(self, logits, targets, pct_cut=0.05):
@@ -74,8 +74,8 @@ class Scaden(object):
         :param pct_cut:
         :return:
         """
-        equality = tf.less_equal(np.abs(np.subtract(logits, targets)), pct_cut)
-        accuracy = tf.reduce_mean(tf.cast(equality, tf.float32))
+        equality = tf.less_equal(tf.math.abs(tf.math.subtract(logits, targets)), pct_cut)
+        accuracy = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
         return accuracy
 
     def correlation_coefficient(self, logits, targets):
@@ -85,11 +85,11 @@ class Scaden(object):
         :param targets:
         :return:
         """
-        mx = tf.reduce_mean(logits)
-        my = tf.reduce_mean(targets)
+        mx = tf.reduce_mean(input_tensor=logits)
+        my = tf.reduce_mean(input_tensor=targets)
         xm, ym = logits-mx, targets-my
-        r_num = tf.reduce_sum(tf.multiply(xm, ym))
-        r_den = tf.sqrt(tf.multiply(tf.reduce_sum(tf.square(xm)), tf.reduce_sum(tf.square(ym))))
+        r_num = tf.reduce_sum(input_tensor=tf.multiply(xm, ym))
+        r_den = tf.sqrt(tf.multiply(tf.reduce_sum(input_tensor=tf.square(xm)), tf.reduce_sum(input_tensor=tf.square(ym))))
         r = tf.divide(r_num, r_den)
         r = tf.maximum(tf.minimum(r, 1.0), -1.0)
         return r
@@ -102,27 +102,27 @@ class Scaden(object):
         :return:
         """
         # add evaluation metrics
-        rmse = tf.metrics.root_mean_squared_error(logits, targets)[1]
+        rmse = tf.compat.v1.metrics.root_mean_squared_error(logits, targets)[1]
         pcor = self.correlation_coefficient(logits, targets)
         eval_metrics = {"rmse": rmse, "pcor": pcor}
 
         for i in range(logits.shape[1]):
-            eval_metrics["mre_" + str(classes[i])] = tf.metrics.mean_relative_error(
+            eval_metrics["mre_" + str(classes[i])] = tf.compat.v1.metrics.mean_relative_error(
                 targets[:, i],
                 logits[:, i],
                 targets[:, i])[0]
-            eval_metrics["mae_" + str(classes[i])] = tf.metrics.mean_absolute_error(
+            eval_metrics["mae_" + str(classes[i])] = tf.compat.v1.metrics.mean_absolute_error(
                 targets[:, i],
                 logits[:, i],
                 targets[:, i])[0]
             eval_metrics["pcor_" + str(classes[i])] = self.correlation_coefficient(targets[:, i],logits[:, i])
 
 
-        eval_metrics["mre_total"] = tf.metrics.mean_relative_error(targets,
+        eval_metrics["mre_total"] = tf.compat.v1.metrics.mean_relative_error(targets,
                                                                    logits,
                                                                    targets)[1]
 
-        eval_metrics["mae_total"] = tf.metrics.mean_relative_error(targets,
+        eval_metrics["mae_total"] = tf.compat.v1.metrics.mean_relative_error(targets,
                                                                    logits,
                                                                    targets)[1]
 
@@ -132,11 +132,11 @@ class Scaden(object):
 
         # Create summary scalars
         for key, value in eval_metrics.items():
-            tf.summary.scalar(key, value)
+            tf.compat.v1.summary.scalar(key, value)
 
-        tf.summary.scalar('loss', self.loss)
+        tf.compat.v1.summary.scalar('loss', self.loss)
 
-        merged_summary_op = tf.summary.merge_all()
+        merged_summary_op = tf.compat.v1.summary.merge_all()
 
         return merged_summary_op
 
@@ -163,8 +163,8 @@ class Scaden(object):
         self.x_data = raw_input.X.astype(np.float32)
         self.y_data = np.array(ratios, dtype=np.float32).transpose()
         # create placeholders
-        self.x_data_ph = tf.placeholder(self.x_data.dtype, self.x_data.shape, name="x_data_ph")
-        self.y_data_ph = tf.placeholder(self.y_data.dtype, self.y_data.shape, name="y_data_ph")
+        self.x_data_ph = tf.compat.v1.placeholder(self.x_data.dtype, self.x_data.shape, name="x_data_ph")
+        self.y_data_ph = tf.compat.v1.placeholder(self.y_data.dtype, self.y_data.shape, name="y_data_ph")
         self.data = tf.data.Dataset.from_tensor_slices((self.x_data_ph, self.y_data_ph))
         self.data = self.data.shuffle(1000).repeat().batch(batch_size=batch_size)
 
@@ -201,8 +201,8 @@ class Scaden(object):
             self.x_data = sample_scaling(self.x_data, scaling_option=scaling)
 
         # Create Dataset object from placeholders
-        self.x_data_ph = tf.placeholder(self.x_data.dtype, self.x_data.shape, name="x_data_ph")
-        self.y_data_ph = tf.placeholder(self.y_dummy.dtype, self.y_dummy.shape, name="y_data_ph")
+        self.x_data_ph = tf.compat.v1.placeholder(self.x_data.dtype, self.x_data.shape, name="x_data_ph")
+        self.y_data_ph = tf.compat.v1.placeholder(self.y_dummy.dtype, self.y_dummy.shape, name="y_data_ph")
         self.data = tf.data.Dataset.from_tensor_slices((self.x_data_ph, self.y_data_ph))
         self.data = self.data.batch(batch_size=m)
 
@@ -225,7 +225,7 @@ class Scaden(object):
                                                      labels=self.labels, scaling=self.scaling)
 
         # Make iterator
-        iter = tf.data.Iterator.from_structure(self.data.output_types, self.data.output_shapes)
+        iter = tf.compat.v1.data.Iterator.from_structure(tf.compat.v1.data.get_output_types(self.data), tf.compat.v1.data.get_output_shapes(self.data))
         next_element = iter.get_next()
         self.data_init_op = iter.make_initializer(self.data)
         self.x, self.y = next_element
@@ -234,7 +234,7 @@ class Scaden(object):
         self.n_classes = len(self.labels)
 
         # Placeholder for training mode
-        self.training_mode = tf.placeholder_with_default(True, shape=())
+        self.training_mode = tf.compat.v1.placeholder_with_default(True, shape=())
 
         # Model
         self.logits = self.model_fn(X=self.x, n_classes=self.n_classes)
@@ -247,7 +247,7 @@ class Scaden(object):
             self.merged_summary_op = self.visualization(tf.cast(self.logits, tf.float32), targets=tf.cast(self.y, tf.float32), classes=self.labels)
             learning_rate = self.learning_rate
             # Optimizer
-            self.optimizer = tf.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.loss, global_step=self.global_step)
+            self.optimizer = tf.compat.v1.train.AdamOptimizer(learning_rate=learning_rate).minimize(self.loss, global_step=self.global_step)
 
 
     def train(self, input_path, train_datasets):
@@ -260,12 +260,12 @@ class Scaden(object):
         self.build_model(input_path=input_path, train_datasets=train_datasets, mode="train")
 
         # Init variables
-        self.sess.run(tf.global_variables_initializer())
-        self.sess.run(tf.local_variables_initializer())
-        self.saver = tf.train.Saver()
+        self.sess.run(tf.compat.v1.global_variables_initializer())
+        self.sess.run(tf.compat.v1.local_variables_initializer())
+        self.saver = tf.compat.v1.train.Saver()
         model = os.path.join(self.model_dir, self.model_name)
-        self.writer = tf.summary.FileWriter(model, self.sess.graph)
-        self.eval_writer = tf.summary.FileWriter(os.path.join(self.model_dir, "eval"), self.sess.graph)
+        self.writer = tf.compat.v1.summary.FileWriter(model, self.sess.graph)
+        self.eval_writer = tf.compat.v1.summary.FileWriter(os.path.join(self.model_dir, "eval"), self.sess.graph)
 
         # Initialize datasets
         self.sess.run(self.data_init_op, feed_dict={self.x_data_ph: self.x_data, self.y_data_ph: self.y_data})
@@ -278,8 +278,8 @@ class Scaden(object):
         pbar = tqdm(range(self.num_steps))
         for _ in pbar:
             _, loss, summary = self.sess.run([self.optimizer, self.loss, self.merged_summary_op])
-            self.writer.add_summary(summary, tf.train.global_step(self.sess, self.global_step))
-            description = "Step: " + str(tf.train.global_step(self.sess, self.global_step)) + ", Loss: {:4.3f}".format(
+            self.writer.add_summary(summary, tf.compat.v1.train.global_step(self.sess, self.global_step))
+            description = "Step: " + str(tf.compat.v1.train.global_step(self.sess, self.global_step)) + ", Loss: {:4.3f}".format(
                 loss)
             pbar.set_description(desc=description)
 
@@ -307,13 +307,13 @@ class Scaden(object):
         self.build_model(input_path=input_path, train_datasets=[], mode="predict")
 
         # Initialize variables
-        self.sess.run(tf.global_variables_initializer())
-        self.sess.run(tf.local_variables_initializer())
+        self.sess.run(tf.compat.v1.global_variables_initializer())
+        self.sess.run(tf.compat.v1.local_variables_initializer())
 
-        self.saver = tf.train.Saver()
+        self.saver = tf.compat.v1.train.Saver()
 
         model = os.path.join(self.model_dir, self.model_name)
-        self.writer = tf.summary.FileWriter(model, self.sess.graph)
+        self.writer = tf.compat.v1.summary.FileWriter(model, self.sess.graph)
 
         # Initialize datasets
         self.sess.run(self.data_init_op, feed_dict={self.x_data_ph: self.x_data, self.y_data_ph: self.y_dummy})

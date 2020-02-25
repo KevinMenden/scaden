@@ -51,8 +51,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
     # M256 model training
     print("Training M256 Model ...")
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn256 = Scaden(sess=sess,
                      model_dir=model_dir+"/m256",
                      model_name='m256',
@@ -66,8 +66,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
     # Training of mid model
     print("Training M512 Model ...")
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn512 = Scaden(sess=sess,
                      model_dir=model_dir+"/m512",
                      model_name='m512',
@@ -81,8 +81,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
     # Training of large model
     print("Training M1024 Model ...")
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn1024 = Scaden(sess=sess,
                       model_dir=model_dir+"/m1024",
                       model_name='m1024',
@@ -107,8 +107,8 @@ def prediction(model_dir, data_path, out_name):
     """
 
     # Small model predictions
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn256 = Scaden(sess=sess,
                      model_dir=model_dir + "/m256",
                      model_name='m256')
@@ -120,8 +120,8 @@ def prediction(model_dir, data_path, out_name):
 
 
     # Mid model predictions
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn512 = Scaden(sess=sess,
                      model_dir=model_dir+"/m512",
                      model_name='m512')
@@ -132,8 +132,8 @@ def prediction(model_dir, data_path, out_name):
         preds_512 = cdn512.predict(input_path=data_path, out_name='scaden_predictions_m512.txt')
 
     # Large model predictions
-    tf.reset_default_graph()
-    with tf.Session() as sess:
+    tf.compat.v1.reset_default_graph()
+    with tf.compat.v1.Session() as sess:
         cdn1024 = Scaden(sess=sess,
                       model_dir=model_dir+"/m1024",
                       model_name='m1024')
