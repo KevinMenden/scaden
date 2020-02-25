@@ -1,5 +1,9 @@
 # Scaden Changelog
 
+## v0.9.4
+
+* fixed dependencies (added python>=3.6 requirement)
+
 ## v0.9.3
 
 * upgrade to tf2

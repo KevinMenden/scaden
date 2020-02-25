@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9.3'
+version = '0.9.4'
 
 with open("README.md", "r", encoding="UTF-8") as fh:
     long_description = fh.read()
@@ -24,6 +24,7 @@ setup(
     scripts=['scripts/scaden'],
     packages=find_packages(),
     include_package_data=True,
+    python_requires='>3.6.0',
     install_requires = [
         'pandas',
         'numpy',
