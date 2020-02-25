@@ -1,8 +1,9 @@
 # Scaden Changelog
 
-## vdevelopment
+## v0.9.3
 
 * upgrade to tf2
+* cleaned up dependencies
 
 ## v0.9.2
 
