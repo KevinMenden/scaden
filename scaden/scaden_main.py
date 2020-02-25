@@ -10,10 +10,10 @@ Contains code to
 
 # Imports
 import tensorflow as tf
-import scanpy.api as sc
+from anndata import read_h5ad
 from scaden.model.architectures import architectures
 from scaden.model.scaden import Scaden
-from scaden.model.functions import *
+from scaden.model.functions import get_signature_genes, preprocess_h5ad_data
 
 """
 PARAMETERS
@@ -157,7 +157,7 @@ def processing(data_path, training_data, processed_path, var_cutoff):
     :return:
     """
     # Get the common genes (signature genes)
-    raw_input = sc.read_h5ad(training_data)
+    raw_input = read_h5ad(training_data)
     sig_genes_complete = list(raw_input.var_names)
     sig_genes = get_signature_genes(input_path=data_path, sig_genes_complete=sig_genes_complete, var_cutoff=var_cutoff)
 

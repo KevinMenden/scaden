@@ -5,7 +5,7 @@ import os
 import tensorflow as tf
 import numpy as np
 import pandas as pd
-import scanpy.api as sc
+from anndata import read_h5ad
 import collections
 from .functions import dummy_labels, sample_scaling
 from tqdm import tqdm
@@ -148,7 +148,7 @@ class Scaden(object):
         :param datasets: a list of datasets to extract from the file
         :return: Dataset object
         """
-        raw_input = sc.read_h5ad(input_path)
+        raw_input = read_h5ad(input_path)
 
         # Subset dataset
         if len(datasets) > 0:

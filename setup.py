@@ -2,7 +2,8 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9.3'
+version = '0.9.4'
+
 
 with open("README.md", "r", encoding="UTF-8") as fh:
     long_description = fh.read()
@@ -24,16 +25,18 @@ setup(
     scripts=['scripts/scaden'],
     packages=find_packages(),
     include_package_data=True,
+    python_requires='>3.6.0',
     install_requires = [
-        'pandas==0.21',
-        'numpy==1.14.5',
+        'pandas',
+        'numpy',
         'scikit-learn',
         'scipy',
-        'seaborn',
         'tensorflow>=2.0',
-        'matplotlib',
-        'scanpy==1.2.2',
+        'anndata',
         'tqdm',
         'click'
-    ]
+    ],
+    extras_require = {
+        'scanpy':  ["scanpy", "matplotlib", "seaborn"]
+    }
 )
