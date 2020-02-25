@@ -22,12 +22,10 @@ requirements:
   run:
     - python {{ python }}
     - pandas
-    - numpy >=1.14
+    - numpy
     - scikit-learn
-    - scipy
-    - seaborn
+    - anndata
     - tensorflow >=2.0
-    - matplotlib
     - scanpy
     - tqdm
     - click
