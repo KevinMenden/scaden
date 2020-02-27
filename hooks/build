@@ -1,0 +1,41 @@
+#!/bin/bash
+
+
+# DOCKER_TAG and IMAGE_NAME are set by the docker hub autobuild system
+#  https://docs.docker.com/docker-hub/builds/advanced/
+
+# Determine if building GPU or CPU image:
+## First from DOCKER_TAG:
+if [[ "${DOCKER_TAG}" == *gpu ]]; then
+  CPU_OR_GPU="gpu"
+fi
+
+if [[ "${DOCKER_TAG}" == *cpu ]]; then
+  CPU_OR_GPU="cpu"
+fi
+
+## If it is a local build, build cpu
+if [ "x${CPU_OR_GPU}" = "x" ]; then
+  CPU_OR_GPU="cpu"
+fi
+
+# If it is a local build, give an image name:
+if [ "x${IMAGE_NAME}" = "x" ]; then
+  IMAGE_NAME="scaden-${CPU_OR_GPU}:dev"
+fi
+
+# Choose base image for cpu or gpu:
+if [ "${CPU_OR_GPU}" = "gpu" ]; then
+  BASE_IMAGE="nvidia/cuda:10.1-runtime-ubuntu18.04"
+else
+  BASE_IMAGE="ubuntu:18.04"
+fi
+
+# Build:
+echo "Building ${IMAGE_NAME}"
+docker build \
+  -t "${IMAGE_NAME}" \
+  --build-arg BASE_IMAGE="${BASE_IMAGE}" \
+  --build-arg CPU_OR_GPU="${CPU_OR_GPU}" \
+  -f Dockerfile-dev \
+  .
