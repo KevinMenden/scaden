@@ -106,7 +106,8 @@ for i, train_file in enumerate(datasets):
 
 
     print("Processing " + str(train_file))
-    adata.append(anndata.AnnData(X=x.as_matrix(),
+    x = pd.DataFrame(x)
+    adata.append(anndata.AnnData(X=x,
                                  obs=ratios,
                                  var=pd.DataFrame(columns=[], index=list(x))))
 import gc
