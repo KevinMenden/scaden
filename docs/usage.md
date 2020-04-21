@@ -82,7 +82,7 @@ So as long as they are not already in logarithmic space, Scaden will be able to 
 
 ## Training data generation
 #### Under Development 
-As version 0.9.0 is a pre-release version of Scaden, generation of artificial bulk RNA-seq data is not nicely implemented yet, but Scaden still ships with all the scripts to do it. 
+As version 0.9.2 is a pre-release version of Scaden, generation of artificial bulk RNA-seq data is not nicely implemented yet, but Scaden still ships with all the scripts to do it. 
 There are generally three steps you have to do to generate training data, given you have a suitable scRNA-seq dataset:
 
 * Generate normalized counts and associated cell type labels
@@ -97,7 +97,7 @@ recommend to do the same, but you can of course use other software for this purp
 the data used for the Scaden paper [here](https://doi.org/10.6084/m9.figshare.8234030.v1). Mainly you have to normalize your count data
 and create a file containing the cell type labels. The file for the cell type labels should be of size (n x 2), where n is the number of cells 
 you have in your data. The two columns correspond to a label for your cells, and a 'Celltype' column. In fact, the only necessary column is the 'Celltype'
-column, which Scaden uses to extract the information. The count data should be of size (g x n), where g is the number of genes and n is the number of samples.
+column, which Scaden uses to extract the information. The count data should be of size (n x g), where g is the number of genes and n is the number of samples.
 The order must be the same as for the cell type labels.
 
 #### Bulk simulation
