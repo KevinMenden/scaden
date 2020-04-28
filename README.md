@@ -36,6 +36,13 @@ Alternatively Scaden can be installed with pip:
 We also provide a docker image with Scaden installed:
 [https://hub.docker.com/r/kevinmenden/scaden](https://hub.docker.com/r/kevinmenden/scaden)
 
+### Webtool (beta)
+Additionally, we now proivde a web tool:
+
+[https://scaden.ims.bio](https://scaden.ims.bio)
+
+It contains pre-generated training datasets for several tissues, and all you need to do is to upload your expression data. Please note that this is still in preview.
+
 ### 3. Demo
 We provide several curated [training datasets](https://scaden.readthedocs.io/en/latest/datasets/) for Scaden. For this demo,
 we will use the human PBMC training dataset, which consists of 4 different scRNA-seq datasets and 32,000 samples in total.
