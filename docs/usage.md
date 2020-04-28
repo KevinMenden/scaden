@@ -12,6 +12,13 @@ Please refer to the [data generation](#training-data-generation) section for ins
 Note that we already provide datasets for certain tissues. All available datasets are listed in the [Datasets](datasets) section. We will
 update this section when new datasets are added. 
 
+## Webtool (beta)
+If you don't want to install Scaden on your local machine, we now provide a webtool for you:
+
+[https://scaden.ims.bio](https://scaden.ims.bio)
+
+It contains pre-generated training datasets for several tissues, and all you need to do is to upload your expression data. Please note that this is still in preview.
+
 ## Pre-processing
 The first step is to pre-process your training data. For this you need your training data and the dataset you want to perform deconvolution on.
 In this step, Scaden will create a new file for training which only contains the intersection of genes between the training and the prediction data.
