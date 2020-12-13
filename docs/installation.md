@@ -18,10 +18,10 @@ If you don't want to use conda, you can also install Scaden using pip:
 
 
 ## Docker
-If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
-You can pull the [Scaden docker container](https://hub.docker.com/r/kevinmenden/scaden) with the following command (from Dockerhub):
-
-`docker pull kevinmenden/scaden`
+A docker container with Scaden installed is also available from [biocontainers](https://biocontainers.pro/#/).
+You can download containers for all Scaden version here:
+[https://biocontainers.pro/#/tools/scaden](https://biocontainers.pro/#/tools/scaden)
+If you will also find Singularity images there.
 
 ## Webtool (beta)
 We now also provide a webtool for you:
