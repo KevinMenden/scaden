@@ -1,5 +1,9 @@
 # Scaden Changelog
 
+## v0.9.5
+
+* changed CLI calling
+
 ## v0.9.4
 
 * fixed dependencies (added python>=3.6 requirement)
@@ -21,10 +25,10 @@
 
 ## v0.9.0   
 
-Initial release of the CDN deconvolution package.
+Initial release of the Scaden deconvolution package.
 
 Commands:
 
 * `scaden process`: Process a training dataset for training
-* `scaden train`: Train a CDN model
+* `scaden train`: Train a Scaden model
 * `scaden predict`: Predict cell type compositions of a given sample

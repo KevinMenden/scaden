@@ -13,7 +13,6 @@ import tensorflow as tf
 from anndata import read_h5ad
 from scaden.model.architectures import architectures
 from scaden.model.scaden import Scaden
-from scaden.model.functions import get_signature_genes, preprocess_h5ad_data
 
 """
 PARAMETERS
@@ -27,7 +26,6 @@ M1024_HIDDEN_UNITS = architectures['m1024'][0]
 M256_DO_RATES = architectures['m256'][1]
 M512_DO_RATES = architectures['m512'][1]
 M1024_DO_RATES = architectures['m1024'][1]
-
 
 # ==========================================#
 
@@ -95,73 +93,3 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
     del cdn1024
 
     print("Training finished.")
-
-
-def prediction(model_dir, data_path, out_name):
-    """
-    Perform prediction using a trained scaden ensemble
-    :param model_dir: the directory containing the models
-    :param data_path: the path to the gene expression file
-    :param out_name: name of the output prediction file
-    :return:
-    """
-
-    # Small model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn256 = Scaden(sess=sess,
-                     model_dir=model_dir + "/m256",
-                     model_name='m256')
-        cdn256.hidden_units = M256_HIDDEN_UNITS
-        cdn256.do_rates = M256_DO_RATES
-
-        # Predict ratios
-        preds_256 = cdn256.predict(input_path=data_path,  out_name='scaden_predictions_m256.txt')
-
-
-    # Mid model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn512 = Scaden(sess=sess,
-                     model_dir=model_dir+"/m512",
-                     model_name='m512')
-        cdn512.hidden_units = M512_HIDDEN_UNITS
-        cdn512.do_rates = M512_DO_RATES
-
-        # Predict ratios
-        preds_512 = cdn512.predict(input_path=data_path, out_name='scaden_predictions_m512.txt')
-
-    # Large model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn1024 = Scaden(sess=sess,
-                      model_dir=model_dir+"/m1024",
-                      model_name='m1024')
-        cdn1024.hidden_units = M1024_HIDDEN_UNITS
-        cdn1024.do_rates = M1024_DO_RATES
-
-        # Predict ratios
-        preds_1024 = cdn1024.predict(input_path=data_path, out_name='scaden_predictions_m1024.txt')
-
-    # Average predictions
-    preds = (preds_256 + preds_512 + preds_1024) / 3
-    preds.to_csv(out_name, sep="\t")
-
-
-def processing(data_path, training_data, processed_path, var_cutoff):
-    """
-    Process a training dataset to contain only the genes also available in the prediction data
-    :param data_path: path to prediction data
-    :param training_data: path to training data (h5ad file)
-    :param processed_path: name of processed file
-    :return:
-    """
-    # Get the common genes (signature genes)
-    raw_input = read_h5ad(training_data)
-    sig_genes_complete = list(raw_input.var_names)
-    sig_genes = get_signature_genes(input_path=data_path, sig_genes_complete=sig_genes_complete, var_cutoff=var_cutoff)
-
-    # Pre-process data with new signature genes
-    preprocess_h5ad_data(raw_input_path=training_data,
-                         processed_path=processed_path,
-                         sig_genes=sig_genes)
