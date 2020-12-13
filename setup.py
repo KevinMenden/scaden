@@ -22,7 +22,7 @@ setup(
     author_email='kevin.menden@t-online.de',
     url='https://github.com/KevinMenden/scaden',
     license="MIT License",
-    scripts=['scripts/scaden'],
+    entry_points={"console_scripts": ["scaden=scaden.__main__:main"]},
     packages=find_packages(),
     include_package_data=True,
     python_requires='>3.6.0',
