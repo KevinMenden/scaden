@@ -1,6 +1,0 @@
-{
-    "python.pythonPath": "/home/kevin/anaconda3/envs/scaden/bin/python",
-    "python.linting.pylintEnabled": false,
-    "python.linting.enabled": true,
-    "python.linting.flake8Enabled": true
-}
