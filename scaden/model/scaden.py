@@ -15,7 +15,7 @@ class Scaden(object):
     scaden class
     """
 
-    def __init__(self, sess, model_dir, model_name, batch_size=128, learning_rate=0.0001,  num_steps=1000):
+    def __init__(self, sess, model_dir, model_name, batch_size=128, learning_rate=0.0001,  num_steps=1000, seed=0):
         self.sess=sess
         self.model_dir=model_dir
         self.batch_size=batch_size
@@ -34,6 +34,11 @@ class Scaden(object):
         self.sample_names=None
         self.hidden_units = [256, 128, 64, 32]
         self.do_rates = [0, 0, 0, 0]
+
+        # Set seeds for reproducibility
+        tf.random.set_seed(seed)
+        os.environ['TF_DETERMINISTIC_OPS'] = '1'
+        np.random.seed(seed)
 
 
     def model_fn(self, X, n_classes, reuse=False):

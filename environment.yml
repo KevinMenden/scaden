@@ -5,6 +5,6 @@ channels:
   - defaults
   - conda-forge
 dependencies:
-  - scaden=0.9.0=py_0
+  - scaden=0.9.4=py_0
 prefix: /home/kevin/anaconda3/envs/scaden
 

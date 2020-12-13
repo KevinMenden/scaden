@@ -1,13 +1,16 @@
 #########################################################################
 ## Simulation of artificial bulk RNA-seq datasets from scRNA-seq data   #
 ########################################################################
-
+import logging
+import sys
+import os
+import gc
+import glob
 import pandas as pd
 import numpy as np
-import glob
-import os
-import argparse
-import gc
+from tqdm import tqdm
+
+logger = logging.getLogger(__name__)
 
 def create_fractions(no_celltypes):
     """
@@ -36,7 +39,9 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
 
     if sparse:
         no_keep = np.random.randint(1, len(available_celltypes))
-        keep = np.random.choice(list(range(len(available_celltypes))), size=no_keep, replace=False)
+        keep = np.random.choice(
+            list(range(len(available_celltypes))), size=no_keep, replace=False
+        )
         available_celltypes = [available_celltypes[i] for i in keep]
 
     no_avail_cts = len(available_celltypes)
@@ -48,14 +53,14 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
 
     # Make complete fracions
     fracs_complete = [0] * len(celltypes)
-    for i,act in enumerate(available_celltypes):
+    for i, act in enumerate(available_celltypes):
         idx = celltypes.index(act)
         fracs_complete[idx] = fracs[i]
 
     artificial_samples = []
     for i in range(no_avail_cts):
         ct = available_celltypes[i]
-        cells_sub = x.loc[np.array(y['Celltype'] == ct),:]
+        cells_sub = x.loc[np.array(y["Celltype"] == ct), :]
         cells_fraction = np.random.randint(0, cells_sub.shape[0], samp_fracs[i])
         cells_sub = cells_sub.iloc[cells_fraction, :]
         artificial_samples.append(cells_sub)
@@ -80,32 +85,33 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     X = []
     Y = []
 
-    available_celltypes = list(set(y['Celltype'].tolist()))
+    available_celltypes = list(set(y["Celltype"].tolist()))
 
     # Create normal samples
-    for i in range(no_samples):
-        sample, label = create_subsample(x, y, sample_size, celltypes, available_celltypes)
+    pbar = tqdm(range(no_samples))
+    pbar.set_description(desc="Normal samples")
+    for _ in pbar:
+        sample, label = create_subsample(
+            x, y, sample_size, celltypes, available_celltypes
+        )
         X.append(sample)
         Y.append(label)
-        if i % 1 == 0:
-            print(i)
 
     # Create sparse samples
     n_sparse = int(no_samples)
-    #n_sparse = 0
-    for i in range(n_sparse):
-        sample, label = create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=True)
+    pbar = tqdm(range(n_sparse))
+    pbar.set_description(desc="Sparse samples")
+    for _ in pbar:
+        sample, label = create_subsample(
+            x, y, sample_size, celltypes, available_celltypes, sparse=True
+        )
         X.append(sample)
         Y.append(label)
-        if i % 1 == 0:
-            print(i)
     X = pd.concat(X, axis=1).T
     Y = pd.DataFrame(Y, columns=celltypes)
 
-    # Shuffle
-    #X, Y = shuffle_dataset(X, Y)
-
     return (X, Y)
+
 
 def filter_for_celltypes(x, y, celltypes):
     """
@@ -115,12 +121,11 @@ def filter_for_celltypes(x, y, celltypes):
     :param celltypes:
     :return:
     """
-    cts = list(y['Celltype'])
+    cts = list(y["Celltype"])
     keep = [elem in celltypes for elem in cts]
     x = x.loc[keep, :]
     y = y.loc[keep, :]
     return (x, y)
-
 
 
 def shuffle_dataset(x, y):
@@ -134,6 +139,7 @@ def shuffle_dataset(x, y):
     x_shuff = x.reindex(idx)
     y_shuff = y.reindex(idx)
     return (x_shuff, y_shuff)
+
 
 def filter_matrix_signature(mat, genes):
     """
@@ -154,6 +160,7 @@ def filter_matrix_signature(mat, genes):
     mat = mat[genes]
     return mat
 
+
 def load_dataset(name, dir, pattern):
     """
     Load a dataset given its name and the directory
@@ -164,9 +171,17 @@ def load_dataset(name, dir, pattern):
     """
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
+
+    try:
+        y = pd.read_table(dir + name + "_celltypes.txt")
+    except FileNotFoundError as e:
+        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        sys.exit()
+
     x = pd.read_table(dir + name + pattern, index_col=0)
-    y = pd.read_table(dir + name + "_celltypes.txt")
+    
     return (x, y)
+
 
 def merge_unkown_celltypes(y, unknown_celltypes):
     """
@@ -176,10 +191,11 @@ def merge_unkown_celltypes(y, unknown_celltypes):
     :param unknown_celltypes:
     :return:
     """
-    celltypes = list(y['Celltype'])
+    celltypes = list(y["Celltype"])
     new_celltypes = ["Unknown" if x in unknown_celltypes else x for x in celltypes]
-    y['Celltype'] = new_celltypes
+    y["Celltype"] = new_celltypes
     return y
+
 
 def collect_celltypes(ys):
     """
@@ -187,14 +203,15 @@ def collect_celltypes(ys):
     :param ys: list of dataset labels
     :return: list of available celltypes
     """
-    ct_list = [list(set(y['Celltype'].tolist())) for y in ys]
+    ct_list = [list(set(y["Celltype"].tolist())) for y in ys]
     celltypes = set()
     for ct in ct_list:
         celltypes = celltypes.union(set(ct))
     celltypes = list(celltypes)
     return celltypes
 
-def get_common_genes(xs, type='intersection'):
+
+def get_common_genes(xs, type="intersection"):
     """
     Get common genes for all matrices xs
     Can either be the union or the intersection (default) of all genes
@@ -207,20 +224,23 @@ def get_common_genes(xs, type='intersection'):
 
     genes = [set(g) for g in genes]
     com_genes = genes[0]
-    if type=='union':
+    if type == "union":
         for gi in range(1, len(genes)):
             com_genes = com_genes.union(genes[gi])
-    elif type=='intersection':
+    elif type == "intersection":
         for gi in range(1, len(genes)):
             com_genes = com_genes.intersection(genes[gi])
 
     else:
-        exit('Wrong type selected to get common genes. Exiting.')
+        logging.critical("Wrong type selected to get common genes. Exiting.")
+        sys.exit()
 
     if len(com_genes) == 0:
-        exit("No common genes found. Exiting.")
+        logging.critical("No common genes found. Exiting.")
+        sys.exit()
 
     return list(com_genes)
+
 
 def generate_signature(x, y):
     """
@@ -231,9 +251,9 @@ def generate_signature(x, y):
     """
 
     signature_matrix = []
-    celltypes = list(set(y['Celltype']))
+    celltypes = list(set(y["Celltype"]))
     for ct in celltypes:
-        ct_exp = x.loc[np.array(y['Celltype'] == ct), :]
+        ct_exp = x.loc[np.array(y["Celltype"] == ct), :]
         ct_exp = ct_exp.mean(axis=0)
         signature_matrix.append(ct_exp)
 
@@ -242,68 +262,64 @@ def generate_signature(x, y):
     return signature_matrix
 
 
-"""
-Main Section
-"""
+def simulate_bulk(
+    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes
+):
+    """
+    Simulate artificial bulk samples from single cell datasets
+    :param sample_size: number of cells per sample
+    :param num_samples: number of sample to simulate
+    :param data_path: path to the data directory
+    :param out_dir: output directory
+    :param pattern of the data files
+    :param unknown_celltypes: which celltypes to merge into the unknown class
+    """
 
-parser = argparse.ArgumentParser()
-parser.add_argument("--cells", type=int, help="Number of cells to use for each sample.", default=100)
-parser.add_argument("--samples", "-n", type=int, help="Total number of samples to create for each dataset.", default=8000)
-parser.add_argument("--data", type=str, help="Directory containg the datsets", default="/home/kevin/deepcell_project/datasets/PBMCs/processed_data")
-parser.add_argument("--out", type=str, help="Output directory", default="./")
-parser.add_argument("--pattern", type=str, help="File pattern to use for getting the datasets (default: *_norm_counts_all.txt", default="*_norm_counts_all.txt")
-parser.add_argument("--unknown", type=str, help="All cell types to group into unknown", nargs='+', default=['Unknown', 'Unkown', 'Neutrophil', 'Dendritic'])
-args = parser.parse_args()
+    num_samples = int(
+        num_samples / 2
+    )  # divide by two so half is sparse and half is normal samples
 
-# Parameters
-sample_size = args.cells
-num_samples = int(args.samples / 2) # divide by two so half is sparse and half is normal samples
-data_path = args.data
-out_dir = args.out
-pattern = args.pattern
-unknown_celltypes = args.unknown
+    # List available datasets
+    files = glob.glob(data_path + pattern)
+    files = [os.path.basename(x) for x in files]
+    datasets = [x.split("_")[0] for x in files]
 
+    if len(datasets) == 0:
+        logging.error("No datasetes fround! Have you specified the pattern correctly?")
+        sys.exit()
 
-# List available datasets
-files = glob.glob(data_path + pattern)
-files = [os.path.basename(x) for x in files]
-datasets = [x.split("_")[0] for x in files]
-print("Datasets: " + str(datasets))
+    print("Datasets: " + str(datasets))
 
-# Load datasets
-xs, ys = [], []
-for i, n in enumerate(datasets):
-    x, y = load_dataset(n, data_path, pattern=pattern)
-    xs.append(x)
-    ys.append(y)
+    # Load datasets
+    xs, ys = [], []
+    for i, n in enumerate(datasets):
+        x, y = load_dataset(n, data_path, pattern=pattern)
+        xs.append(x)
+        ys.append(y)
 
-# Get common gene list
-all_genes = get_common_genes(xs, type='intersection')
-print("No. of common genes: " + str(len(all_genes)))
-xs = [filter_matrix_signature(m, all_genes) for m in xs]
+    # Get common gene list
+    all_genes = get_common_genes(xs, type="intersection")
+    print("No. of common genes: " + str(len(all_genes)))
+    xs = [filter_matrix_signature(m, all_genes) for m in xs]
 
-# Merge unknown celltypes
-print("Merging unknown cell types: " + str(unknown_celltypes))
-for i in range(len(ys)):
-    ys[i] = merge_unkown_celltypes(ys[i], unknown_celltypes)
+    # Merge unknown celltypes
+    print("Merging unknown cell types: " + str(unknown_celltypes))
+    for i in range(len(ys)):
+        ys[i] = merge_unkown_celltypes(ys[i], unknown_celltypes)
 
-# Collect all available celltypes
-celltypes = collect_celltypes(ys)
-print("Available celltypes: " + str(celltypes))
-pd.DataFrame(celltypes).to_csv(out_dir + "celltypes.txt", sep="\t")
+    # Collect all available celltypes
+    celltypes = collect_celltypes(ys)
+    print("Available celltypes: " + str(celltypes))
+    pd.DataFrame(celltypes).to_csv(out_dir + "celltypes.txt", sep="\t")
 
-# Create signature matrices (for use with Cibersort)
-sig_mats = []
-for i in range(len(xs)):
-    sm = generate_signature(xs[i], ys[i])
-    sig_mats.append(sm)
+    # Create datasets
+    for i in range(len(xs)):
+        print("Subsampling " + datasets[i] + "...")
+        tmpx, tmpy = create_subsample_dataset(
+            xs[i], ys[i], sample_size, celltypes, num_samples
+        )
+        tmpx.to_csv(out_dir + datasets[i] + "_samples.txt", sep="\t", index=False)
+        tmpy.to_csv(out_dir + datasets[i] + "_labels.txt", sep="\t", index=False)
+        gc.collect()
 
-# Create datasets
-for i in range(len(xs)):
-    print("Subsampling " + datasets[i] + "...")
-    tmpx, tmpy = create_subsample_dataset(xs[i], ys[i], sample_size, celltypes, num_samples)
-    tmpx.to_csv(out_dir + datasets[i] + "_samples.txt", sep="\t", index=False)
-    tmpy.to_csv(out_dir + datasets[i] + "_labels.txt", sep="\t", index=False)
-    gc.collect()
-
-print("Finished!")
+    print("Finished!")
