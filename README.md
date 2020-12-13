@@ -4,8 +4,8 @@
 
 Scaden is a deep-learning based algorithm for cell type deconvolution of bulk RNA-seq samples. It was developed 
 at the DZNE Tübingen and the ZMNH in Hamburg. 
-A pre-print describing the method is available at Biorxiv:
- [Deep-learning based cell composition analysis from tissue expression profiles](https://www.biorxiv.org/content/10.1101/659227v2)
+The method is published in Science Advances:
+ [Deep-learning based cell composition analysis from tissue expression profiles](https://advances.sciencemag.org/content/6/30/eaba2619)
 
 A complete documentation is available [here](https://scaden.readthedocs.io)
 
@@ -62,50 +62,13 @@ python3 -m pip install -U scaden
 We also provide a docker image with Scaden installed:
 [https://hub.docker.com/r/kevinmenden/scaden](https://hub.docker.com/r/kevinmenden/scaden)
 
-#### Development version
 
-To build and install the dev version
+### Webtool (beta)
+Additionally, we now proivde a web tool:
 
-```bash
-# Clone the repository
-git clone https://github.com/KevinMenden/scaden.git
-git checkout dev
-# Enter scaden
-cd scaden
-# Install conda-build and conda-verify:
-conda install conda-build conda-verify
-# Build the conda package:
-conda build --override-channels -c defaults -c conda-forge -c bioconda conda.recipe/
-# Install the built package in a new environment (using the local channel)
-conda create -n scaden_env_dev --override-channels -c local -c defaults -c conda-forge -c bioconda scaden
-# Optionally, install tensorflow-gpu:
-conda activate scaden_env_dev && conda install tensorflow-gpu
-```
+[https://scaden.ims.bio](https://scaden.ims.bio)
 
-To develop scaden, it may be practical to use `conda develop`:
-
-```bash
-# Clone the repository
-git clone https://github.com/KevinMenden/scaden.git
-git checkout dev
-# Enter scaden
-cd scaden
-# Install conda-build and conda-verify:
-conda install conda-build conda-verify
-# Build the conda package:
-conda build --override-channels -c defaults -c conda-forge -c bioconda conda.recipe/
-# Install scaden dependencies (only the dependencies, not scaden)
-conda create -n scaden_env_dev --only-deps --override-channels -c local -c defaults -c conda-forge -c bioconda scaden
-# Activate the development environment you just created
-conda activate scaden_env_dev
-# Optionally, install tensorflow-gpu:
-conda install tensorflow-gpu
-# Create a new branch for the feature you are working at:
-git checkout -b feature-a-cool-enhancement
-# Install scaden in development mode
-conda develop .
-```
-
+It contains pre-generated training datasets for several tissues, and all you need to do is to upload your expression data. Please note that this is still in preview.
 
 ### 3. Demo
 We provide several curated [training datasets](https://scaden.readthedocs.io/en/latest/datasets/) for Scaden. For this demo,

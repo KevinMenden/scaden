@@ -23,3 +23,9 @@ You can pull the [Scaden docker container](https://hub.docker.com/r/kevinmenden/
 
 `docker pull kevinmenden/scaden`
 
+## Webtool (beta)
+We now also provide a webtool for you:
+
+[https://scaden.ims.bio](https://scaden.ims.bio)
+
+It comes with pre-generated training datasets for several tissues. You only need to upload the epxression data for prediction. Please not that this is still in beta.
