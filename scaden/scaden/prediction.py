@@ -12,7 +12,7 @@ Contains code to
 import tensorflow as tf
 from anndata import read_h5ad
 from scaden.model.architectures import architectures
-from scaden.model.scaden import Scaden
+from scaden.model.scaden_tf2 import Scaden
 
 """
 PARAMETERS
@@ -41,44 +41,34 @@ def prediction(model_dir, data_path, out_name, seed=0):
     """
 
     # Small model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn256 = Scaden(sess=sess,
-                     model_dir=model_dir + "/m256",
-                     model_name='m256',
-                     seed=seed)
-        cdn256.hidden_units = M256_HIDDEN_UNITS
-        cdn256.do_rates = M256_DO_RATES
-
-        # Predict ratios
-        preds_256 = cdn256.predict(input_path=data_path,  out_name='scaden_predictions_m256.txt')
-
+    cdn256 = Scaden(
+            model_dir=model_dir + "/m256",
+            model_name='m256',
+            seed=seed,
+            hidden_units=M256_HIDDEN_UNITS,
+            do_rates=M256_DO_RATES)
+    # Predict ratios
+    preds_256 = cdn256.predict(input_path=data_path,  out_name='scaden_predictions_m256.txt')
 
     # Mid model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn512 = Scaden(sess=sess,
-                     model_dir=model_dir+"/m512",
-                     model_name='m512',
-                     seed=seed)
-        cdn512.hidden_units = M512_HIDDEN_UNITS
-        cdn512.do_rates = M512_DO_RATES
-
-        # Predict ratios
-        preds_512 = cdn512.predict(input_path=data_path, out_name='scaden_predictions_m512.txt')
+    cdn512 = Scaden(
+            model_dir=model_dir+"/m512",
+            model_name='m512',
+            seed=seed,
+            hidden_units=M512_HIDDEN_UNITS,
+            do_rates=M512_DO_RATES)
+    # Predict ratios
+    preds_512 = cdn512.predict(input_path=data_path, out_name='scaden_predictions_m512.txt')
 
     # Large model predictions
-    tf.compat.v1.reset_default_graph()
-    with tf.compat.v1.Session() as sess:
-        cdn1024 = Scaden(sess=sess,
-                      model_dir=model_dir+"/m1024",
-                      model_name='m1024',
-                      seed=seed)
-        cdn1024.hidden_units = M1024_HIDDEN_UNITS
-        cdn1024.do_rates = M1024_DO_RATES
-
-        # Predict ratios
-        preds_1024 = cdn1024.predict(input_path=data_path, out_name='scaden_predictions_m1024.txt')
+    cdn1024 = Scaden(
+            model_dir=model_dir+"/m1024",
+            model_name='m1024',
+            seed=seed,
+            hidden_units=M1024_HIDDEN_UNITS,
+            do_rates=M256_DO_RATES)
+    # Predict ratios
+    preds_1024 = cdn1024.predict(input_path=data_path, out_name='scaden_predictions_m1024.txt')
 
     # Average predictions
     preds = (preds_256 + preds_512 + preds_1024) / 3
