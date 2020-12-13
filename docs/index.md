@@ -17,6 +17,7 @@ A pre-print describing the method is available on Biorxiv:
 
 ### Version 0.9.5
 + added `scaden simulate` command to perform bulk simulation and training file creation
++ added `--seed` parameter to allow reproducible Scaden runs
 
 ### Version 0.9.4
 + fixed dependencies (added python>=3.6 requirement)

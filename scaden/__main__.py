@@ -1,5 +1,7 @@
 import click
 import scaden
+import logging
+import os
 from scaden.scaden.training import training
 from scaden.scaden.prediction import prediction
 from scaden.scaden.processing import processing
@@ -11,6 +13,7 @@ author: Kevin Menden
 This is the main file for executing the Scaden program.
 """
 
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 
 def main():
