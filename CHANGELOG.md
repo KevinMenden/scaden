@@ -2,6 +2,7 @@
 
 ## v0.9.5
 
+* added `scaden simulate` command to perform bulk simulation and training file creation
 * changed CLI calling
 
 ## v0.9.4
