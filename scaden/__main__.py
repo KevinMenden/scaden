@@ -75,14 +75,20 @@ Training mode
     default = 5000,
     help = 'Number of training steps'
 )
-def train(data_path, train_datasets, model_dir, batch_size, learning_rate, steps):
+@click.option(
+    '--seed',
+    default = 0,
+    help = "Set random seed"
+)
+def train(data_path, train_datasets, model_dir, batch_size, learning_rate, steps, seed):
     """ Train a Scaden model """
     training(data_path=data_path,
                       train_datasets=train_datasets,
                       model_dir=model_dir,
                       batch_size=batch_size,
                       learning_rate=learning_rate,
-                      num_steps=steps)
+                      num_steps=steps,
+                      seed=seed)
 
 
 """
@@ -105,11 +111,17 @@ Prediction mode
     default = "scaden_predictions.txt",
     help = 'Name of predictions file.'
 )
-def predict(data_path, model_dir, outname):
+@click.option(
+    '--seed',
+    default = 0,
+    help = "Set random seed"
+)
+def predict(data_path, model_dir, outname, seed):
     """ Predict cell type composition using a trained Scaden model"""
     prediction(model_dir=model_dir,
                         data_path=data_path,
-                        out_name=outname)
+                        out_name=outname,
+                        seed=seed)
 
 
 

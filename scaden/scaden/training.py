@@ -30,7 +30,7 @@ M1024_DO_RATES = architectures['m1024'][1]
 # ==========================================#
 
 
-def training(data_path, train_datasets, model_dir, batch_size, learning_rate, num_steps):
+def training(data_path, train_datasets, model_dir, batch_size, learning_rate, num_steps, seed=0):
     """
     Perform training of three a scaden model ensemble consisting of three different models
     :param model_dir:
@@ -56,7 +56,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
                      model_name='m256',
                      batch_size=batch_size,
                      learning_rate=learning_rate,
-                     num_steps=num_steps)
+                     num_steps=num_steps,
+                     seed=seed)
         cdn256.hidden_units = M256_HIDDEN_UNITS
         cdn256.do_rates = M256_DO_RATES
         cdn256.train(input_path=data_path, train_datasets=train_datasets)
@@ -71,7 +72,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
                      model_name='m512',
                      batch_size=batch_size,
                      learning_rate=learning_rate,
-                     num_steps=num_steps)
+                     num_steps=num_steps,
+                     seed=seed)
         cdn512.hidden_units = M512_HIDDEN_UNITS
         cdn512.do_rates = M512_DO_RATES
         cdn512.train(input_path=data_path, train_datasets=train_datasets)
@@ -86,7 +88,8 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
                       model_name='m1024',
                       batch_size=batch_size,
                       learning_rate=learning_rate,
-                      num_steps=num_steps)
+                      num_steps=num_steps,
+                      seed=seed)
         cdn1024.hidden_units = M1024_HIDDEN_UNITS
         cdn1024.do_rates = M1024_DO_RATES
         cdn1024.train(input_path=data_path, train_datasets=train_datasets)

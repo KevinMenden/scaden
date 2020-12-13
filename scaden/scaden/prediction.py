@@ -31,7 +31,7 @@ M1024_DO_RATES = architectures['m1024'][1]
 # ==========================================#
 
 
-def prediction(model_dir, data_path, out_name):
+def prediction(model_dir, data_path, out_name, seed=0):
     """
     Perform prediction using a trained scaden ensemble
     :param model_dir: the directory containing the models
@@ -45,7 +45,8 @@ def prediction(model_dir, data_path, out_name):
     with tf.compat.v1.Session() as sess:
         cdn256 = Scaden(sess=sess,
                      model_dir=model_dir + "/m256",
-                     model_name='m256')
+                     model_name='m256',
+                     seed=seed)
         cdn256.hidden_units = M256_HIDDEN_UNITS
         cdn256.do_rates = M256_DO_RATES
 
@@ -58,7 +59,8 @@ def prediction(model_dir, data_path, out_name):
     with tf.compat.v1.Session() as sess:
         cdn512 = Scaden(sess=sess,
                      model_dir=model_dir+"/m512",
-                     model_name='m512')
+                     model_name='m512',
+                     seed=seed)
         cdn512.hidden_units = M512_HIDDEN_UNITS
         cdn512.do_rates = M512_DO_RATES
 
@@ -70,7 +72,8 @@ def prediction(model_dir, data_path, out_name):
     with tf.compat.v1.Session() as sess:
         cdn1024 = Scaden(sess=sess,
                       model_dir=model_dir+"/m1024",
-                      model_name='m1024')
+                      model_name='m1024',
+                      seed=seed)
         cdn1024.hidden_units = M1024_HIDDEN_UNITS
         cdn1024.do_rates = M1024_DO_RATES
 
