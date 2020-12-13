@@ -1,6 +1,9 @@
 import click
 import scaden
-from scaden.scaden_main import training, prediction, processing
+from scaden.scaden.training import training
+from scaden.scaden.prediction import prediction
+from scaden.scaden.processing import processing
+from scaden.preprocessing.simulate import simulation
 """
 
 author: Kevin Menden
@@ -73,7 +76,7 @@ Training mode
     help = 'Number of training steps'
 )
 def train(data_path, train_datasets, model_dir, batch_size, learning_rate, steps):
-    """ Train a cdn model """
+    """ Train a Scaden model """
     training(data_path=data_path,
                       train_datasets=train_datasets,
                       model_dir=model_dir,
@@ -103,7 +106,7 @@ Prediction mode
     help = 'Name of predictions file.'
 )
 def predict(data_path, model_dir, outname):
-    """ cdn prediction using a trained model """
+    """ Predict cell type composition using a trained Scaden model"""
     prediction(model_dir=model_dir,
                         data_path=data_path,
                         out_name=outname)
@@ -145,4 +148,54 @@ def process(data_path, prediction_data, processed_path, var_cutoff):
                         var_cutoff=var_cutoff
                )
 
+"""
+Simulate dataset
+"""
+@cli.command()
+@click.option(
+    '--out', '-o',
+    default = './',
+    help = "Directory to store output files in"
+)
+@click.option(
+    '--data', '-d',
+    default = '.',
+    help = "Path to scRNA-seq dataset(s)"
+)
+@click.option(
+    '--cells', '-c',
+    default = 100,
+    help = "Number of cells per sample [default: 100]"
+)
+@click.option(
+    '--n_samples', '-n',
+    default = 1000,
+    help = "Number of samples to simulate [default: 1000]"
+)
+@click.option(
+    '--pattern', 
+    default = "*_norm_counts_all.txt",
+    help = "File pattern to recognize your processed scRNA-seq count files"
+)
+@click.option(
+    '--unknown', '-m',
+    default = ['unkown'],
+    help = "Specifiy cell types to merge into the unknown category."
 
+)
+@click.option(
+    '--prefix', '-p',
+    default = "data",
+    help = "Prefix to append to training .h5ad file [default: data]"
+)
+def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
+    """ Create artificial bulk RNA-seq data from scRNA-seq dataset(s)"""
+    simulation(
+        simulate_dir=out, 
+        data_dir=data, 
+        sample_size=cells, 
+        num_samples=n_samples, 
+        pattern=pattern, 
+        unknown_celltypes=unknown, 
+        out_prefix=prefix
+        )
