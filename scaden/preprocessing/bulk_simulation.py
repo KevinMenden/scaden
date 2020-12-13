@@ -1,15 +1,16 @@
 #########################################################################
 ## Simulation of artificial bulk RNA-seq datasets from scRNA-seq data   #
 ########################################################################
-
+import logging
+import sys
+import os
+import gc
+import glob
 import pandas as pd
 import numpy as np
-import glob
-import os
-import argparse
-import gc
 from tqdm import tqdm
 
+logger = logging.getLogger(__name__)
 
 def create_fractions(no_celltypes):
     """
@@ -170,8 +171,15 @@ def load_dataset(name, dir, pattern):
     """
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
+
+    try:
+        y = pd.read_table(dir + name + "_celltypes.txt")
+    except FileNotFoundError as e:
+        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        sys.exit()
+
     x = pd.read_table(dir + name + pattern, index_col=0)
-    y = pd.read_table(dir + name + "_celltypes.txt")
+    
     return (x, y)
 
 
@@ -224,10 +232,12 @@ def get_common_genes(xs, type="intersection"):
             com_genes = com_genes.intersection(genes[gi])
 
     else:
-        exit("Wrong type selected to get common genes. Exiting.")
+        logging.critical("Wrong type selected to get common genes. Exiting.")
+        sys.exit()
 
     if len(com_genes) == 0:
-        exit("No common genes found. Exiting.")
+        logging.critical("No common genes found. Exiting.")
+        sys.exit()
 
     return list(com_genes)
 
@@ -273,6 +283,11 @@ def simulate_bulk(
     files = glob.glob(data_path + pattern)
     files = [os.path.basename(x) for x in files]
     datasets = [x.split("_")[0] for x in files]
+
+    if len(datasets) == 0:
+        logging.error("No datasetes fround! Have you specified the pattern correctly?")
+        sys.exit()
+
     print("Datasets: " + str(datasets))
 
     # Load datasets
@@ -296,12 +311,6 @@ def simulate_bulk(
     celltypes = collect_celltypes(ys)
     print("Available celltypes: " + str(celltypes))
     pd.DataFrame(celltypes).to_csv(out_dir + "celltypes.txt", sep="\t")
-
-    # Create signature matrices (for use with Cibersort)
-    sig_mats = []
-    for i in range(len(xs)):
-        sm = generate_signature(xs[i], ys[i])
-        sig_mats.append(sm)
 
     # Create datasets
     for i in range(len(xs)):

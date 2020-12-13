@@ -44,7 +44,7 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
         train_datasets = []
     else:
         train_datasets = train_datasets.split()
-    print("Training on: " + str(train_datasets))
+        print(f"Training on: {train_datasets}")
 
 
     # M256 model training

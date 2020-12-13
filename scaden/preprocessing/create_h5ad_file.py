@@ -4,13 +4,16 @@ usable for scaden training
 
 When using additional datasets, they should be in similar format and best have the same output cell types.
 """
-
-import argparse
+import gc
 import anndata
 import glob
 import os
+import sys
+import logging
 import pandas as pd
 import numpy as np
+
+logger = logging.getLogger(__name__)
 
 def parse_data(x_path, y_path):
     """
@@ -20,8 +23,12 @@ def parse_data(x_path, y_path):
     :return: training and test data and labels
     """
     # Load the data
-    x = pd.read_table(x_path, sep="\t")
-    y = pd.read_table(y_path, sep="\t")
+    try:
+        x = pd.read_table(x_path, sep="\t")
+        y = pd.read_table(y_path, sep="\t")
+    except FileNotFoundError as e:
+        logging.error(f"Could not find simulated data files: {e}")
+        sys.exit()
     labels = list(y.columns)
 
     # Transform Y to numpy array and split in train and testset
@@ -96,8 +103,9 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
                 X=x.to_numpy(), obs=ratios, var=pd.DataFrame(columns=[], index=list(x))
             )
         )
-    import gc
-
+        
+        
+    
     for i in range(1, len(adata)):
         print("Concatenating " + str(i))
         adata[0] = adata[0].concatenate(adata[1])

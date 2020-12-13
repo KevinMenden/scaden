@@ -13,6 +13,8 @@ author: Kevin Menden
 This is the main file for executing the Scaden program.
 """
 
+# Logging
+logger = logging.getLogger()
 os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
 
 

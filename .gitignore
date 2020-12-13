@@ -126,3 +126,5 @@ dmypy.json
 # extra
 .idea
 scaden.egg-info
+.vscode
+.vscode/
