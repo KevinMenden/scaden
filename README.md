@@ -24,17 +24,44 @@ hardware (e.g. GPU), however we recommend to have at least 16 GB of memory.
 Scaden requires Python 3. All package dependencies should be handled automatically when installing with pip or conda.
 
 ### 2. Installation guide
-The recommended way to install Scaden is using conda and the Bioconda channel:
 
-`conda install -c bioconda scaden`
+#### Stable version
 
-Instllation with conda takes only a few minutes (2-5), depending on the internet connetion.
-Alternatively Scaden can be installed with pip:
+The recommended way to install Scaden is using conda and the Bioconda channel.
 
-`pip install scaden`
+You can create a conda environment for your scaden installation to minimize package conflicts:
+
+```bash
+conda create -n scaden_env --override-channels -c defaults -c conda-forge -c bioconda scaden
+```
+
+`scaden` depends on `tensorflow`. On conda `tensorflow` uses the CPU to train the networks.
+ If you have a `cuda` capable GPU, you may want to install the `tensorflow-gpu` conda package as well
+so scaden uses the gpu instead:
+
+```bash
+conda activate scaden_env
+conda install tensorflow-gpu
+```
+
+Installation with `conda` takes only a few minutes (2-5), depending on the internet connection.
+
+Alternatively Scaden can be installed with `pip`:
+
+```bash
+# Create a virtual environment:
+python3 -m venv ./venv
+# Activate the virtual environment with:
+source ./venv/bin/activate
+# Upgrade pip and wheel:
+python3 -m pip install -U pip wheel
+# Install scaden:
+python3 -m pip install -U scaden
+```
 
 We also provide a docker image with Scaden installed:
 [https://hub.docker.com/r/kevinmenden/scaden](https://hub.docker.com/r/kevinmenden/scaden)
+
 
 ### Webtool (beta)
 Additionally, we now proivde a web tool:
