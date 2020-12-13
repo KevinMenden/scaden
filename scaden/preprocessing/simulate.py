@@ -8,7 +8,8 @@ and subsequenbt formatting in .h5ad file for training with Scaden
 
 def simulation(simulate_dir, data_dir, sample_size, num_samples, pattern, unknown_celltypes, out_prefix):
 
-    # Simulate the data
+    # Perform the bulk simulation
+    unknown_celltypes = list(unknown_celltypes)
     simulate_bulk(
         sample_size, 
         num_samples, 

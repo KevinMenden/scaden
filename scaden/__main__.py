@@ -178,9 +178,10 @@ Simulate dataset
     help = "File pattern to recognize your processed scRNA-seq count files"
 )
 @click.option(
-    '--unknown', '-m',
-    default = ['unkown'],
-    help = "Specifiy cell types to merge into the unknown category."
+    '--unknown', '-u',
+    multiple = True,
+    default = ['unknown'],
+    help = "Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to merge in unknown. [default: unknown]"
 
 )
 @click.option(
