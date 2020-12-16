@@ -1,5 +1,6 @@
-FROM continuumio/miniconda3
+FROM ubuntu
 
-COPY environment.yml /
-RUN conda env create -f /environment.yml && conda clean -a
-ENV PATH /opt/conda/envs/scaden/bin:$PATH
+RUN apt-get update && apt-get upgrade -y
+RUN apt-get install python3 -y
+RUN apt-get install python3-pip -y
+RUN pip3 install scaden
