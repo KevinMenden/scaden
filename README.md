@@ -5,7 +5,6 @@
 ![MIT](https://img.shields.io/badge/License-MIT-black)
 ![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
 ![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
-![Docker build](https://img.shields.io/docker/cloud/build/kevinmenden/scaden)
 ![Downloads](https://static.pepy.tech/personalized-badge/scaden?period=total&units=international_system&left_color=blue&right_color=green&left_text=Downloads)
 
 ## Single-cell assisted deconvolutional network
