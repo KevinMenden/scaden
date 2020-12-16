@@ -3,6 +3,7 @@
 ### Version 0.9.6
 + fixed Dockerfile (switched to pip installation)
 + added better error messages to `simulate` command
++ cleaned up dependencies
 
 ### Version 0.9.5
 + added `scaden simulate` command to perform bulk simulation and training file creation

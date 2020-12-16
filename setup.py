@@ -30,13 +30,10 @@ setup(
         'pandas',
         'numpy',
         'scikit-learn',
-        'scipy',
         'tensorflow>=2.0',
         'anndata',
         'tqdm',
-        'click'
-    ],
-    extras_require = {
-        'scanpy':  ["scanpy", "matplotlib", "seaborn"]
-    }
+        'click',
+        'h5py~=2.10.0'
+    ]
 )
