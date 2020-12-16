@@ -295,7 +295,7 @@ class Scaden(object):
         pd.DataFrame(self.sig_genes).to_csv(self.model_dir + "/genes.txt", sep="\t")
 
 
-    def predict(self, input_path, out_name="cdn_predictions.txt"):
+    def predict(self, input_path, out_name="scaden_predictions.txt"):
         """
         Perform prediction with a pre-trained model
         :param out_dir: path to store results in

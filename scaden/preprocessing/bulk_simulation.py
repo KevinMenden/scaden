@@ -175,7 +175,7 @@ def load_dataset(name, dir, pattern):
     try:
         y = pd.read_table(dir + name + "_celltypes.txt")
     except FileNotFoundError as e:
-        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        logger.error(f"    No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
         sys.exit()
 
     x = pd.read_table(dir + name + pattern, index_col=0)
@@ -285,7 +285,7 @@ def simulate_bulk(
     datasets = [x.split("_")[0] for x in files]
 
     if len(datasets) == 0:
-        logging.error("No datasetes fround! Have you specified the pattern correctly?")
+        logging.error("No datasets fround! Have you specified the pattern correctly?")
         sys.exit()
 
     print("Datasets: " + str(datasets))
