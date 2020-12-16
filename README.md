@@ -1,8 +1,13 @@
 ![Scaden](docs/img/scaden_logo.png)
 
-![MIT](https://anaconda.org/bioconda/scaden/badges/license.svg)
-![Install with Bioconda](https://anaconda.org/bioconda/scaden/badges/installer/conda.svg)
+
+![Scaden version](https://img.shields.io/badge/scaden-v0.9.5-cyan)
+![MIT](https://img.shields.io/badge/License-MIT-black)
+![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
+![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
+![Docker build](https://img.shields.io/docker/cloud/build/kevinmenden/scaden)
 ![Downloads](https://static.pepy.tech/personalized-badge/scaden?period=total&units=international_system&left_color=blue&right_color=green&left_text=Downloads)
+
 ## Single-cell assisted deconvolutional network
 
 Scaden is a deep-learning based algorithm for cell type deconvolution of bulk RNA-seq samples. It was developed 
