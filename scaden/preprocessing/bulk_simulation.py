@@ -160,6 +160,22 @@ def filter_matrix_signature(mat, genes):
     mat = mat[genes]
     return mat
 
+def load_celltypes(path, name):
+    """ Load the cell type information """
+    try:
+        y = pd.read_table(path)
+        # Check if has Celltype column
+        if not 'Celltype' in y.columns:
+            logger.error(f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column.")
+            sys.exit()
+    except FileNotFoundError as e:
+        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        sys.exit(e)
+    
+    return y
+
+
+
 
 def load_dataset(name, dir, pattern):
     """
@@ -172,12 +188,7 @@ def load_dataset(name, dir, pattern):
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
 
-    try:
-        y = pd.read_table(dir + name + "_celltypes.txt")
-    except FileNotFoundError as e:
-        logger.error(f"    No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
-        sys.exit()
-
+    y = load_celltypes(dir + name + "_celltypes.txt", name)
     x = pd.read_table(dir + name + pattern, index_col=0)
     
     return (x, y)
