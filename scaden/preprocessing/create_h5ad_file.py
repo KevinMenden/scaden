@@ -27,7 +27,7 @@ def parse_data(x_path, y_path):
         x = pd.read_table(x_path, sep="\t")
         y = pd.read_table(y_path, sep="\t")
     except FileNotFoundError as e:
-        logging.error(f"Could not find simulated data files: {e}")
+        logging.error(f"   Could not find simulated data files: {e}")
         sys.exit()
     labels = list(y.columns)
 

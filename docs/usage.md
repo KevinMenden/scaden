@@ -96,10 +96,9 @@ Once you have done this, you can use Scaden's command `scaden simulate` to gener
 The first step is to process your scRNA-seq dataset(s) you want to use for training. I used Scanpy for this, and would therefore
 recommend to do the same, but you can of course use other software for this purpose. I've uploaded the scripts I used to preprocess
 the data used for the Scaden paper [here](https://doi.org/10.6084/m9.figshare.8234030.v1). Mainly you have to normalize your count data
-and create a file containing the cell type labels. The file for the cell type labels should be of size (n x 2), where n is the number of cells 
-you have in your data. The two columns correspond to a label for your cells, and a 'Celltype' column. In fact, the only necessary column is the 'Celltype'
-column, which Scaden uses to extract the information. The count data should be of size (n x g), where g is the number of genes and n is the number of samples.
-The order must be the same as for the cell type labels.
+and create a file containing the cell type labels. 
+The file for the cell type labels should be of size (n x 1), where n is the number of cells 
+you have in your data. The single column in this file should be labeled 'Celltype'. You can have extra columns if you like, as long as you have a 'Celltype' column which specifies the cell type label in the correct order. The count data should be of size (n x g), where g is the number of genes and n is the number of samples. The order must be the same as for the cell type labels.
 
 #### Bulk simulation
 Once the data is processed, you can use the command `scaden simulate` to generate your artificial bulk samples for training.
@@ -115,6 +114,12 @@ As example, you can generate 1000 artificial bulk samples from 100 cells per sam
 ```console
 scaden simulate --cells 100 --n_samples 1000 --data <data_directory> --pattern <your_pattern>
 ```
+
+An example for a pattern would be `*_counts.txt`. This pattern would find the following dataset:
+* `dataset_counts.txt`
+* `dataset_celltypes.txt`
+
+Make sure to include an `*` in your pattern!
 
 This command will create the artificial samples in the current working directory. You can also specificy an output directory using the `--out` parameter. Scaden will also directly create a .h5ad file in this directory, which is the file you will need for training. By default, this file will be called `data.h5ad`, however you can change the prefix using the `--prefix` flag.
 

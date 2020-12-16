@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = '0.9.5'
+version = '0.9.6'
 
 
 with open("README.md", "r", encoding="UTF-8") as fh:
@@ -30,13 +30,10 @@ setup(
         'pandas',
         'numpy',
         'scikit-learn',
-        'scipy',
         'tensorflow>=2.0',
         'anndata',
         'tqdm',
-        'click'
-    ],
-    extras_require = {
-        'scanpy':  ["scanpy", "matplotlib", "seaborn"]
-    }
+        'click',
+        'h5py~=2.10.0'
+    ]
 )
