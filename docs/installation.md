@@ -17,9 +17,14 @@ You can also install Scaden via bioconda, using::
 
 ## Docker
 If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
-You can pull the [Scaden docker container](https://hub.docker.com/r/kevinmenden/scaden) with the following command (from Dockerhub):
+For every release, we provide two version - one for CPU and one for GPU usage.
+To pull the CPU container, use this command:
 
-`docker pull kevinmenden/scaden`
+`docker pull ghcr.io/kevinmenden/scaden/scaden`
+
+For the GPU container:
+
+`docker pull ghcr.io/kevinmenden/scaden/scaden-gpu`
 
 ## Webtool (beta)
 We now also provide a webtool for you:
