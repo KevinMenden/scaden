@@ -6,7 +6,7 @@ from scaden.train import training
 from scaden.predict import prediction
 from scaden.process import processing
 from scaden.simulate import simulation
-from scaden.example import exampleCounts
+from scaden.example import exampleData
 """
 
 author: Kevin Menden
@@ -16,7 +16,8 @@ This is the main file for executing the Scaden program.
 
 # Logging
 logger = logging.getLogger()
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+logger.setLevel(logging.INFO)
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '0'
 
 
 def main():
@@ -197,5 +198,13 @@ Generate example data
               '-g',
               default=100,
               help="Number of genes [default: 100]")
-def example(out, cells, genes):
-    exampleCounts(n_cells=cells, n_genes=genes)
+@click.option('--out',
+              '-o',
+              default="./",
+              help="Output directory [default: ./]")
+@click.option('--samples',
+              '-n',
+              default=10,
+              help="Number of bulk samples [default: 10]")
+def example(cells, genes, samples, out):
+    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out)
