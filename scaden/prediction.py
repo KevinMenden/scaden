@@ -12,7 +12,7 @@ Contains code to
 import tensorflow as tf
 from anndata import read_h5ad
 from scaden.model.architectures import architectures
-from scaden.model.scaden_tf2 import Scaden
+from scaden.model.scaden import Scaden
 """
 PARAMETERS
 """
