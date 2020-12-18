@@ -15,32 +15,36 @@ from tqdm import tqdm
 
 logger = logging.getLogger(__name__)
 
+
 class Scaden(object):
     """
     scaden class
     """
+    def __init__(self,
+                 model_dir,
+                 model_name,
+                 batch_size=128,
+                 learning_rate=0.0001,
+                 num_steps=1000,
+                 seed=0,
+                 hidden_units=[256, 128, 64, 32],
+                 do_rates=[0, 0, 0, 0]):
 
-    def __init__(self, model_dir, 
-                    model_name, batch_size=128, 
-                    learning_rate=0.0001,  num_steps=1000, 
-                    seed=0, hidden_units=[256, 128, 64, 32],
-                    do_rates=[0,0,0,0]):
-
-        self.model_dir=model_dir
-        self.batch_size=batch_size
-        self.model_name=model_name
-        self.beta1=0.9
-        self.beta2=0.999
-        self.learning_rate=learning_rate
-        self.data=None
-        self.n_classes=None
-        self.labels=None
-        self.x=None
-        self.y=None
-        self.num_steps=num_steps
-        self.scaling="log_min_max"
-        self.sig_genes=None
-        self.sample_names=None
+        self.model_dir = model_dir
+        self.batch_size = batch_size
+        self.model_name = model_name
+        self.beta1 = 0.9
+        self.beta2 = 0.999
+        self.learning_rate = learning_rate
+        self.data = None
+        self.n_classes = None
+        self.labels = None
+        self.x = None
+        self.y = None
+        self.num_steps = num_steps
+        self.scaling = "log_min_max"
+        self.sig_genes = None
+        self.sample_names = None
         self.hidden_units = hidden_units
         self.do_rates = do_rates
 
@@ -53,13 +57,17 @@ class Scaden(object):
         """Create the Scaden model"""
 
         model = tf.keras.Sequential()
-        model.add(tf.keras.layers.Dense(self.hidden_units[0], activation=tf.nn.relu))
+        model.add(
+            tf.keras.layers.Dense(self.hidden_units[0], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[0]))
-        model.add(tf.keras.layers.Dense(self.hidden_units[1], activation=tf.nn.relu))
+        model.add(
+            tf.keras.layers.Dense(self.hidden_units[1], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[1]))
-        model.add(tf.keras.layers.Dense(self.hidden_units[2], activation=tf.nn.relu))
+        model.add(
+            tf.keras.layers.Dense(self.hidden_units[2], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[2]))
-        model.add(tf.keras.layers.Dense(self.hidden_units[3], activation=tf.nn.relu))
+        model.add(
+            tf.keras.layers.Dense(self.hidden_units[3], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[3]))
         model.add(tf.keras.layers.Dense(n_classes, activation=tf.nn.softmax))
 
@@ -72,7 +80,7 @@ class Scaden(object):
         :param targets:
         :return: L1 loss
         """
-        loss = tf.reduce_mean(input_tensor=tf.math.square(logits-targets))
+        loss = tf.reduce_mean(input_tensor=tf.math.square(logits - targets))
         return loss
 
     def compute_accuracy(self, logits, targets, pct_cut=0.05):
@@ -82,7 +90,8 @@ class Scaden(object):
         :param pct_cut:
         :return:
         """
-        equality = tf.less_equal(tf.math.abs(tf.math.subtract(logits, targets)), pct_cut)
+        equality = tf.less_equal(
+            tf.math.abs(tf.math.subtract(logits, targets)), pct_cut)
         accuracy = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
         return accuracy
 
@@ -95,9 +104,11 @@ class Scaden(object):
         """
         mx = tf.reduce_mean(input_tensor=logits)
         my = tf.reduce_mean(input_tensor=targets)
-        xm, ym = logits-mx, targets-my
+        xm, ym = logits - mx, targets - my
         r_num = tf.reduce_sum(input_tensor=tf.multiply(xm, ym))
-        r_den = tf.sqrt(tf.multiply(tf.reduce_sum(input_tensor=tf.square(xm)), tf.reduce_sum(input_tensor=tf.square(ym))))
+        r_den = tf.sqrt(
+            tf.multiply(tf.reduce_sum(input_tensor=tf.square(xm)),
+                        tf.reduce_sum(input_tensor=tf.square(ym))))
         r = tf.divide(r_num, r_den)
         r = tf.maximum(tf.minimum(r, 1.0), -1.0)
         return r
@@ -115,28 +126,33 @@ class Scaden(object):
         eval_metrics = {"rmse": rmse, "pcor": pcor}
 
         for i in range(logits.shape[1]):
-            eval_metrics["mre_" + str(classes[i])] = tf.compat.v1.metrics.mean_relative_error(
-                targets[:, i],
-                logits[:, i],
-                targets[:, i])[0]
-            eval_metrics["mae_" + str(classes[i])] = tf.compat.v1.metrics.mean_absolute_error(
-                targets[:, i],
-                logits[:, i],
-                targets[:, i])[0]
-            eval_metrics["pcor_" + str(classes[i])] = self.correlation_coefficient(targets[:, i],logits[:, i])
+            eval_metrics[
+                "mre_" +
+                str(classes[i])] = tf.compat.v1.metrics.mean_relative_error(
+                    targets[:, i], logits[:, i], targets[:, i])[0]
+            eval_metrics[
+                "mae_" +
+                str(classes[i])] = tf.compat.v1.metrics.mean_absolute_error(
+                    targets[:, i], logits[:, i], targets[:, i])[0]
+            eval_metrics["pcor_" +
+                         str(classes[i])] = self.correlation_coefficient(
+                             targets[:, i], logits[:, i])
 
+        eval_metrics["mre_total"] = tf.compat.v1.metrics.mean_relative_error(
+            targets, logits, targets)[1]
 
-        eval_metrics["mre_total"] = tf.compat.v1.metrics.mean_relative_error(targets,
-                                                                   logits,
-                                                                   targets)[1]
+        eval_metrics["mae_total"] = tf.compat.v1.metrics.mean_relative_error(
+            targets, logits, targets)[1]
 
-        eval_metrics["mae_total"] = tf.compat.v1.metrics.mean_relative_error(targets,
-                                                                   logits,
-                                                                   targets)[1]
-
-        eval_metrics["accuracy01"] = self.compute_accuracy(logits, targets, pct_cut=0.01)
-        eval_metrics["accuracy05"] = self.compute_accuracy(logits, targets, pct_cut=0.05)
-        eval_metrics["accuracy1"] = self.compute_accuracy(logits, targets, pct_cut=0.1)
+        eval_metrics["accuracy01"] = self.compute_accuracy(logits,
+                                                           targets,
+                                                           pct_cut=0.01)
+        eval_metrics["accuracy05"] = self.compute_accuracy(logits,
+                                                           targets,
+                                                           pct_cut=0.05)
+        eval_metrics["accuracy1"] = self.compute_accuracy(logits,
+                                                          targets,
+                                                          pct_cut=0.1)
 
         # Create summary scalars
         for key, value in eval_metrics.items():
@@ -159,7 +175,9 @@ class Scaden(object):
         try:
             raw_input = read_h5ad(input_path)
         except:
-            logger.error("Could not load training data file! Is it a .h5ad file generated with `scaden process`?")
+            logger.error(
+                "Could not load training data file! Is it a .h5ad file generated with `scaden process`?"
+            )
             sys.exit()
 
         # Subset dataset
@@ -169,20 +187,27 @@ class Scaden(object):
                 if ds not in datasets:
                     raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
 
-
         # Create training dataset
-        ratios = [raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']]
+        ratios = [
+            raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']
+        ]
         self.x_data = raw_input.X.astype(np.float32)
         self.y_data = np.array(ratios, dtype=np.float32).transpose()
-        self.data = tf.data.Dataset.from_tensor_slices((self.x_data, self.y_data))
-        self.data = self.data.shuffle(1000).repeat().batch(batch_size=batch_size)
+        self.data = tf.data.Dataset.from_tensor_slices(
+            (self.x_data, self.y_data))
+        self.data = self.data.shuffle(1000).repeat().batch(
+            batch_size=batch_size)
         self.data_iter = iter(self.data)
 
         # Extract celltype and feature info
         self.labels = raw_input.uns['cell_types']
         self.sig_genes = list(raw_input.var_names)
 
-    def load_prediction_file(self, input_path, sig_genes, labels, scaling=None):
+    def load_prediction_file(self,
+                             input_path,
+                             sig_genes,
+                             labels,
+                             scaling=None):
         """
         Load a file to perform prediction on it
         :param input_path: path to input file
@@ -197,7 +222,9 @@ class Scaden(object):
         # check for duplicates
         data_index = list(data.index)
         if not (len(data_index) == len(set(data_index))):
-            print("Scaden Warning: Your mixture file conatins duplicate genes! The first occuring gene will be used for every duplicate.")
+            print(
+                "Scaden Warning: Your mixture file conatins duplicate genes! The first occuring gene will be used for every duplicate."
+            )
             data = data.loc[~data.index.duplicated(keep='first')]
 
         data = data.loc[sig_genes]
@@ -220,27 +247,25 @@ class Scaden(object):
         self.global_step = tf.Variable(0, name='global_step', trainable=False)
 
         # Load training data
-        if mode=="train":
-            self.load_h5ad_file(
-                input_path=input_path,
-                batch_size=self.batch_size, 
-                datasets=train_datasets
-                )
+        if mode == "train":
+            self.load_h5ad_file(input_path=input_path,
+                                batch_size=self.batch_size,
+                                datasets=train_datasets)
 
         # Load prediction data
-        if mode=="predict":
+        if mode == "predict":
             self.sample_names = self.load_prediction_file(
-                input_path=input_path, 
-                sig_genes=self.sig_genes, 
-                labels=self.labels, 
-                scaling=self.scaling
-                )
+                input_path=input_path,
+                sig_genes=self.sig_genes,
+                labels=self.labels,
+                scaling=self.scaling)
 
         # Build the model or load if available
         self.n_classes = len(self.labels)
 
         try:
-            self.model = tf.keras.models.load_model(self.model_dir, compile=False)
+            self.model = tf.keras.models.load_model(self.model_dir,
+                                                    compile=False)
             logger.info("Loaded pre-trained model")
         except:
             self.model = self.scaden_model(n_classes=self.n_classes)
@@ -256,18 +281,20 @@ class Scaden(object):
         optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
 
         # Build model graph
-        self.build_model(input_path=input_path, train_datasets=train_datasets, mode="train")
+        self.build_model(input_path=input_path,
+                         train_datasets=train_datasets,
+                         mode="train")
 
         # Training loop
         pbar = tqdm(range(self.num_steps))
-        for step,_ in enumerate(pbar):
+        for step, _ in enumerate(pbar):
 
             x, y = self.data_iter.get_next()
 
             with tf.GradientTape() as tape:
-                self.logits = self.model(x, training = True)
-                loss = self.compute_loss(self.logits, y) 
-            
+                self.logits = self.model(x, training=True)
+                loss = self.compute_loss(self.logits, y)
+
             grads = tape.gradient(loss, self.model.trainable_weights)
 
             optimizer.apply_gradients(zip(grads, self.model.trainable_weights))
@@ -281,9 +308,12 @@ class Scaden(object):
 
         # Save the trained model
         self.model.save(self.model_dir)
-        pd.DataFrame(self.labels).to_csv(os.path.join(self.model_dir, "celltypes.txt"), sep="\t")
-        pd.DataFrame(self.sig_genes).to_csv(os.path.join(self.model_dir, "genes.txt"), sep="\t")
-
+        pd.DataFrame(self.labels).to_csv(os.path.join(self.model_dir,
+                                                      "celltypes.txt"),
+                                         sep="\t")
+        pd.DataFrame(self.sig_genes).to_csv(os.path.join(
+            self.model_dir, "genes.txt"),
+                                            sep="\t")
 
     def predict(self, input_path, out_name="scaden_predictions.txt"):
         """
@@ -299,10 +329,13 @@ class Scaden(object):
         self.labels = list(labels['0'])
 
         # Build model graph
-        self.build_model(input_path=input_path, train_datasets=[], mode="predict")
+        self.build_model(input_path=input_path,
+                         train_datasets=[],
+                         mode="predict")
 
-        print(self.data)
         predictions = self.model.predict(self.data)
 
-        pred_df = pd.DataFrame(predictions[0], columns=self.labels, index=self.sample_names)
+        pred_df = pd.DataFrame(predictions,
+                               columns=self.labels,
+                               index=self.sample_names)
         return pred_df

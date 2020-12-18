@@ -13,7 +13,6 @@ import tensorflow as tf
 from anndata import read_h5ad
 from scaden.model.architectures import architectures
 from scaden.model.scaden_tf2 import Scaden
-
 """
 PARAMETERS
 """
@@ -30,7 +29,13 @@ M1024_DO_RATES = architectures['m1024'][1]
 # ==========================================#
 
 
-def training(data_path, train_datasets, model_dir, batch_size, learning_rate, num_steps, seed=0):
+def training(data_path,
+             train_datasets,
+             model_dir,
+             batch_size,
+             learning_rate,
+             num_steps,
+             seed=0):
     """
     Perform training of three a scaden model ensemble consisting of three different models
     :param model_dir:
@@ -48,43 +53,40 @@ def training(data_path, train_datasets, model_dir, batch_size, learning_rate, nu
 
     # Training of M256 model
     print("Training M256 Model ...")
-    cdn256 = Scaden(
-        model_dir=model_dir+"/m256",
-        model_name='m256',
-        batch_size=batch_size,
-        learning_rate=learning_rate,
-        num_steps=num_steps,
-        seed=seed,
-        hidden_units=M256_HIDDEN_UNITS,
-        do_rates=M512_DO_RATES)
+    cdn256 = Scaden(model_dir=model_dir + "/m256",
+                    model_name='m256',
+                    batch_size=batch_size,
+                    learning_rate=learning_rate,
+                    num_steps=num_steps,
+                    seed=seed,
+                    hidden_units=M256_HIDDEN_UNITS,
+                    do_rates=M512_DO_RATES)
     cdn256.train(input_path=data_path, train_datasets=train_datasets)
     del cdn256
 
     # Training of M512 model
     print("Training M512 Model ...")
-    cdn512 = Scaden(
-        model_dir=model_dir+"/m512",
-        model_name='m512',
-        batch_size=batch_size,
-        learning_rate=learning_rate,
-        num_steps=num_steps,
-        seed=seed,
-        hidden_units=M512_HIDDEN_UNITS,
-        do_rates=M512_DO_RATES)
+    cdn512 = Scaden(model_dir=model_dir + "/m512",
+                    model_name='m512',
+                    batch_size=batch_size,
+                    learning_rate=learning_rate,
+                    num_steps=num_steps,
+                    seed=seed,
+                    hidden_units=M512_HIDDEN_UNITS,
+                    do_rates=M512_DO_RATES)
     cdn512.train(input_path=data_path, train_datasets=train_datasets)
     del cdn512
 
     # Training of M1024 model
     print("Training M1024 Model ...")
-    cdn1024 = Scaden(
-        model_dir=model_dir+"/m1024",
-        model_name='m1024',
-        batch_size=batch_size,
-        learning_rate=learning_rate,
-        num_steps=num_steps,
-        seed=seed,
-        hidden_units=M1024_HIDDEN_UNITS,
-        do_rates=M1024_DO_RATES)
+    cdn1024 = Scaden(model_dir=model_dir + "/m1024",
+                     model_name='m1024',
+                     batch_size=batch_size,
+                     learning_rate=learning_rate,
+                     num_steps=num_steps,
+                     seed=seed,
+                     hidden_units=M1024_HIDDEN_UNITS,
+                     do_rates=M1024_DO_RATES)
     cdn1024.train(input_path=data_path, train_datasets=train_datasets)
     del cdn1024
 

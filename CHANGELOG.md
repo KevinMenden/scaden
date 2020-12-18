@@ -1,5 +1,11 @@
 # Scaden Changelog
 
+### Version 0.9.6
+
++ fixed Dockerfile (switched to pip installation)
++ added better error messages to `simulate` command
++ cleaned up dependencies
+
 ## v0.9.5
 
 * added `--seed` parameter to allow reproducible Scaden runs
