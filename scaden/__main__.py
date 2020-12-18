@@ -6,6 +6,7 @@ from scaden.train import training
 from scaden.predict import prediction
 from scaden.process import processing
 from scaden.simulate import simulation
+from scaden.example import exampleCounts
 """
 
 author: Kevin Menden
@@ -176,3 +177,25 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
                pattern=pattern,
                unknown_celltypes=unknown,
                out_prefix=prefix)
+
+
+"""
+Generate example data
+"""
+
+
+@cli.command()
+@click.option('--out',
+              '-o',
+              default='./',
+              help="Directory to store output files in")
+@click.option('--cells',
+              '-c',
+              default=10,
+              help="Number of cells [default: 10]")
+@click.option('--genes',
+              '-g',
+              default=100,
+              help="Number of genes [default: 100]")
+def example(out, cells, genes):
+    exampleCounts(n_cells=cells, n_genes=genes)
