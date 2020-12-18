@@ -1,7 +1,12 @@
 ![Scaden](docs/img/scaden_logo.png)
 
-![MIT](https://anaconda.org/bioconda/scaden/badges/license.svg)
-![Install with Bioconda](https://anaconda.org/bioconda/scaden/badges/installer/conda.svg)
+
+![Scaden version](https://img.shields.io/badge/Scaden-v0.9.6-cyan)
+![MIT](https://img.shields.io/badge/License-MIT-black)
+![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
+![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
+![Downloads](https://static.pepy.tech/personalized-badge/scaden?period=total&units=international_system&left_color=blue&right_color=green&left_text=Downloads)
+
 ## Single-cell assisted deconvolutional network
 
 Scaden is a deep-learning based algorithm for cell type deconvolution of bulk RNA-seq samples. It was developed 
@@ -26,44 +31,41 @@ hardware (e.g. GPU), however we recommend to have at least 16 GB of memory.
 Scaden requires Python 3. All package dependencies should be handled automatically when installing with pip or conda.
 
 ### 2. Installation guide
+Scaden can be easily installed on a Linux system, and should also work on Mac. 
+There are currently two options for installing Scaden, either using [Bioconda](https://bioconda.github.io/) or via [pip](https://pypi.org/).
 
-#### Stable version
+## pip
+To install Scaden via pip, simply run the following command:
 
-The recommended way to install Scaden is using conda and the Bioconda channel.
+`pip install scaden`
 
-You can create a conda environment for your scaden installation to minimize package conflicts:
 
-```bash
-conda create -n scaden_env --override-channels -c defaults -c conda-forge -c bioconda scaden
-```
+## Bioconda
+You can also install Scaden via bioconda, using:
 
-`scaden` depends on `tensorflow`. On conda `tensorflow` uses the CPU to train the networks.
- If you have a `cuda` capable GPU, you may want to install the `tensorflow-gpu` conda package as well
-so scaden uses the gpu instead:
+`conda install -c bioconda scaden`
 
-```bash
-conda activate scaden_env
-conda install tensorflow-gpu
-```
+## GPU
+If you want to make use of your GPU, you will have to additionally install `tensorflow-gpu`.
 
-Installation with `conda` takes only a few minutes (2-5), depending on the internet connection.
+For pip:
 
-Alternatively Scaden can be installed with `pip`:
+`pip install tensorflow-gpu`
 
-```bash
-# Create a virtual environment:
-python3 -m venv ./venv
-# Activate the virtual environment with:
-source ./venv/bin/activate
-# Upgrade pip and wheel:
-python3 -m pip install -U pip wheel
-# Install scaden:
-python3 -m pip install -U scaden
-```
+For conda:
 
-We also provide a docker image with Scaden installed:
-[https://hub.docker.com/r/kevinmenden/scaden](https://hub.docker.com/r/kevinmenden/scaden)
+`conda install tensorflow-gpu`
 
+## Docker
+If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
+For every release, we provide two version - one for CPU and one for GPU usage.
+To pull the CPU container, use this command:
+
+`docker pull ghcr.io/kevinmenden/scaden/scaden`
+
+For the GPU container:
+
+`docker pull ghcr.io/kevinmenden/scaden/scaden-gpu`
 
 ### Webtool (beta)
 Additionally, we now proivde a web tool:
