@@ -2,10 +2,10 @@ import click
 import scaden
 import logging
 import os
-from scaden.training import training
-from scaden.prediction import prediction
-from scaden.processing import processing
-from scaden.preprocessing.simulate import simulation
+from scaden.train import training
+from scaden.predict import prediction
+from scaden.process import processing
+from scaden.simulate import simulation
 """
 
 author: Kevin Menden
