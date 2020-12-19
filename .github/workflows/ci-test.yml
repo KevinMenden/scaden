@@ -26,7 +26,7 @@ jobs:
       - name: Create example data
         run: |
           mkdir example_data
-          scaden example -out example_data
+          scaden example --out example_data
 
       - name: Simulate training data
         run: |
