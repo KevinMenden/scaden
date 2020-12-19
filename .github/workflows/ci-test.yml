@@ -1,0 +1,45 @@
+name: Scaden CI
+# This workflow installs Scaden, creates example data and performs all
+# steps of the Scaden workflow: simulation, processing, training and prediction
+on: [push, pull_request]
+
+jobs:
+  run_scaden:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.x"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install setuptools wheel twine
+
+      - name: Install Scaden
+        run: |
+          pip install .
+
+      - name: Create example data
+        run: |
+          mkdir example_data
+          scaden example -out example_data
+
+      - name: Simulate training data
+        run: |
+          scaden simulate -d example_data --pattern '*_counts.txt'
+
+      - name: Scaden process
+        run: |
+          scaden process data.h5ad example_data/example_bulk_data.txt
+
+      - name: Scaden training
+        run: |
+          scaden train processed.h5ad --steps 100 --model_dir model
+
+      - name: Scaden predict
+        run: |
+          scaden predict --model_dir model example_data/example_bulk_data.txt
