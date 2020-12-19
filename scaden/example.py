@@ -48,4 +48,4 @@ def exampleData(n_cells=10, n_genes=100, n_samples=10, out_dir="./"):
                  index=False)
     bulk_df.to_csv(os.path.join(out_dir, "example_bulk_data.txt"), sep="\t")
 
-    logger.warn(f"Example data has been create in {out_dir}")
+    logger.warn(f"Example data has been created in {out_dir}")

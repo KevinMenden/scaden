@@ -25,16 +25,15 @@ jobs:
 
       - name: Create example data
         run: |
-          mkdir example_data
-          scaden example --out example_data
+          scaden example
 
       - name: Simulate training data
         run: |
-          scaden simulate -d example_data --pattern '*_counts.txt'
+          scaden simulate --pattern '*_counts.txt'
 
       - name: Scaden process
         run: |
-          scaden process data.h5ad example_data/example_bulk_data.txt
+          scaden process data.h5ad example_bulk_data.txt
 
       - name: Scaden training
         run: |
@@ -42,4 +41,4 @@ jobs:
 
       - name: Scaden predict
         run: |
-          scaden predict --model_dir model example_data/example_bulk_data.txt
+          scaden predict --model_dir model example_bulk_data.txt
