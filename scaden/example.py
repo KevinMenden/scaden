@@ -28,7 +28,7 @@ def exampleData(n_cells=10, n_genes=100, n_samples=10, out_dir="./"):
     df = pd.DataFrame(counts, columns=gene_names)
 
     # Generate example celltype labels
-    celltypes = ['celltype'] * np.random.randint(n_cells - 1)
+    celltypes = ['celltype'] * np.random.randint(low=2, high=n_cells - 1)
     for i in range(len(celltypes)):
         celltypes[i] = celltypes[i] + str(i)
     celltype_list = random.choices(celltypes, k=n_cells)
