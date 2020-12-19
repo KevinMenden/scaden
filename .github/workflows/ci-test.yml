@@ -26,6 +26,7 @@ jobs:
       - name: Create example data
         run: |
           scaden example
+          scaden simulate --pattern '*_counts.txt'
 
       - name: Simulate training data
         run: |
