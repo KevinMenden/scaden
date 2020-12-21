@@ -26,11 +26,11 @@ jobs:
       - name: Create example data
         run: |
           mkdir example_data
-          scaden example -out example_data
+          scaden example --out example_data/
 
       - name: Simulate training data
         run: |
-          scaden simulate -d example_data --pattern '*_counts.txt'
+          scaden simulate --data example_data/ --pattern '*_counts.txt'
 
       - name: Scaden process
         run: |
