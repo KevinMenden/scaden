@@ -155,7 +155,7 @@ Simulate dataset
               help="Number of samples to simulate [default: 1000]")
 @click.option(
     '--pattern',
-    default="*_norm_counts_all.txt",
+    default="*_counts.txt",
     help="File pattern to recognize your processed scRNA-seq count files")
 @click.option(
     '--unknown',
