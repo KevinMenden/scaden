@@ -3,6 +3,8 @@
 from setuptools import setup, find_packages
 
 version = '1.0.0'
+=======
+
 
 with open("README.md", "r", encoding="UTF-8") as fh:
     long_description = fh.read()
@@ -31,3 +33,4 @@ setup(name='scaden',
           'pandas', 'numpy', 'scikit-learn', 'tensorflow>=2.0', 'anndata',
           'tqdm', 'click', 'h5py~=2.10.0'
       ])
+

@@ -315,6 +315,7 @@ class Scaden(object):
             self.model_dir, "genes.txt"),
                                             sep="\t")
 
+
     def predict(self, input_path, out_name="scaden_predictions.txt"):
         """
         Perform prediction with a pre-trained model

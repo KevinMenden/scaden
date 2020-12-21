@@ -170,6 +170,22 @@ def filter_matrix_signature(mat, genes):
     mat = mat[genes]
     return mat
 
+def load_celltypes(path, name):
+    """ Load the cell type information """
+    try:
+        y = pd.read_table(path)
+        # Check if has Celltype column
+        if not 'Celltype' in y.columns:
+            logger.error(f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column.")
+            sys.exit()
+    except FileNotFoundError as e:
+        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        sys.exit(e)
+    
+    return y
+
+
+
 
 def load_dataset(name, dir, pattern):
     """
@@ -324,6 +340,7 @@ def simulate_bulk(sample_size, num_samples, data_path, out_dir, pattern,
         logging.error(
             "No datasets fround! Have you specified the pattern correctly?")
         sys.exit(1)
+
 
     print("Datasets: " + str(datasets))
 

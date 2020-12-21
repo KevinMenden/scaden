@@ -9,6 +9,7 @@
 
 ### Version 0.9.6
 
+
 + fixed Dockerfile (switched to pip installation)
 + added better error messages to `simulate` command
 + cleaned up dependencies
@@ -47,3 +48,4 @@ Commands:
 * `scaden process`: Process a training dataset for training
 * `scaden train`: Train a Scaden model
 * `scaden predict`: Predict cell type compositions of a given sample
+
