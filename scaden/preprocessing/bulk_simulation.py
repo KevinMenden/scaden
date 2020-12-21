@@ -171,25 +171,6 @@ def filter_matrix_signature(mat, genes):
     return mat
 
 
-def load_celltypes(path, name):
-    """ Load the cell type information """
-    try:
-        y = pd.read_table(path)
-        # Check if has Celltype column
-        if not 'Celltype' in y.columns:
-            logger.error(
-                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
-            )
-            sys.exit()
-    except FileNotFoundError as e:
-        logger.error(
-            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
-        )
-        sys.exit(e)
-
-    return y
-
-
 def load_dataset(name, dir, pattern):
     """
     Load a dataset given its name and the directory
@@ -201,8 +182,36 @@ def load_dataset(name, dir, pattern):
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
 
-    y = load_celltypes(dir + name + "_celltypes.txt", name)
-    x = pd.read_table(dir + name + pattern, index_col=0)
+    # Try to load celltypes
+    try:
+        y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
+        # Check if has Celltype column
+        print(y.columns)
+        if not 'Celltype' in y.columns:
+            logger.error(
+                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+            )
+            sys.exit()
+    except FileNotFoundError as e:
+        logger.error(
+            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
+        )
+        sys.exit(e)
+
+    # Try to load data file
+    try:
+        x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
+    except FileNotFoundError as e:
+        logger.error(
+            f"No counts file found for {name}. Was looking for file {name + pattern}"
+        )
+
+    # Check that celltypes and count file have same number of cells
+    if not y.shape[0] == x.shape[0]:
+        logger.error(
+            f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
+        )
+        sys.exit(1)
 
     return (x, y)
 
@@ -314,7 +323,7 @@ def simulate_bulk(sample_size, num_samples, data_path, out_dir, pattern,
     if len(datasets) == 0:
         logging.error(
             "No datasets fround! Have you specified the pattern correctly?")
-        sys.exit()
+        sys.exit(1)
 
     print("Datasets: " + str(datasets))
 

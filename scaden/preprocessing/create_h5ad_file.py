@@ -15,6 +15,7 @@ import numpy as np
 
 logger = logging.getLogger(__name__)
 
+
 def parse_data(x_path, y_path):
     """
     Parse data and labels and divide them into training and testset
@@ -94,18 +95,16 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
 
         x = x.sort_index(axis=1)
         ratios = pd.DataFrame(y, columns=celltypes)
-        ratios["ds"] = pd.Series(np.repeat(train_file, y.shape[0]), index=ratios.index)
+        ratios["ds"] = pd.Series(np.repeat(train_file, y.shape[0]),
+                                 index=ratios.index)
 
         print("Processing " + str(train_file))
         x = pd.DataFrame(x)
         adata.append(
-            anndata.AnnData(
-                X=x.to_numpy(), obs=ratios, var=pd.DataFrame(columns=[], index=list(x))
-            )
-        )
-        
-        
-    
+            anndata.AnnData(X=x.to_numpy(),
+                            obs=ratios,
+                            var=pd.DataFrame(columns=[], index=list(x))))
+
     for i in range(1, len(adata)):
         print("Concatenating " + str(i))
         adata[0] = adata[0].concatenate(adata[1])
