@@ -56,9 +56,11 @@ Training mode
                 type=click.Path(exists=True),
                 required=True,
                 metavar='<training data>')
-@click.option('--train_datasets',
-              default='',
-              help='Datasets used for training. Uses all by default.')
+@click.option(
+    '--train_datasets',
+    default='',
+    help=
+    'Comma-separated list of datasets used for training. Uses all by default.')
 @click.option('--model_dir', default="./", help='Path to store the model in')
 @click.option('--batch_size',
               default=128,

@@ -48,7 +48,7 @@ def training(data_path,
     if train_datasets == '':
         train_datasets = []
     else:
-        train_datasets = train_datasets.split()
+        train_datasets = train_datasets.split(',')
         print(f"Training on: {train_datasets}")
 
     # Training of M256 model
