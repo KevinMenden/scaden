@@ -1,7 +1,7 @@
 ![Scaden](docs/img/scaden_logo.png)
 
 
-![Scaden version](https://img.shields.io/badge/Scaden-v0.9.6-cyan)
+![Scaden version](https://img.shields.io/badge/Scaden-v1.0.0-cyan)
 ![MIT](https://img.shields.io/badge/License-MIT-black)
 ![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
 ![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
