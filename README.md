@@ -6,7 +6,8 @@
 ![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
 ![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
 ![Downloads](https://static.pepy.tech/personalized-badge/scaden?period=total&units=international_system&left_color=blue&right_color=green&left_text=Downloads)
-
+![Docker](https://github.com/kevinmenden/scaden/workflows/Docker/badge.svg)
+![Scaden CI](https://github.com/kevinmenden/scaden/workflows/Scaden%20CI/badge.svg)
 ## Single-cell assisted deconvolutional network
 
 Scaden is a deep-learning based algorithm for cell type deconvolution of bulk RNA-seq samples. It was developed 

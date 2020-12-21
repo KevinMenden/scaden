@@ -9,6 +9,7 @@ import glob
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
 
@@ -304,7 +305,9 @@ def simulate_bulk(sample_size, num_samples, data_path, out_dir, pattern,
         2)  # divide by two so half is sparse and half is normal samples
 
     # List available datasets
-    files = glob.glob(os.path.join(data_path + pattern))
+    if not data_path.endswith("/"):
+        data_path += "/"
+    files = glob.glob(os.path.join(data_path, pattern))
     files = [os.path.basename(x) for x in files]
     datasets = [x.split("_")[0] for x in files]
 
