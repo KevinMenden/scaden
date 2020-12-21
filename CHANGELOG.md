@@ -2,6 +2,7 @@
 
 ### Version 1.0.0
 
+* Rebuild Scaden model and training to use TF2 Keras API instead of the old compatibility functions 
 * added `scaden example` command which allows to generate example data for test-running scaden and to inpstec the expected file format
 * added more tests and checks input reading function in `scaden simulate`
 * fixed bug in reading input data 
