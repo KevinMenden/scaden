@@ -9,8 +9,10 @@ import glob
 import pandas as pd
 import numpy as np
 from tqdm import tqdm
+from pathlib import Path
 
 logger = logging.getLogger(__name__)
+
 
 def create_fractions(no_celltypes):
     """
@@ -24,7 +26,12 @@ def create_fractions(no_celltypes):
     return fracs
 
 
-def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=False):
+def create_subsample(x,
+                     y,
+                     sample_size,
+                     celltypes,
+                     available_celltypes,
+                     sparse=False):
     """
     Generate artifical bulk subsample with random fractions of celltypes
     If sparse is set to true, add random celltypes to the missing celltypes
@@ -39,9 +46,9 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
 
     if sparse:
         no_keep = np.random.randint(1, len(available_celltypes))
-        keep = np.random.choice(
-            list(range(len(available_celltypes))), size=no_keep, replace=False
-        )
+        keep = np.random.choice(list(range(len(available_celltypes))),
+                                size=no_keep,
+                                replace=False)
         available_celltypes = [available_celltypes[i] for i in keep]
 
     no_avail_cts = len(available_celltypes)
@@ -61,7 +68,8 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
     for i in range(no_avail_cts):
         ct = available_celltypes[i]
         cells_sub = x.loc[np.array(y["Celltype"] == ct), :]
-        cells_fraction = np.random.randint(0, cells_sub.shape[0], samp_fracs[i])
+        cells_fraction = np.random.randint(0, cells_sub.shape[0],
+                                           samp_fracs[i])
         cells_sub = cells_sub.iloc[cells_fraction, :]
         artificial_samples.append(cells_sub)
 
@@ -91,9 +99,8 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     pbar = tqdm(range(no_samples))
     pbar.set_description(desc="Normal samples")
     for _ in pbar:
-        sample, label = create_subsample(
-            x, y, sample_size, celltypes, available_celltypes
-        )
+        sample, label = create_subsample(x, y, sample_size, celltypes,
+                                         available_celltypes)
         X.append(sample)
         Y.append(label)
 
@@ -102,9 +109,12 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     pbar = tqdm(range(n_sparse))
     pbar.set_description(desc="Sparse samples")
     for _ in pbar:
-        sample, label = create_subsample(
-            x, y, sample_size, celltypes, available_celltypes, sparse=True
-        )
+        sample, label = create_subsample(x,
+                                         y,
+                                         sample_size,
+                                         celltypes,
+                                         available_celltypes,
+                                         sparse=True)
         X.append(sample)
         Y.append(label)
     X = pd.concat(X, axis=1).T
@@ -160,21 +170,24 @@ def filter_matrix_signature(mat, genes):
     mat = mat[genes]
     return mat
 
+
 def load_celltypes(path, name):
     """ Load the cell type information """
     try:
         y = pd.read_table(path)
         # Check if has Celltype column
         if not 'Celltype' in y.columns:
-            logger.error(f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column.")
+            logger.error(
+                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+            )
             sys.exit()
     except FileNotFoundError as e:
-        logger.error(f"No celltypes file found for {name}. It should be called {name}_celltypes.txt.")
+        logger.error(
+            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
+        )
         sys.exit(e)
-    
+
     return y
-
-
 
 
 def load_dataset(name, dir, pattern):
@@ -188,9 +201,37 @@ def load_dataset(name, dir, pattern):
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
 
-    y = load_celltypes(dir + name + "_celltypes.txt", name)
-    x = pd.read_table(dir + name + pattern, index_col=0)
-    
+    # Try to load celltypes
+    try:
+        y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
+        # Check if has Celltype column
+        print(y.columns)
+        if not 'Celltype' in y.columns:
+            logger.error(
+                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+            )
+            sys.exit()
+    except FileNotFoundError as e:
+        logger.error(
+            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
+        )
+        sys.exit(e)
+
+    # Try to load data file
+    try:
+        x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
+    except FileNotFoundError as e:
+        logger.error(
+            f"No counts file found for {name}. Was looking for file {name + pattern}"
+        )
+
+    # Check that celltypes and count file have same number of cells
+    if not y.shape[0] == x.shape[0]:
+        logger.error(
+            f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
+        )
+        sys.exit(1)
+
     return (x, y)
 
 
@@ -203,7 +244,9 @@ def merge_unkown_celltypes(y, unknown_celltypes):
     :return:
     """
     celltypes = list(y["Celltype"])
-    new_celltypes = ["Unknown" if x in unknown_celltypes else x for x in celltypes]
+    new_celltypes = [
+        "Unknown" if x in unknown_celltypes else x for x in celltypes
+    ]
     y["Celltype"] = new_celltypes
     return y
 
@@ -273,9 +316,8 @@ def generate_signature(x, y):
     return signature_matrix
 
 
-def simulate_bulk(
-    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes
-):
+def simulate_bulk(sample_size, num_samples, data_path, out_dir, pattern,
+                  unknown_celltypes):
     """
     Simulate artificial bulk samples from single cell datasets
     :param sample_size: number of cells per sample
@@ -287,17 +329,20 @@ def simulate_bulk(
     """
 
     num_samples = int(
-        num_samples / 2
-    )  # divide by two so half is sparse and half is normal samples
+        num_samples /
+        2)  # divide by two so half is sparse and half is normal samples
 
     # List available datasets
-    files = glob.glob(data_path + pattern)
+    if not data_path.endswith("/"):
+        data_path += "/"
+    files = glob.glob(os.path.join(data_path, pattern))
     files = [os.path.basename(x) for x in files]
     datasets = [x.split("_")[0] for x in files]
 
     if len(datasets) == 0:
-        logging.error("No datasets fround! Have you specified the pattern correctly?")
-        sys.exit()
+        logging.error(
+            "No datasets found! Have you specified the pattern correctly?")
+        sys.exit(1)
 
     print("Datasets: " + str(datasets))
 
@@ -326,11 +371,14 @@ def simulate_bulk(
     # Create datasets
     for i in range(len(xs)):
         print("Subsampling " + datasets[i] + "...")
-        tmpx, tmpy = create_subsample_dataset(
-            xs[i], ys[i], sample_size, celltypes, num_samples
-        )
-        tmpx.to_csv(out_dir + datasets[i] + "_samples.txt", sep="\t", index=False)
-        tmpy.to_csv(out_dir + datasets[i] + "_labels.txt", sep="\t", index=False)
+        tmpx, tmpy = create_subsample_dataset(xs[i], ys[i], sample_size,
+                                              celltypes, num_samples)
+        tmpx.to_csv(out_dir + datasets[i] + "_samples.txt",
+                    sep="\t",
+                    index=False)
+        tmpy.to_csv(out_dir + datasets[i] + "_labels.txt",
+                    sep="\t",
+                    index=False)
         gc.collect()
 
     print("Finished!")

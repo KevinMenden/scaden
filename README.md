@@ -6,6 +6,8 @@
 ![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
 ![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
 ![Downloads](https://static.pepy.tech/personalized-badge/scaden?period=total&units=international_system&left_color=blue&right_color=green&left_text=Downloads)
+![Docker](https://github.com/kevinmenden/scaden/workflows/Docker/badge.svg)
+![Scaden CI](https://github.com/kevinmenden/scaden/workflows/Scaden%20CI/badge.svg)
 
 ## Single-cell assisted deconvolutional network
 
@@ -23,29 +25,24 @@ Scaden overview. a) Generation of artificial bulk samples with known cell type c
 of Scaden model ensemble on simulated training data. c) Scaden ensemble architecture. d) A trained Scaden model can be used
 to deconvolve complex bulk mixtures.
 
-### 1. System requirements
-Scaden was developed and tested on Linux (Ubuntu 16.04 and 18.04). It was not tested on Windows or Mac, but should
-also be usable on these systems when installing with Pip or Bioconda. Scaden does not require any special
-hardware (e.g. GPU), however we recommend to have at least 16 GB of memory.
 
-Scaden requires Python 3. All package dependencies should be handled automatically when installing with pip or conda.
 
-### 2. Installation guide
+## Installation guide
 Scaden can be easily installed on a Linux system, and should also work on Mac. 
 There are currently two options for installing Scaden, either using [Bioconda](https://bioconda.github.io/) or via [pip](https://pypi.org/).
 
-## pip
+### pip
 To install Scaden via pip, simply run the following command:
 
 `pip install scaden`
 
 
-## Bioconda
+### Bioconda
 You can also install Scaden via bioconda, using:
 
 `conda install -c bioconda scaden`
 
-## GPU
+### GPU
 If you want to make use of your GPU, you will have to additionally install `tensorflow-gpu`.
 
 For pip:
@@ -56,7 +53,7 @@ For conda:
 
 `conda install tensorflow-gpu`
 
-## Docker
+### Docker
 If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
 For every release, we provide two version - one for CPU and one for GPU usage.
 To pull the CPU container, use this command:
@@ -74,38 +71,54 @@ Additionally, we now proivde a web tool:
 
 It contains pre-generated training datasets for several tissues, and all you need to do is to upload your expression data. Please note that this is still in preview.
 
-### 3. Demo
-We provide several curated [training datasets](https://scaden.readthedocs.io/en/latest/datasets/) for Scaden. For this demo,
-we will use the human PBMC training dataset, which consists of 4 different scRNA-seq datasets and 32,000 samples in total.
-You can download it here:
-[https://figshare.com/s/e59a03885ec4c4d8153f](https://figshare.com/s/e59a03885ec4c4d8153f).
+## Usage
+We provide a detailed instructions for how to use Scaden at our [Documentation page](https://scaden.readthedocs.io/en/latest/usage/)
 
-For this demo, you will also need to download some test samples to perform deconvolution on, along with their associated labels.
-You can download the data we used for the Scaden paper here:
-[https://figshare.com/articles/Publication_Figures/8234030](https://figshare.com/articles/Publication_Figures/8234030)
+A deconvolution workflow with Scaden consists of four major steps:
+* data simulation
+* data processing
+* training
+* prediction
 
-We'll perform deconvolution on simulated samples from the data6k dataset. You can find the samples and labels in 'paper_data/figures/figure2/data/data6k_500_*'
-once you have downloaded this data from the link mentioned above.
+If training data is already available, you can start at the data processing step. Otherwise you will first have to process scRNA-seq datasets and perform data simulation to generate a training dataset. As an example workflow, you can use Scaden's function `scaden example` to generate example data and go through the whole pipeline.
 
-The first step is to perform preprocessing on the training data. This is done with the following command:
+First, make an example data directory and generate the example data:
+```bash
+mkdir example_data
+scaden example --out example_data/
+```
+This generates the files "example_counts.txt", "example_celltypes.txt" and "example_bulk_data.txt" in the "example_data" directory. Next, you can generate training data:
 
-`scaden process pbmc_data.h5ad paper_data/figures/figure2/data/data6k_500_samples.txt`
+```bash
+scaden simulate --data example_data/ -n 100 --pattern "*_counts.txt
+```
 
-This will generate a file called 'processed.h5ad', which we will use for training. The training data
-we have downloaded also contains samples from the data6k scRNA-seq dataset, so we have to exclude them from training
-to get a meaningfull test of Scaden's performance. The following command will train a Scaden ensemble for 5000 steps per model (recommended),
-and store it in 'scaden_model'. Data from the data6k dataset will be excluded from training. Depending on your machine, this can take about 10-20 minutes.
+This generates 100 samples of training data in your current working directory. The file you need for your next step is called "data.h5ad". Now you need to perform the preprocessing using the training data and the bulk data file:
 
-`scaden train processed.h5ad --steps 5000 --model_dir scaden_model --train_datasets 'data8k donorA donorC'`
+```bash
+scaden process data.h5ad example_data/example_bulk_data.txt
+```
 
-Finally, we can perform deconvolution on the 500 simulates samples from the data6k dataset:
+As a result, you should now have a file called "processed.h5ad" in your directory. Now you can perform training. The following command performs training for 5000 steps per model and saves the trained weights to the "model" directory, which will be created:
 
-`scaden predict paper_data/figures/figure2/data/data6k_500_samples.txt --model_dir scaden_model`
+```bash
+scaden train processed.h5ad --steps 5000 --model_dir model
+```
 
-This will create a file named 'cdn_predictions.txt' (will be renamed in future version to 'scaden_predictions.txt'), which contains
-the deconvolution results. You can now compare these predictions with the true values contained in 
-'paper_data/figures/figure2/data/data6k_500_labels.txt'. This should give you the same results as we obtained in the Scaden paper
-(see Figure 2).
+Finally, you can use the trained model to perform prediction:
 
-### 4. Instructions for use
-For a general description on how to use Scaden, please check out our [usage documentation](https://scaden.readthedocs.io/en/latest/usage/).
+```bash
+scaden predict --model_dir model example_data/example_bulk_data.txt
+```
+
+Now you should have a file called "scaden_predictions.txt" in your working directory, which contains your estimated cell compositions.
+
+
+
+
+### 1. System requirements
+Scaden was developed and tested on Linux (Ubuntu 16.04 and 18.04). It was not tested on Windows or Mac, but should
+also be usable on these systems when installing with Pip or Bioconda. Scaden does not require any special
+hardware (e.g. GPU), however we recommend to have at least 16 GB of memory.
+
+Scaden requires Python 3. All package dependencies should be handled automatically when installing with pip or conda.
