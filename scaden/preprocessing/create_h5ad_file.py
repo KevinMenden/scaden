@@ -71,7 +71,7 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
     # List available datasets
     files = glob.glob(data_dir + pattern)
     files = [os.path.basename(x) for x in files]
-    datasets = [x.split("_")[0] for x in files]
+    datasets = [x.replace(pattern.replace("*", ""), "") for x in files]
 
     # get celltypes
     celltypes = load_celltypes(data_dir)
@@ -95,15 +95,15 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
 
         x = x.sort_index(axis=1)
         ratios = pd.DataFrame(y, columns=celltypes)
-        ratios["ds"] = pd.Series(np.repeat(train_file, y.shape[0]),
-                                 index=ratios.index)
+        ratios["ds"] = pd.Series(np.repeat(train_file, y.shape[0]), index=ratios.index)
 
         print("Processing " + str(train_file))
         x = pd.DataFrame(x)
         adata.append(
-            anndata.AnnData(X=x.to_numpy(),
-                            obs=ratios,
-                            var=pd.DataFrame(columns=[], index=list(x))))
+            anndata.AnnData(
+                X=x.to_numpy(), obs=ratios, var=pd.DataFrame(columns=[], index=list(x))
+            )
+        )
 
     for i in range(1, len(adata)):
         print("Concatenating " + str(i))
