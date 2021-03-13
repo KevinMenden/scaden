@@ -71,7 +71,7 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
     # List available datasets
     files = glob.glob(data_dir + pattern)
     files = [os.path.basename(x) for x in files]
-    datasets = [x.split("_")[0] for x in files]
+    datasets = [x.replace(pattern.replace("*", ""), "") for x in files]
 
     # get celltypes
     celltypes = load_celltypes(data_dir)
