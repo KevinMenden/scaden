@@ -334,7 +334,7 @@ def simulate_bulk(
         logging.error("No datasets found! Have you specified the pattern correctly?")
         sys.exit(1)
 
-    print("Datasets: " + str(datasets))
+    logger.info("Datasets: [cyan]" + str(datasets) + "[/]")
 
     # Load datasets
     xs, ys = [], []
@@ -345,22 +345,23 @@ def simulate_bulk(
 
     # Get common gene list
     all_genes = get_common_genes(xs, type="intersection")
-    print("No. of common genes: " + str(len(all_genes)))
+    logger.info("No. of common genes: " + str(len(all_genes)))
     xs = [filter_matrix_signature(m, all_genes) for m in xs]
 
     # Merge unknown celltypes
-    print("Merging unknown cell types: " + str(unknown_celltypes))
+    logger.info("Merging unknown cell types: " + str(unknown_celltypes))
     for i in range(len(ys)):
         ys[i] = merge_unkown_celltypes(ys[i], unknown_celltypes)
 
     # Collect all available celltypes
     celltypes = collect_celltypes(ys)
-    print("Available celltypes: " + str(celltypes))
+    logger.info("Available celltypes: " + str(celltypes))
     pd.DataFrame(celltypes).to_csv(out_dir + "celltypes.txt", sep="\t")
 
     # Create datasets
     for i in range(len(xs)):
-        print("Subsampling " + datasets[i] + "...")
+        logger.info("Subsampling " + datasets[i] + "...")
+
         tmpx, tmpy = create_subsample_dataset(
             xs[i], ys[i], sample_size, celltypes, num_samples
         )
@@ -368,4 +369,4 @@ def simulate_bulk(
         tmpy.to_csv(out_dir + datasets[i] + "_labels.txt", sep="\t", index=False)
         gc.collect()
 
-    print("Finished!")
+    logger.info("[bold green]Finished data simulation!")

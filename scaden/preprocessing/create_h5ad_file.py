@@ -67,7 +67,7 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
     """
     Create h5ad file from simulated data
     """
-
+    logger.info("[bold]Creating h5ad file")
     # List available datasets
     files = glob.glob(data_dir + pattern)
     files = [os.path.basename(x) for x in files]
@@ -75,8 +75,8 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
 
     # get celltypes
     celltypes = load_celltypes(data_dir)
-    print(f"Celltypes: {celltypes}")
-    print(f"Found datasets: {datasets}")
+    logger.info(f"Celltypes: {celltypes}")
+    logger.info(f"Found datasets: {datasets}")
     adata = []
     me_dict = {}
 
@@ -97,7 +97,7 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
         ratios = pd.DataFrame(y, columns=celltypes)
         ratios["ds"] = pd.Series(np.repeat(train_file, y.shape[0]), index=ratios.index)
 
-        print("Processing " + str(train_file))
+        logger.info("Processing " + str(train_file))
         x = pd.DataFrame(x)
         adata.append(
             anndata.AnnData(
@@ -106,11 +106,11 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
         )
 
     for i in range(1, len(adata)):
-        print("Concatenating " + str(i))
+        logger.info("Concatenating " + str(i))
         adata[0] = adata[0].concatenate(adata[1])
         del adata[1]
         gc.collect()
-        print(len(adata))
+        logger.info(len(adata))
     adata = adata[0]
 
     # add cell types and signature genes
@@ -119,3 +119,4 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
 
     # save data
     adata.write(out_path)
+    logger.info(f"Created h5ad file: {out_path}")

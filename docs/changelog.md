@@ -1,5 +1,11 @@
 # Scaden Changelog
 
+### Version 1.0.2
+
+* General improvement of logging using the 'rich' library for colorized output
+* Added verification check for '--train_datasets' parameter to notify user of 
+  unavailable datasets
+
 ### Version 1.0.1
 
 * Made identification of datasets more robust to fix issue [#66](https://github.com/KevinMenden/scaden/issues/66)
@@ -12,7 +18,6 @@
 * fixed bug in reading input data 
 
 ### Version 0.9.6
-
 
 + fixed Dockerfile (switched to pip installation)
 + added better error messages to `simulate` command
@@ -52,4 +57,3 @@ Commands:
 * `scaden process`: Process a training dataset for training
 * `scaden train`: Train a Scaden model
 * `scaden predict`: Predict cell type compositions of a given sample
-

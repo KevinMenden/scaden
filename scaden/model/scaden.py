@@ -20,15 +20,18 @@ class Scaden(object):
     """
     scaden class
     """
-    def __init__(self,
-                 model_dir,
-                 model_name,
-                 batch_size=128,
-                 learning_rate=0.0001,
-                 num_steps=1000,
-                 seed=0,
-                 hidden_units=[256, 128, 64, 32],
-                 do_rates=[0, 0, 0, 0]):
+
+    def __init__(
+        self,
+        model_dir,
+        model_name,
+        batch_size=128,
+        learning_rate=0.0001,
+        num_steps=1000,
+        seed=0,
+        hidden_units=[256, 128, 64, 32],
+        do_rates=[0, 0, 0, 0],
+    ):
 
         self.model_dir = model_dir
         self.batch_size = batch_size
@@ -50,24 +53,20 @@ class Scaden(object):
 
         # Set seeds for reproducibility
         tf.random.set_seed(seed)
-        os.environ['TF_DETERMINISTIC_OPS'] = '1'
+        os.environ["TF_DETERMINISTIC_OPS"] = "1"
         np.random.seed(seed)
 
     def scaden_model(self, n_classes):
         """Create the Scaden model"""
 
         model = tf.keras.Sequential()
-        model.add(
-            tf.keras.layers.Dense(self.hidden_units[0], activation=tf.nn.relu))
+        model.add(tf.keras.layers.Dense(self.hidden_units[0], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[0]))
-        model.add(
-            tf.keras.layers.Dense(self.hidden_units[1], activation=tf.nn.relu))
+        model.add(tf.keras.layers.Dense(self.hidden_units[1], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[1]))
-        model.add(
-            tf.keras.layers.Dense(self.hidden_units[2], activation=tf.nn.relu))
+        model.add(tf.keras.layers.Dense(self.hidden_units[2], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[2]))
-        model.add(
-            tf.keras.layers.Dense(self.hidden_units[3], activation=tf.nn.relu))
+        model.add(tf.keras.layers.Dense(self.hidden_units[3], activation=tf.nn.relu))
         model.add(tf.keras.layers.Dropout(self.do_rates[3]))
         model.add(tf.keras.layers.Dense(n_classes, activation=tf.nn.softmax))
 
@@ -91,7 +90,8 @@ class Scaden(object):
         :return:
         """
         equality = tf.less_equal(
-            tf.math.abs(tf.math.subtract(logits, targets)), pct_cut)
+            tf.math.abs(tf.math.subtract(logits, targets)), pct_cut
+        )
         accuracy = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
         return accuracy
 
@@ -107,8 +107,11 @@ class Scaden(object):
         xm, ym = logits - mx, targets - my
         r_num = tf.reduce_sum(input_tensor=tf.multiply(xm, ym))
         r_den = tf.sqrt(
-            tf.multiply(tf.reduce_sum(input_tensor=tf.square(xm)),
-                        tf.reduce_sum(input_tensor=tf.square(ym))))
+            tf.multiply(
+                tf.reduce_sum(input_tensor=tf.square(xm)),
+                tf.reduce_sum(input_tensor=tf.square(ym)),
+            )
+        )
         r = tf.divide(r_num, r_den)
         r = tf.maximum(tf.minimum(r, 1.0), -1.0)
         return r
@@ -127,38 +130,44 @@ class Scaden(object):
 
         for i in range(logits.shape[1]):
             eval_metrics[
-                "mre_" +
-                str(classes[i])] = tf.compat.v1.metrics.mean_relative_error(
-                    targets[:, i], logits[:, i], targets[:, i])[0]
+                "mre_" + str(classes[i])
+            ] = tf.compat.v1.metrics.mean_relative_error(
+                targets[:, i], logits[:, i], targets[:, i]
+            )[
+                0
+            ]
             eval_metrics[
-                "mae_" +
-                str(classes[i])] = tf.compat.v1.metrics.mean_absolute_error(
-                    targets[:, i], logits[:, i], targets[:, i])[0]
-            eval_metrics["pcor_" +
-                         str(classes[i])] = self.correlation_coefficient(
-                             targets[:, i], logits[:, i])
+                "mae_" + str(classes[i])
+            ] = tf.compat.v1.metrics.mean_absolute_error(
+                targets[:, i], logits[:, i], targets[:, i]
+            )[
+                0
+            ]
+            eval_metrics["pcor_" + str(classes[i])] = self.correlation_coefficient(
+                targets[:, i], logits[:, i]
+            )
 
         eval_metrics["mre_total"] = tf.compat.v1.metrics.mean_relative_error(
-            targets, logits, targets)[1]
+            targets, logits, targets
+        )[1]
 
         eval_metrics["mae_total"] = tf.compat.v1.metrics.mean_relative_error(
-            targets, logits, targets)[1]
+            targets, logits, targets
+        )[1]
 
-        eval_metrics["accuracy01"] = self.compute_accuracy(logits,
-                                                           targets,
-                                                           pct_cut=0.01)
-        eval_metrics["accuracy05"] = self.compute_accuracy(logits,
-                                                           targets,
-                                                           pct_cut=0.05)
-        eval_metrics["accuracy1"] = self.compute_accuracy(logits,
-                                                          targets,
-                                                          pct_cut=0.1)
+        eval_metrics["accuracy01"] = self.compute_accuracy(
+            logits, targets, pct_cut=0.01
+        )
+        eval_metrics["accuracy05"] = self.compute_accuracy(
+            logits, targets, pct_cut=0.05
+        )
+        eval_metrics["accuracy1"] = self.compute_accuracy(logits, targets, pct_cut=0.1)
 
         # Create summary scalars
         for key, value in eval_metrics.items():
             tf.compat.v1.summary.scalar(key, value)
 
-        tf.compat.v1.summary.scalar('loss', self.loss)
+        tf.compat.v1.summary.scalar("loss", self.loss)
 
         merged_summary_op = tf.compat.v1.summary.merge_all()
 
@@ -180,34 +189,34 @@ class Scaden(object):
             )
             sys.exit()
 
-        # Subset dataset
+        # Subset dataset if --train_datasets is given
         if len(datasets) > 0:
-            all_ds = collections.Counter(raw_input.obs['ds'])
+            all_ds = collections.Counter(raw_input.obs["ds"])
+
+            # Check that given datasets are all actually available
+            for ds in datasets:
+                if not ds in all_ds:
+                    logger.warn(
+                        f"The dataset '[cyan]{ds}[/cyan]' could not be found in the training data! Is the name correct?"
+                    )
+
             for ds in all_ds:
                 if ds not in datasets:
-                    raw_input = raw_input[raw_input.obs['ds'] != ds].copy()
+                    raw_input = raw_input[raw_input.obs["ds"] != ds].copy()
 
         # Create training dataset
-        ratios = [
-            raw_input.obs[ctype] for ctype in raw_input.uns['cell_types']
-        ]
+        ratios = [raw_input.obs[ctype] for ctype in raw_input.uns["cell_types"]]
         self.x_data = raw_input.X.astype(np.float32)
         self.y_data = np.array(ratios, dtype=np.float32).transpose()
-        self.data = tf.data.Dataset.from_tensor_slices(
-            (self.x_data, self.y_data))
-        self.data = self.data.shuffle(1000).repeat().batch(
-            batch_size=batch_size)
+        self.data = tf.data.Dataset.from_tensor_slices((self.x_data, self.y_data))
+        self.data = self.data.shuffle(1000).repeat().batch(batch_size=batch_size)
         self.data_iter = iter(self.data)
 
         # Extract celltype and feature info
-        self.labels = raw_input.uns['cell_types']
+        self.labels = raw_input.uns["cell_types"]
         self.sig_genes = list(raw_input.var_names)
 
-    def load_prediction_file(self,
-                             input_path,
-                             sig_genes,
-                             labels,
-                             scaling=None):
+    def load_prediction_file(self, input_path, sig_genes, labels, scaling=None):
         """
         Load a file to perform prediction on it
         :param input_path: path to input file
@@ -222,10 +231,10 @@ class Scaden(object):
         # check for duplicates
         data_index = list(data.index)
         if not (len(data_index) == len(set(data_index))):
-            print(
+            logger.warn(
                 "Scaden Warning: Your mixture file conatins duplicate genes! The first occuring gene will be used for every duplicate."
             )
-            data = data.loc[~data.index.duplicated(keep='first')]
+            data = data.loc[~data.index.duplicated(keep="first")]
 
         data = data.loc[sig_genes]
         data = data.T
@@ -244,13 +253,15 @@ class Scaden(object):
         :param reuse:
         :return:
         """
-        self.global_step = tf.Variable(0, name='global_step', trainable=False)
+        self.global_step = tf.Variable(0, name="global_step", trainable=False)
 
         # Load training data
         if mode == "train":
-            self.load_h5ad_file(input_path=input_path,
-                                batch_size=self.batch_size,
-                                datasets=train_datasets)
+            self.load_h5ad_file(
+                input_path=input_path,
+                batch_size=self.batch_size,
+                datasets=train_datasets,
+            )
 
         # Load prediction data
         if mode == "predict":
@@ -258,15 +269,15 @@ class Scaden(object):
                 input_path=input_path,
                 sig_genes=self.sig_genes,
                 labels=self.labels,
-                scaling=self.scaling)
+                scaling=self.scaling,
+            )
 
         # Build the model or load if available
         self.n_classes = len(self.labels)
 
         try:
-            self.model = tf.keras.models.load_model(self.model_dir,
-                                                    compile=False)
-            logger.info("Loaded pre-trained model")
+            self.model = tf.keras.models.load_model(self.model_dir, compile=False)
+            logger.info(f"Loaded pre-trained model: [cyan]{self.model_name}")
         except:
             self.model = self.scaden_model(n_classes=self.n_classes)
 
@@ -281,9 +292,9 @@ class Scaden(object):
         optimizer = tf.keras.optimizers.Adam(learning_rate=self.learning_rate)
 
         # Build model graph
-        self.build_model(input_path=input_path,
-                         train_datasets=train_datasets,
-                         mode="train")
+        self.build_model(
+            input_path=input_path, train_datasets=train_datasets, mode="train"
+        )
 
         # Training loop
         pbar = tqdm(range(self.num_steps))
@@ -299,7 +310,7 @@ class Scaden(object):
 
             optimizer.apply_gradients(zip(grads, self.model.trainable_weights))
 
-            desc = (f"Step: {step}, Loss: {loss:.4f}")
+            desc = f"Step: {step}, Loss: {loss:.4f}"
             pbar.set_description(desc=desc)
 
             # Collect garbage after 100 steps - otherwise runs out of memory
@@ -308,13 +319,12 @@ class Scaden(object):
 
         # Save the trained model
         self.model.save(self.model_dir)
-        pd.DataFrame(self.labels).to_csv(os.path.join(self.model_dir,
-                                                      "celltypes.txt"),
-                                         sep="\t")
-        pd.DataFrame(self.sig_genes).to_csv(os.path.join(
-            self.model_dir, "genes.txt"),
-                                            sep="\t")
-
+        pd.DataFrame(self.labels).to_csv(
+            os.path.join(self.model_dir, "celltypes.txt"), sep="\t"
+        )
+        pd.DataFrame(self.sig_genes).to_csv(
+            os.path.join(self.model_dir, "genes.txt"), sep="\t"
+        )
 
     def predict(self, input_path, out_name="scaden_predictions.txt"):
         """
@@ -325,18 +335,16 @@ class Scaden(object):
         """
         # Load signature genes and celltype labels
         sig_genes = pd.read_table(self.model_dir + "/genes.txt", index_col=0)
-        self.sig_genes = list(sig_genes['0'])
+        self.sig_genes = list(sig_genes["0"])
         labels = pd.read_table(self.model_dir + "/celltypes.txt", index_col=0)
-        self.labels = list(labels['0'])
+        self.labels = list(labels["0"])
 
         # Build model graph
-        self.build_model(input_path=input_path,
-                         train_datasets=[],
-                         mode="predict")
+        self.build_model(input_path=input_path, train_datasets=[], mode="predict")
 
         predictions = self.model.predict(self.data)
 
-        pred_df = pd.DataFrame(predictions,
-                               columns=self.labels,
-                               index=self.sample_names)
+        pred_df = pd.DataFrame(
+            predictions, columns=self.labels, index=self.sample_names
+        )
         return pred_df
