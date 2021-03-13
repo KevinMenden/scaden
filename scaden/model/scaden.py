@@ -231,7 +231,7 @@ class Scaden(object):
         # check for duplicates
         data_index = list(data.index)
         if not (len(data_index) == len(set(data_index))):
-            print(
+            logger.warn(
                 "Scaden Warning: Your mixture file conatins duplicate genes! The first occuring gene will be used for every duplicate."
             )
             data = data.loc[~data.index.duplicated(keep="first")]
@@ -277,7 +277,7 @@ class Scaden(object):
 
         try:
             self.model = tf.keras.models.load_model(self.model_dir, compile=False)
-            logger.info("Loaded pre-trained model")
+            logger.info(f"Loaded pre-trained model: [cyan]{self.model_name}")
         except:
             self.model = self.scaden_model(n_classes=self.n_classes)
 
