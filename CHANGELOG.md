@@ -1,5 +1,15 @@
 # Scaden Changelog
 
+### Version 1.0.2
+
+* General improvement of logging using the 'rich' library for colorized output
+* Added verification check for '--train_datasets' parameter to notify user of 
+  unavailable datasets
+
+### Version 1.0.1
+
+* Made identification of datasets more robust to fix issue [#66](https://github.com/KevinMenden/scaden/issues/66)
+
 ### Version 1.0.0
 
 * Rebuild Scaden model and training to use TF2 Keras API instead of the old compatibility functions 

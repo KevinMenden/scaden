@@ -40,5 +40,6 @@ setup(
         "tqdm",
         "click",
         "h5py~=2.10.0",
+        "rich",
     ],
 )
