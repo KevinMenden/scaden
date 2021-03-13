@@ -328,7 +328,7 @@ def simulate_bulk(
         data_path += "/"
     files = glob.glob(os.path.join(data_path, pattern))
     files = [os.path.basename(x) for x in files]
-    datasets = [x.split("_")[0] for x in files]
+    datasets = [x.replace(pattern.replace("*", ""), "") for x in files]
 
     if len(datasets) == 0:
         logging.error("No datasets found! Have you specified the pattern correctly?")
@@ -361,6 +361,7 @@ def simulate_bulk(
     # Create datasets
     for i in range(len(xs)):
         logger.info("Subsampling " + datasets[i] + "...")
+
         tmpx, tmpy = create_subsample_dataset(
             xs[i], ys[i], sample_size, celltypes, num_samples
         )
