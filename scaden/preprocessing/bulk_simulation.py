@@ -182,46 +182,76 @@ def load_celltypes(path, name):
     return y
 
 
-def load_dataset(name, dir, pattern):
+def load_dataset(name, dir, pattern, fmt):
     """
     Load a dataset given its name and the directory
     :param name: name of the dataset
     :param dir: directory containing the data
-    :param sig_genes: the signature genes for filtering
+    :param pattern: pattern of the data files
+    :param fmt: input file format txt or h5ad
     :return: X, Y
     """
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
-
-    # Try to load celltypes
-    try:
-        y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
-        # Check if has Celltype column
-        print(y.columns)
-        if not "Celltype" in y.columns:
+    
+    if fmt == 'txt':
+        # Try to load celltypes
+        try:
+            y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
+            # Check if has Celltype column
+            print(y.columns)
+            if not "Celltype" in y.columns:
+                logger.error(
+                    f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+                )
+                sys.exit()
+        except FileNotFoundError as e:
             logger.error(
-                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+                f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
             )
-            sys.exit()
-    except FileNotFoundError as e:
-        logger.error(
-            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
-        )
-        sys.exit(e)
+            sys.exit(e)
 
-    # Try to load data file
-    try:
-        x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
-    except FileNotFoundError as e:
-        logger.error(
-            f"No counts file found for {name}. Was looking for file {name + pattern}"
-        )
+        # Try to load data file
+        try:
+            x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
+        except FileNotFoundError as e:
+            logger.error(
+                f"No counts file found for {name}. Was looking for file {name + pattern}"
+            )
 
-    # Check that celltypes and count file have same number of cells
-    if not y.shape[0] == x.shape[0]:
+        # Check that celltypes and count file have same number of cells
+        if not y.shape[0] == x.shape[0]:
+            logger.error(
+                f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
+            )
+            sys.exit(1)
+    elif fmt == 'h5ad':
+        from anndata import read_h5ad
+        try:
+            xy = read_h5ad(os.path.join(dir, name + pattern))
+        except FileNotFoundError as e:
+            logger.error(
+                f"No h5ad file found for {name}. Was looking for file {name + pattern}"
+            )
+            sys.exit(e)
+        # cell types
+        try:
+            y = pd.DataFrame(xy.obs.Celltype)
+            y.reset_index(inplace=True, drop=True)
+        except:
+            logger.error(
+                f"Celltype attribute not found for {name}"
+            )
+            sys.exit(e)
+        # counts
+        x = pd.DataFrame(xy.X.todense())
+        x.index = xy.obs_names
+        x.columns = xy.var_names
+        del xy
+    else:
         logger.error(
-            f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
-        )
+                f"Unsuported file format {fmt}!"
+            )
         sys.exit(1)
 
     return (x, y)
@@ -307,7 +337,7 @@ def generate_signature(x, y):
 
 
 def simulate_bulk(
-    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes
+    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes, fmt
 ):
     """
     Simulate artificial bulk samples from single cell datasets
@@ -339,7 +369,7 @@ def simulate_bulk(
     # Load datasets
     xs, ys = [], []
     for i, n in enumerate(datasets):
-        x, y = load_dataset(n, data_path, pattern=pattern)
+        x, y = load_dataset(n, data_path, pattern=pattern, fmt=fmt)
         xs.append(x)
         ys.append(y)
 

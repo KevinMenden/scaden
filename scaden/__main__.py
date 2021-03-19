@@ -193,7 +193,12 @@ Simulate dataset
     default="data",
     help="Prefix to append to training .h5ad file [default: data]",
 )
-def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
+@click.option(
+    "--fmt",
+    default="txt",
+    help="Input format sc data txt or h5ad [default: txt]",
+)
+def simulate(out, data, cells, n_samples, pattern, unknown, prefix, fmt):
     """ Create artificial bulk RNA-seq data from scRNA-seq dataset(s)"""
     simulation(
         simulate_dir=out,
@@ -203,6 +208,7 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
         pattern=pattern,
         unknown_celltypes=unknown,
         out_prefix=prefix,
+        fmt=fmt
     )
 
 
