@@ -70,18 +70,18 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
     df_samp = pd.concat(artificial_samples, axis=0)
     df_samp = df_samp.sum(axis=0)
 
-    return (df_samp, fracs_complete)
+    return df_samp, fracs_complete
 
 
 def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     """
     Generate many artifial bulk samples with known fractions
     This function will create normal and sparse samples (no_samples)
-    :param cells:
-    :param labels:
-    :param sample_size:
-    :param no_celltypes:
-    :param no_samples:
+    :param x: count matrix
+    :param y: cell type labels
+    :param sample_size: number of cells per sample
+    :param celltypes: list of cell types
+    :param no_samples: number of samples to simulate
     :return: dataset and corresponding labels
     """
     X = []
@@ -112,7 +112,7 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     X = pd.concat(X, axis=1).T
     Y = pd.DataFrame(Y, columns=celltypes)
 
-    return (X, Y)
+    return X, Y
 
 
 def filter_for_celltypes(x, y, celltypes):
@@ -127,12 +127,12 @@ def filter_for_celltypes(x, y, celltypes):
     keep = [elem in celltypes for elem in cts]
     x = x.loc[keep, :]
     y = y.loc[keep, :]
-    return (x, y)
+    return x, y
 
 
 def shuffle_dataset(x, y):
     """
-    Shuffle dataset while keeping x and y in synch
+    Shuffle dataset while keeping x and y in sync
     :param x:
     :param y:
     :return:
@@ -140,7 +140,7 @@ def shuffle_dataset(x, y):
     idx = np.random.permutation(x.index)
     x_shuff = x.reindex(idx)
     y_shuff = y.reindex(idx)
-    return (x_shuff, y_shuff)
+    return x_shuff, y_shuff
 
 
 def filter_matrix_signature(mat, genes):
@@ -187,7 +187,7 @@ def load_dataset(name, dir, pattern):
     Load a dataset given its name and the directory
     :param name: name of the dataset
     :param dir: directory containing the data
-    :param sig_genes: the signature genes for filtering
+    :param pattern: the pattern for matchin the data
     :return: X, Y
     """
     pattern = pattern.replace("*", "")
@@ -224,7 +224,7 @@ def load_dataset(name, dir, pattern):
         )
         sys.exit(1)
 
-    return (x, y)
+    return x, y
 
 
 def merge_unkown_celltypes(y, unknown_celltypes):
@@ -260,6 +260,7 @@ def get_common_genes(xs, type="intersection"):
     Get common genes for all matrices xs
     Can either be the union or the intersection (default) of all genes
     :param xs: cell x gene matrices
+    :param type: how to calculate the signature gene list
     :return: list of common genes
     """
     genes = []

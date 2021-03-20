@@ -78,7 +78,6 @@ def create_h5ad_file(data_dir, out_path, unknown, pattern="*_samples.txt"):
     logger.info(f"Celltypes: {celltypes}")
     logger.info(f"Found datasets: {datasets}")
     adata = []
-    me_dict = {}
 
     # Create adata datasets for each
     for i, train_file in enumerate(datasets):

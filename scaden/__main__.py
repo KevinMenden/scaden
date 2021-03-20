@@ -212,7 +212,6 @@ Generate example data
 
 
 @cli.command()
-@click.option("--out", "-o", default="./", help="Directory to store output files in")
 @click.option("--cells", "-c", default=10, help="Number of cells [default: 10]")
 @click.option("--genes", "-g", default=100, help="Number of genes [default: 100]")
 @click.option("--out", "-o", default="./", help="Output directory [default: ./]")
