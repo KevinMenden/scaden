@@ -193,7 +193,7 @@ def load_dataset(name, dir, pattern, fmt):
     """
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
-    
+
     if fmt == 'txt':
         # Try to load celltypes
         try:
@@ -250,8 +250,8 @@ def load_dataset(name, dir, pattern, fmt):
         del xy
     else:
         logger.error(
-                f"Unsuported file format {fmt}!"
-            )
+            f"Unsuported file format {fmt}!"
+        )
         sys.exit(1)
 
     return (x, y)
@@ -337,7 +337,7 @@ def generate_signature(x, y):
 
 
 def simulate_bulk(
-    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes, fmt
+        sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes, fmt
 ):
     """
     Simulate artificial bulk samples from single cell datasets

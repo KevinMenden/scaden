@@ -158,11 +158,6 @@ def process(data_path, prediction_data, processed_path, var_cutoff):
     )
 
 
-"""
-Simulate dataset
-"""
-
-
 @cli.command()
 @click.option("--out", "-o", default="./", help="Directory to store output files in")
 @click.option("--data", "-d", default=".", help="Path to scRNA-seq dataset(s)")
@@ -194,11 +189,12 @@ Simulate dataset
     help="Prefix to append to training .h5ad file [default: data]",
 )
 @click.option(
-    "--fmt",
+    "--data-format",
+    "-f",
     default="txt",
-    help="Input format sc data txt or h5ad [default: txt]",
+    help="Data format of scRNA-seq data, can be 'txt' or 'h5ad' [default: 'txt']",
 )
-def simulate(out, data, cells, n_samples, pattern, unknown, prefix, fmt):
+def simulate(out, data, cells, n_samples, pattern, unknown, prefix, data_format):
     """ Create artificial bulk RNA-seq data from scRNA-seq dataset(s)"""
     simulation(
         simulate_dir=out,
@@ -208,8 +204,13 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix, fmt):
         pattern=pattern,
         unknown_celltypes=unknown,
         out_prefix=prefix,
-        fmt=fmt
+        fmt=data_format
     )
+
+
+"""
+Simulate dataset
+"""
 
 
 """
