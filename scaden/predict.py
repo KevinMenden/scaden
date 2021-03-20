@@ -52,7 +52,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
     )
     # Predict ratios
     preds_256 = cdn256.predict(
-        input_path=data_path, out_name="scaden_predictions_m256.txt"
+        input_path=data_path
     )
 
     # Mid model predictions
@@ -65,7 +65,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
     )
     # Predict ratios
     preds_512 = cdn512.predict(
-        input_path=data_path, out_name="scaden_predictions_m512.txt"
+        input_path=data_path
     )
 
     # Large model predictions
@@ -78,7 +78,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
     )
     # Predict ratios
     preds_1024 = cdn1024.predict(
-        input_path=data_path, out_name="scaden_predictions_m1024.txt"
+        input_path=data_path
     )
 
     # Average predictions
