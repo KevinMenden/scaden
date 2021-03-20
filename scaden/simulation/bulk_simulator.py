@@ -301,6 +301,7 @@ class BulkSimulator(object):
         @param files: list of files to merge
         @return:
         """
+        non_celltype_obs = ["ds", "batch"]
         if not files:
             files = glob.glob(data_dir + "*.h5ad")
 
@@ -313,8 +314,7 @@ class BulkSimulator(object):
             adata = adata.concatenate(ad.read_h5ad(files[i]), uns_merge="same")
 
         combined_celltypes = list(adata.obs.columns)
-        combined_celltypes.remove("ds")
-        combined_celltypes.remove("batch")
+        combined_celltypes = [x for x in combined_celltypes if not x in non_celltype_obs]
         for ct in combined_celltypes:
             adata.obs[ct].fillna(0, inplace=True)
 
