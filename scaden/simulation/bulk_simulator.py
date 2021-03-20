@@ -258,39 +258,39 @@ class BulkSimulator(object):
         @param sparse:
         @return:
         """
-        # todo fix available cell types again
+        available_celltypes = celltypes
         if sparse:
-            no_keep = np.random.randint(1, len(celltypes))
+            no_keep = np.random.randint(1, len(available_celltypes))
             keep = np.random.choice(
-                list(range(len(celltypes))), size=no_keep, replace=False
+                list(range(len(available_celltypes))), size=no_keep, replace=False
             )
-            available_celltypes = [celltypes[i] for i in keep]
+            available_celltypes = [available_celltypes[i] for i in keep]
 
-        no_avail_cts = len(celltypes)
+        no_avail_cts = len(available_celltypes)
 
         # Create fractions for available celltypes
         fracs = create_fractions(no_celltypes=no_avail_cts)
         samp_fracs = np.multiply(fracs, self.sample_size)
         samp_fracs = list(map(int, samp_fracs))
 
-        # Make complete fractions
+        # Make complete fracions
         fracs_complete = [0] * len(celltypes)
-        for i, act in enumerate(celltypes):
+        for i, act in enumerate(available_celltypes):
             idx = celltypes.index(act)
             fracs_complete[idx] = fracs[i]
 
         artificial_samples = []
         for i in range(no_avail_cts):
-            ct = celltypes[i]
+            ct = available_celltypes[i]
             cells_sub = x.loc[np.array(y["Celltype"] == ct), :]
             cells_fraction = np.random.randint(0, cells_sub.shape[0], samp_fracs[i])
             cells_sub = cells_sub.iloc[cells_fraction, :]
             artificial_samples.append(cells_sub)
 
-        df_sample = pd.concat(artificial_samples, axis=0)
-        df_sample = df_sample.sum(axis=0)
+        df_samp = pd.concat(artificial_samples, axis=0)
+        df_samp = df_samp.sum(axis=0)
 
-        return df_sample, fracs_complete
+        return df_samp, fracs_complete
 
     @staticmethod
     def merge_datasets(data_dir="./", files=None, out_name="data.h5ad"):
@@ -312,11 +312,11 @@ class BulkSimulator(object):
         for i in range(1, len(files)):
             adata = adata.concatenate(ad.read_h5ad(files[i]), uns_merge="same")
 
-        # TODO remove NA values
-        #adata.obs.fillna(0, axis=1, inplace=True)
-        print(adata.obs['celltype6'])
-        print(type(adata.obs))
-        print(adata.X.shape)
-        print(adata.var_names)
+        combined_celltypes = list(adata.obs.columns)
+        combined_celltypes.remove("ds")
+        combined_celltypes.remove("batch")
+        for ct in combined_celltypes:
+            adata.obs[ct].fillna(0, inplace=True)
 
+        adata.uns['cell_types'] = combined_celltypes
         adata.write(out_name)

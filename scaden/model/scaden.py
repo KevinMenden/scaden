@@ -10,9 +10,8 @@ import numpy as np
 import pandas as pd
 from anndata import read_h5ad
 import collections
-from .functions import dummy_labels, sample_scaling
-from tqdm import tqdm
-
+from .functions import sample_scaling
+from rich.progress import Progress, BarColumn
 logger = logging.getLogger(__name__)
 
 
@@ -297,25 +296,35 @@ class Scaden(object):
         )
 
         # Training loop
-        pbar = tqdm(range(self.num_steps))
-        for step, _ in enumerate(pbar):
+        progress_bar = Progress(
+            "[bold blue]{task.description}",
+            "[bold cyan]Step: {task.fields[step]}, Loss: {task.fields[loss]}",
+            BarColumn(bar_width=None)
+        )
 
-            x, y = self.data_iter.get_next()
+        with progress_bar:
+            training_progress = progress_bar.add_task(self.model_name,
+                                                      total=self.num_steps,
+                                                      step=0,
+                                                      loss=1)
 
-            with tf.GradientTape() as tape:
-                self.logits = self.model(x, training=True)
-                loss = self.compute_loss(self.logits, y)
+            for step in range(self.num_steps):
 
-            grads = tape.gradient(loss, self.model.trainable_weights)
+                x, y = self.data_iter.get_next()
 
-            optimizer.apply_gradients(zip(grads, self.model.trainable_weights))
+                with tf.GradientTape() as tape:
+                    self.logits = self.model(x, training=True)
+                    loss = self.compute_loss(self.logits, y)
 
-            desc = f"Step: {step}, Loss: {loss:.4f}"
-            pbar.set_description(desc=desc)
+                grads = tape.gradient(loss, self.model.trainable_weights)
 
-            # Collect garbage after 100 steps - otherwise runs out of memory
-            if step % 100 == 0:
-                gc.collect()
+                optimizer.apply_gradients(zip(grads, self.model.trainable_weights))
+
+                progress_bar.update(training_progress, advance=1, step=step, loss=f"{loss:.4f}")
+
+                # Collect garbage after 100 steps - otherwise runs out of memory
+                if step % 100 == 0:
+                    gc.collect()
 
         # Save the trained model
         self.model.save(self.model_dir)
@@ -326,11 +335,10 @@ class Scaden(object):
             os.path.join(self.model_dir, "genes.txt"), sep="\t"
         )
 
-    def predict(self, input_path, out_name="scaden_predictions.txt"):
+    def predict(self, input_path):
         """
         Perform prediction with a pre-trained model
-        :param out_dir: path to store results in
-        :param training_data: the dataset used for training
+        :param input_path: prediction data path
         :return:
         """
         # Load signature genes and celltype labels

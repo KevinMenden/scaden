@@ -180,7 +180,8 @@ def process(data_path, prediction_data, processed_path, var_cutoff):
     "-u",
     multiple=True,
     default=["unknown"],
-    help="Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to merge in unknown. [default: unknown]",
+    help="Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to "
+         "merge in unknown. [default: unknown]",
 )
 @click.option(
     "--prefix",
