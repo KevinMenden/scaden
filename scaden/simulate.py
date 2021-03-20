@@ -22,10 +22,12 @@ def simulation(simulate_dir, data_dir, sample_size, num_samples, pattern,
 
     bulk_simulator.simulate()
 
+    bulk_simulator.merge_datasets(data_dir=bulk_simulator.out_dir, files=bulk_simulator.dataset_files)
+
     # Perform the bulk simulation
     #simulate_bulk(sample_size, num_samples, data_dir, simulate_dir, pattern,
     #              unknown_celltypes, fmt)
 
     # Create the h5ad training data file
-    out_name = os.path.join(simulate_dir, out_prefix + ".h5ad")
-    create_h5ad_file(simulate_dir, out_name, unknown_celltypes)
+    #out_name = os.path.join(simulate_dir, out_prefix + ".h5ad")
+    #create_h5ad_file(simulate_dir, out_name, unknown_celltypes)

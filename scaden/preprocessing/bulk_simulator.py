@@ -2,6 +2,7 @@ import logging
 import glob
 import os
 import sys
+import gc
 
 import pandas as pd
 import anndata as ad
@@ -37,7 +38,16 @@ class BulkSimulator(object):
     :param fmt: the format of the input files, can be txt or h5ad
     """
 
-    def __init__(self, sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes, fmt):
+    def __init__(self, sample_size=100,
+                 num_samples=1000,
+                 data_path="./",
+                 out_dir="./",
+                 pattern="*_counts.txt",
+                 unknown_celltypes=None,
+                 fmt="txt"):
+        if unknown_celltypes is None:
+            unknown_celltypes = ["unknown"]
+
         self.sample_size = sample_size
         self.num_samples = num_samples // 2
         self.data_path = data_path
@@ -45,6 +55,8 @@ class BulkSimulator(object):
         self.pattern = pattern
         self.unknown_celltypes = unknown_celltypes
         self.format = fmt
+        self.datasets = []
+        self.dataset_files = []
 
     def simulate(self):
         """ simulate artificial bulk datasets
@@ -55,16 +67,18 @@ class BulkSimulator(object):
             self.data_path += "/"
         files = glob.glob(os.path.join(self.data_path, self.pattern))
         files = [os.path.basename(x) for x in files]
-        datasets = [x.replace(self.pattern.replace("*", ""), "") for x in files]
+        self.datasets = [x.replace(self.pattern.replace("*", ""), "") for x in files]
+        self.dataset_files = [x + ".h5ad" for x in self.datasets]
 
-        if len(datasets) == 0:
+        if len(self.datasets) == 0:
             logging.error("No datasets found! Have you specified the pattern correctly?")
             sys.exit(1)
 
-        logger.info("Datasets: [cyan]" + str(datasets) + "[/]")
+        logger.info("Datasets: [cyan]" + str(self.datasets) + "[/]")
 
         # Loop over datasets and simulate bulk data
-        for i, dataset in enumerate(datasets):
+        for i, dataset in enumerate(self.datasets):
+            gc.collect()
             logger.info(f"[bold u]Simulating data from {dataset}")
             self.simulate_dataset(dataset)
 
@@ -90,10 +104,17 @@ class BulkSimulator(object):
 
         # Extract celltypes
         celltypes = list(set(data_y["Celltype"].tolist()))
-
         tmp_x, tmp_y = self.create_subsample_dataset(data_x, data_y, celltypes=celltypes)
-        tmp_x.to_csv(self.out_dir + dataset + "_samples.txt", sep="\t", index=False)
-        tmp_y.to_csv(self.out_dir + dataset + "_labels.txt", sep="\t", index=False)
+
+        tmp_x = tmp_x.sort_index(axis=1)
+        ratios = pd.DataFrame(tmp_y, columns=celltypes)
+        ratios["ds"] = pd.Series(np.repeat(dataset, tmp_y.shape[0]), index=ratios.index)
+
+        ann_data = ad.AnnData(X=tmp_x.to_numpy(), obs=ratios, var=pd.DataFrame(columns=[], index=list(tmp_x)))
+        ann_data.uns['unknown'] = self.unknown_celltypes
+        ann_data.uns['cell_types'] = celltypes
+
+        ann_data.write(self.out_dir + dataset + ".h5ad")
 
     def load_dataset(self, dataset):
         """
@@ -237,7 +258,7 @@ class BulkSimulator(object):
         @param sparse:
         @return:
         """
-
+        # todo fix available cell types again
         if sparse:
             no_keep = np.random.randint(1, len(celltypes))
             keep = np.random.choice(
@@ -270,3 +291,32 @@ class BulkSimulator(object):
         df_sample = df_sample.sum(axis=0)
 
         return df_sample, fracs_complete
+
+    @staticmethod
+    def merge_datasets(data_dir="./", files=None, out_name="data.h5ad"):
+        """
+
+        @param out_name: name of the merged .h5ad file
+        @param data_dir: directory to look for datasets
+        @param files: list of files to merge
+        @return:
+        """
+        if not files:
+            files = glob.glob(data_dir + "*.h5ad")
+
+        logger.info(f"Merging datasets: {files} into [bold cyan]{out_name}")
+
+        # load first file
+        adata = ad.read_h5ad(files[0])
+
+        for i in range(1, len(files)):
+            adata = adata.concatenate(ad.read_h5ad(files[i]), uns_merge="same")
+
+        # TODO remove NA values
+        #adata.obs.fillna(0, axis=1, inplace=True)
+        print(adata.obs['celltype6'])
+        print(type(adata.obs))
+        print(adata.X.shape)
+        print(adata.var_names)
+
+        adata.write(out_name)
