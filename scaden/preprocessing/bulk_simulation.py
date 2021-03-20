@@ -70,18 +70,18 @@ def create_subsample(x, y, sample_size, celltypes, available_celltypes, sparse=F
     df_samp = pd.concat(artificial_samples, axis=0)
     df_samp = df_samp.sum(axis=0)
 
-    return df_samp, fracs_complete
+    return (df_samp, fracs_complete)
 
 
 def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     """
     Generate many artifial bulk samples with known fractions
     This function will create normal and sparse samples (no_samples)
-    :param x: count matrix
-    :param y: cell type labels
-    :param sample_size: number of cells per sample
-    :param celltypes: list of cell types
-    :param no_samples: number of samples to simulate
+    :param cells:
+    :param labels:
+    :param sample_size:
+    :param no_celltypes:
+    :param no_samples:
     :return: dataset and corresponding labels
     """
     X = []
@@ -112,7 +112,7 @@ def create_subsample_dataset(x, y, sample_size, celltypes, no_samples):
     X = pd.concat(X, axis=1).T
     Y = pd.DataFrame(Y, columns=celltypes)
 
-    return X, Y
+    return (X, Y)
 
 
 def filter_for_celltypes(x, y, celltypes):
@@ -127,12 +127,12 @@ def filter_for_celltypes(x, y, celltypes):
     keep = [elem in celltypes for elem in cts]
     x = x.loc[keep, :]
     y = y.loc[keep, :]
-    return x, y
+    return (x, y)
 
 
 def shuffle_dataset(x, y):
     """
-    Shuffle dataset while keeping x and y in sync
+    Shuffle dataset while keeping x and y in synch
     :param x:
     :param y:
     :return:
@@ -140,7 +140,7 @@ def shuffle_dataset(x, y):
     idx = np.random.permutation(x.index)
     x_shuff = x.reindex(idx)
     y_shuff = y.reindex(idx)
-    return x_shuff, y_shuff
+    return (x_shuff, y_shuff)
 
 
 def filter_matrix_signature(mat, genes):
@@ -182,49 +182,79 @@ def load_celltypes(path, name):
     return y
 
 
-def load_dataset(name, dir, pattern):
+def load_dataset(name, dir, pattern, fmt):
     """
     Load a dataset given its name and the directory
     :param name: name of the dataset
     :param dir: directory containing the data
-    :param pattern: the pattern for matchin the data
+    :param pattern: pattern of the data files
+    :param fmt: input file format txt or h5ad
     :return: X, Y
     """
     pattern = pattern.replace("*", "")
     print("Loading " + name + " dataset ...")
-
-    # Try to load celltypes
-    try:
-        y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
-        # Check if has Celltype column
-        print(y.columns)
-        if not "Celltype" in y.columns:
+    
+    if fmt == 'txt':
+        # Try to load celltypes
+        try:
+            y = pd.read_table(os.path.join(dir, name + "_celltypes.txt"))
+            # Check if has Celltype column
+            print(y.columns)
+            if not "Celltype" in y.columns:
+                logger.error(
+                    f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+                )
+                sys.exit()
+        except FileNotFoundError as e:
             logger.error(
-                f"No 'Celltype' column found in {name}_celltypes.txt! Please make sure to include this column."
+                f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
             )
-            sys.exit()
-    except FileNotFoundError as e:
-        logger.error(
-            f"No celltypes file found for {name}. It should be called {name}_celltypes.txt."
-        )
-        sys.exit(e)
+            sys.exit(e)
 
-    # Try to load data file
-    try:
-        x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
-    except FileNotFoundError as e:
-        logger.error(
-            f"No counts file found for {name}. Was looking for file {name + pattern}"
-        )
+        # Try to load data file
+        try:
+            x = pd.read_table(os.path.join(dir, name + pattern), index_col=0)
+        except FileNotFoundError as e:
+            logger.error(
+                f"No counts file found for {name}. Was looking for file {name + pattern}"
+            )
 
-    # Check that celltypes and count file have same number of cells
-    if not y.shape[0] == x.shape[0]:
+        # Check that celltypes and count file have same number of cells
+        if not y.shape[0] == x.shape[0]:
+            logger.error(
+                f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
+            )
+            sys.exit(1)
+    elif fmt == 'h5ad':
+        from anndata import read_h5ad
+        try:
+            xy = read_h5ad(os.path.join(dir, name + pattern))
+        except FileNotFoundError as e:
+            logger.error(
+                f"No h5ad file found for {name}. Was looking for file {name + pattern}"
+            )
+            sys.exit(e)
+        # cell types
+        try:
+            y = pd.DataFrame(xy.obs.Celltype)
+            y.reset_index(inplace=True, drop=True)
+        except:
+            logger.error(
+                f"Celltype attribute not found for {name}"
+            )
+            sys.exit(e)
+        # counts
+        x = pd.DataFrame(xy.X.todense())
+        x.index = xy.obs_names
+        x.columns = xy.var_names
+        del xy
+    else:
         logger.error(
-            f"Different number of cells in {name}_celltypes and {name + pattern}! Make sure the data has been processed correctly."
-        )
+                f"Unsuported file format {fmt}!"
+            )
         sys.exit(1)
 
-    return x, y
+    return (x, y)
 
 
 def merge_unkown_celltypes(y, unknown_celltypes):
@@ -260,7 +290,6 @@ def get_common_genes(xs, type="intersection"):
     Get common genes for all matrices xs
     Can either be the union or the intersection (default) of all genes
     :param xs: cell x gene matrices
-    :param type: how to calculate the signature gene list
     :return: list of common genes
     """
     genes = []
@@ -308,7 +337,7 @@ def generate_signature(x, y):
 
 
 def simulate_bulk(
-    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes
+    sample_size, num_samples, data_path, out_dir, pattern, unknown_celltypes, fmt
 ):
     """
     Simulate artificial bulk samples from single cell datasets
@@ -340,7 +369,7 @@ def simulate_bulk(
     # Load datasets
     xs, ys = [], []
     for i, n in enumerate(datasets):
-        x, y = load_dataset(n, data_path, pattern=pattern)
+        x, y = load_dataset(n, data_path, pattern=pattern, fmt=fmt)
         xs.append(x)
         ys.append(y)
 
