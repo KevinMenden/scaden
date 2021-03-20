@@ -157,7 +157,9 @@ def process(data_path, prediction_data, processed_path, var_cutoff):
         var_cutoff=var_cutoff,
     )
 
-
+"""
+Simulate dataset
+"""
 @cli.command()
 @click.option("--out", "-o", default="./", help="Directory to store output files in")
 @click.option("--data", "-d", default=".", help="Path to scRNA-seq dataset(s)")
@@ -210,22 +212,16 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix, data_format)
 
 
 """
-Simulate dataset
-"""
-
-
-"""
 Generate example data
 """
-
-
 @cli.command()
 @click.option("--cells", "-c", default=10, help="Number of cells [default: 10]")
+@click.option("--types", "-t", default=5, help="Number of cell types [default: 5]")
 @click.option("--genes", "-g", default=100, help="Number of genes [default: 100]")
 @click.option("--out", "-o", default="./", help="Output directory [default: ./]")
 @click.option(
     "--samples", "-n", default=10, help="Number of bulk samples [default: 10]"
 )
-def example(cells, genes, samples, out):
+def example(cells, genes, samples, out, types):
     """ Generate an example dataset """
-    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out)
+    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out, n_types=types)
