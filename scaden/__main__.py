@@ -220,4 +220,5 @@ Generate example data
     "--samples", "-n", default=10, help="Number of bulk samples [default: 10]"
 )
 def example(cells, genes, samples, out):
+    """ Generate an example dataset """
     exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out)
