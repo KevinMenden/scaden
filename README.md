@@ -5,7 +5,6 @@
 
 ![MIT](https://img.shields.io/badge/License-MIT-black)
 ![Install with pip](https://img.shields.io/badge/Install%20with-pip-blue)
-![Install with Bioconda](https://img.shields.io/badge/Install%20with-conda-green)
 [![Downloads](https://pepy.tech/badge/scaden)](https://pepy.tech/project/scaden)
 ![Docker](https://github.com/kevinmenden/scaden/workflows/Docker/badge.svg)
 ![Scaden CI](https://github.com/kevinmenden/scaden/workflows/Scaden%20CI/badge.svg)
@@ -39,7 +38,8 @@ To install Scaden via pip, simply run the following command:
 
 
 ### Bioconda
-You can also install Scaden via bioconda, using:
+Bioconda installation is currently not supported for the newest Scaden versions, but this will hopefully change soon.
+It is therefore highly recommended to install via pip.
 
 `conda install -c bioconda scaden`
 

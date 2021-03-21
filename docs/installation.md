@@ -10,7 +10,8 @@ To install Scaden via pip, simply run the following command:
 
 
 ## Bioconda
-You can also install Scaden via bioconda, using::
+Bioconda installation is currently not supported for the newest Scaden versions, but this will hopefully change soon.
+It is therefore highly recommended to install via pip.
 
 `conda install -c bioconda scaden`
 
