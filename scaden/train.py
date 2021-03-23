@@ -10,8 +10,6 @@ Contains code to
 
 # Imports
 import logging
-import tensorflow as tf
-from anndata import read_h5ad
 from scaden.model.architectures import architectures
 from scaden.model.scaden import Scaden
 

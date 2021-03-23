@@ -5,6 +5,7 @@ import rich
 import rich.logging
 import logging
 import os
+import tensorflow as tf
 from scaden.train import training
 from scaden.predict import prediction
 from scaden.process import processing
@@ -30,8 +31,7 @@ logger.addHandler(
     )
 )
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
-
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 def main():
     text = """
