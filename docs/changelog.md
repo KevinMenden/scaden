@@ -1,5 +1,14 @@
 # Scaden Changelog
 
+## Version 1.1.0
+
+* Reduced memory usage of `scaden simulate` significantly by performing simulation for one dataset at a time.
+* Using `.h5ad` format to store simulated data
+* Allow reading data in `.h5ad` format for improved performance (courtesy of @eboileau)
+* Improved logging and using rich progress bar for training
+* Gene subsetting is now done only when merging datasets, which will allow to generate different combinations
+of simulated datasets
+
 ### Version 1.0.2
 
 * General improvement of logging using the 'rich' library for colorized output

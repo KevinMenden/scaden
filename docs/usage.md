@@ -126,7 +126,8 @@ This command will create the artificial samples in the current working directory
 For Scaden to work properly, your input files have to be correctly formatted. As long as you use Scadens inbuilt functionality to generate the training data, you should have no problem 
 with formatting there. The prediction file, however, you have to format yourself. This should be a file of shape m X n, where m are your features (genes) and n your samples. So each row corresponds to 
 a gene, and each column to a sample. Leave the column name for the genes empy (just put a `\t` there). This is a rather standard format to store gene expression tables, so you should have not much work assuring that the
-format fits.
+format fits. Since version `v1.1.0` it is also possible to load data for simulation in `.h5ad` format for improved performance. In this case, the AnnData object should have
+a `Celltype` column in the `obs` field.
 
 Your data can either be raw counts or normalized, just make sure that they are not in logarithmic space already. When loading a prediction file, Scaden applies its scaling procedure to it, which involves taking the logarithm of your counts.
 So as long as they are not already in logarithmic space, Scaden will be able to handle both raw and normalized counts / expression values.

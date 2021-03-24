@@ -22,6 +22,6 @@ def simulation(simulate_dir, data_dir, sample_size, num_samples, pattern,
     bulk_simulator.simulate()
 
     # Merge the resulting datasets
-    bulk_simulator.merge_datasets(data_dir=bulk_simulator.out_dir,
+    bulk_simulator.merge_datasets(data_dir=simulate_dir,
                                   files=bulk_simulator.dataset_files,
                                   out_name=out_prefix + ".h5ad")

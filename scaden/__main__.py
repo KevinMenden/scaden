@@ -11,7 +11,7 @@ from scaden.predict import prediction
 from scaden.process import processing
 from scaden.simulate import simulation
 from scaden.example import exampleData
-
+from scaden.merge import merge_datasets
 """
 
 author: Kevin Menden
@@ -32,6 +32,7 @@ logger.addHandler(
 )
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 
 def main():
     text = """
@@ -146,7 +147,7 @@ Processing mode
     "--var_cutoff",
     default=0.1,
     help="Filter out genes with a variance less than the specified cutoff. A low cutoff is recommended,"
-    "this should only remove genes that are obviously uninformative.",
+         "this should only remove genes that are obviously uninformative.",
 )
 def process(data_path, prediction_data, processed_path, var_cutoff):
     """ Process a dataset for training """
@@ -157,9 +158,12 @@ def process(data_path, prediction_data, processed_path, var_cutoff):
         var_cutoff=var_cutoff,
     )
 
+
 """
 Simulate dataset
 """
+
+
 @cli.command()
 @click.option("--out", "-o", default="./", help="Directory to store output files in")
 @click.option("--data", "-d", default=".", help="Path to scRNA-seq dataset(s)")
@@ -212,8 +216,24 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix, data_format)
 
 
 """
+Merge simulated datasets
+"""
+
+
+@cli.command()
+@click.option("--data", "-d", default=".", help="Directory containing simulated datasets (in .h5ad format)")
+@click.option("--prefix", "-p", default="data", help="Prefix of output file [default: data]")
+@click.option("--files", "-f", default=None, help="Comma-separated list of filenames to merge")
+def merge(data, prefix, files):
+    """ Merge simulated datasets into on training dataset """
+    merge_datasets(data_dir=data, prefix=prefix, files=files)
+
+
+"""
 Generate example data
 """
+
+
 @cli.command()
 @click.option("--cells", "-c", default=10, help="Number of cells [default: 10]")
 @click.option("--types", "-t", default=5, help="Number of cell types [default: 5]")
