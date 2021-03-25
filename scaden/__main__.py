@@ -5,12 +5,13 @@ import rich
 import rich.logging
 import logging
 import os
+import tensorflow as tf
 from scaden.train import training
 from scaden.predict import prediction
 from scaden.process import processing
 from scaden.simulate import simulation
 from scaden.example import exampleData
-
+from scaden.merge import merge_datasets
 """
 
 author: Kevin Menden
@@ -30,7 +31,7 @@ logger.addHandler(
     )
 )
 
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "0"
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 
 def main():
@@ -146,7 +147,7 @@ Processing mode
     "--var_cutoff",
     default=0.1,
     help="Filter out genes with a variance less than the specified cutoff. A low cutoff is recommended,"
-    "this should only remove genes that are obviously uninformative.",
+         "this should only remove genes that are obviously uninformative.",
 )
 def process(data_path, prediction_data, processed_path, var_cutoff):
     """ Process a dataset for training """
@@ -185,7 +186,8 @@ Simulate dataset
     "-u",
     multiple=True,
     default=["unknown"],
-    help="Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to merge in unknown. [default: unknown]",
+    help="Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to "
+         "merge in unknown. [default: unknown]",
 )
 @click.option(
     "--prefix",
@@ -193,7 +195,13 @@ Simulate dataset
     default="data",
     help="Prefix to append to training .h5ad file [default: data]",
 )
-def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
+@click.option(
+    "--data-format",
+    "-f",
+    default="txt",
+    help="Data format of scRNA-seq data, can be 'txt' or 'h5ad' [default: 'txt']",
+)
+def simulate(out, data, cells, n_samples, pattern, unknown, prefix, data_format):
     """ Create artificial bulk RNA-seq data from scRNA-seq dataset(s)"""
     simulation(
         simulate_dir=out,
@@ -203,7 +211,22 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix):
         pattern=pattern,
         unknown_celltypes=unknown,
         out_prefix=prefix,
+        fmt=data_format
     )
+
+
+"""
+Merge simulated datasets
+"""
+
+
+@cli.command()
+@click.option("--data", "-d", default=".", help="Directory containing simulated datasets (in .h5ad format)")
+@click.option("--prefix", "-p", default="data", help="Prefix of output file [default: data]")
+@click.option("--files", "-f", default=None, help="Comma-separated list of filenames to merge")
+def merge(data, prefix, files):
+    """ Merge simulated datasets into on training dataset """
+    merge_datasets(data_dir=data, prefix=prefix, files=files)
 
 
 """
@@ -212,12 +235,13 @@ Generate example data
 
 
 @cli.command()
-@click.option("--out", "-o", default="./", help="Directory to store output files in")
 @click.option("--cells", "-c", default=10, help="Number of cells [default: 10]")
+@click.option("--types", "-t", default=5, help="Number of cell types [default: 5]")
 @click.option("--genes", "-g", default=100, help="Number of genes [default: 100]")
 @click.option("--out", "-o", default="./", help="Output directory [default: ./]")
 @click.option(
     "--samples", "-n", default=10, help="Number of bulk samples [default: 10]"
 )
-def example(cells, genes, samples, out):
-    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out)
+def example(cells, genes, samples, out, types):
+    """ Generate an example dataset """
+    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out, n_types=types)

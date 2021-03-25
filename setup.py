@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = "1.0.2"
+version = "1.1.0"
 
 
 with open("README.md", "r", encoding="UTF-8") as fh:
@@ -38,7 +38,6 @@ setup(
         "scikit-learn",
         "tensorflow>=2.0",
         "anndata",
-        "tqdm",
         "click",
         "h5py~=2.10.0",
         "rich",
