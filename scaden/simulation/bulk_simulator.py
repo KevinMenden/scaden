@@ -68,7 +68,7 @@ class BulkSimulator(object):
         files = glob.glob(os.path.join(self.data_path, self.pattern))
         files = [os.path.basename(x) for x in files]
         self.datasets = [x.replace(self.pattern.replace("*", ""), "") for x in files]
-        self.dataset_files = [x + ".h5ad" for x in self.datasets]
+        self.dataset_files = [os.path.join(self.out_dir, x + ".h5ad") for x in self.datasets]
 
         if len(self.datasets) == 0:
             logging.error("No datasets found! Have you specified the pattern correctly?")
@@ -114,7 +114,7 @@ class BulkSimulator(object):
         ann_data.uns['unknown'] = self.unknown_celltypes
         ann_data.uns['cell_types'] = celltypes
 
-        ann_data.write(self.out_dir + dataset + ".h5ad")
+        ann_data.write(os.path.join(self.out_dir, dataset + ".h5ad"))
 
     def load_dataset(self, dataset):
         """
@@ -303,7 +303,7 @@ class BulkSimulator(object):
         """
         non_celltype_obs = ["ds", "batch"]
         if not files:
-            files = glob.glob(data_dir + "*.h5ad")
+            files = glob.glob(os.path.join(data_dir, "*.h5ad"))
 
         logger.info(f"Merging datasets: {files} into [bold cyan]{out_name}")
 
