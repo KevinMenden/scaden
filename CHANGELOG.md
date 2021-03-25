@@ -8,6 +8,7 @@
 * Improved logging and using rich progress bar for training
 * Gene subsetting is now done only when merging datasets, which will allow to generate different combinations
 of simulated datasets
+* Added `scaden merge` command which allows merging of previously created datasets  
 
 ### Version 1.0.2
 

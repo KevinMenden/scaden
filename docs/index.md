@@ -8,3 +8,7 @@ at the [DZNE Tübingen](https://www.dzne.de/en/about-us/sites/tuebingen/) and th
 
 A paper describing Scaden has been published in Science Advances:
 [Deep-learning based cell composition analysis from tissue expression profiles](https://advances.sciencemag.org/content/6/30/eaba2619)
+
+For information about how to install Scaden, go to the [Installation](installation.md) section. Look in the [Usage](usage.md)
+section for general help with Scaden usage. In the [Datasets](datasets.md) section you'll find a list of prepared training datasets.
+You can also have a look in the [Blog](blog.md) section, where I summarize new features that are added to Scaden.

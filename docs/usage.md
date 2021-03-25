@@ -120,7 +120,13 @@ An example for a pattern would be `*_counts.txt`. This pattern would find the fo
 
 Make sure to include an `*` in your pattern!
 
-This command will create the artificial samples in the current working directory. You can also specificy an output directory using the `--out` parameter. Scaden will also directly create a .h5ad file in this directory, which is the file you will need for training. By default, this file will be called `data.h5ad`, however you can change the prefix using the `--prefix` flag.
+This command will create the artificial samples in the current working directory. You can also specificy an output directory using the `--out` parameter.
+Scaden will also directly create a .h5ad file in this directory, which is the file you will need for training.
+By default, this file will be called `data.h5ad`, however you can change the prefix using the `--prefix` flag.
+
+Alternatively, you can manually merge `.h5ad` files that have been created with `scaden simulate` from v1.1.0 on using
+the `scaden merge` command. Either point it to a directory of `.h5ad` files, or give it a comma-separated list of files
+to merge. Type `scaden merge --help` for details.
 
 ## File Formats
 For Scaden to work properly, your input files have to be correctly formatted. As long as you use Scadens inbuilt functionality to generate the training data, you should have no problem 
