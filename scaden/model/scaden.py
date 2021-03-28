@@ -14,8 +14,7 @@ from .functions import sample_scaling
 from rich.progress import Progress, BarColumn
 
 logger = logging.getLogger(__name__)
-tf.get_logger().setLevel('ERROR')
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
+
 
 class Scaden(object):
     """
@@ -304,7 +303,9 @@ class Scaden(object):
             BarColumn(bar_width=None),
         )
 
-        training_progress = progress_bar.add_task(self.model_name, total=self.num_steps, step=0, loss=1)
+        training_progress = progress_bar.add_task(
+            self.model_name, total=self.num_steps, step=0, loss=1
+        )
         with progress_bar:
 
             for step in range(self.num_steps):
@@ -319,12 +320,13 @@ class Scaden(object):
 
                 optimizer.apply_gradients(zip(grads, self.model.trainable_weights))
 
-                progress_bar.update(training_progress, advance=1, step=step, loss=f"{loss:.4f}")
+                progress_bar.update(
+                    training_progress, advance=1, step=step, loss=f"{loss:.4f}"
+                )
 
                 # Collect garbage after 100 steps - otherwise runs out of memory
                 if step % 100 == 0:
                     gc.collect()
-
 
         # Save the trained model
         self.model.save(self.model_dir)
