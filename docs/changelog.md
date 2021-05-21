@@ -1,5 +1,9 @@
 # Scaden Changelog
 
+## Version 1.1.1
+
+* Fixed bugs in scaden model definition [[#88](https://github.com/KevinMenden/scaden/issues/88)]
+
 ## Version 1.1.0
 
 * Reduced memory usage of `scaden simulate` significantly by performing simulation for one dataset at a time.
@@ -9,7 +13,6 @@
 * Gene subsetting is now done only when merging datasets, which will allow to generate different combinations
 of simulated datasets
 * Added `scaden merge` command which allows merging of previously created datasets  
-
 
 ### Version 1.0.2
 
@@ -26,13 +29,13 @@ of simulated datasets
 * Rebuild Scaden model and training to use TF2 Keras API instead of the old compatibility functions 
 * added `scaden example` command which allows to generate example data for test-running scaden and to inpstec the expected file format
 * added more tests and checks input reading function in `scaden simulate`
-* fixed bug in reading input data 
+* fixed bug in reading input data
 
 ### Version 0.9.6
 
-+ fixed Dockerfile (switched to pip installation)
-+ added better error messages to `simulate` command
-+ cleaned up dependencies
+* fixed Dockerfile (switched to pip installation)
+* added better error messages to `simulate` command
+* cleaned up dependencies
 
 ### v0.9.5
 
