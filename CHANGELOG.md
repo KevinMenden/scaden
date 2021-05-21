@@ -4,6 +4,7 @@
 
 * Fixed bugs in scaden model definition [[#88](https://github.com/KevinMenden/scaden/issues/88)]
 * removed installation instructions for bioconda as not functional at the moment [[#86](https://github.com/KevinMenden/scaden/issues/86)]
+* Fixed bug in `scaden example` [[#85](https://github.com/KevinMenden/scaden/issues/85)]
 
 ## Version 1.1.0
 
