@@ -51,9 +51,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
         do_rates=M256_DO_RATES,
     )
     # Predict ratios
-    preds_256 = cdn256.predict(
-        input_path=data_path
-    )
+    preds_256 = cdn256.predict(input_path=data_path)
 
     # Mid model predictions
     cdn512 = Scaden(
@@ -64,9 +62,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
         do_rates=M512_DO_RATES,
     )
     # Predict ratios
-    preds_512 = cdn512.predict(
-        input_path=data_path
-    )
+    preds_512 = cdn512.predict(input_path=data_path)
 
     # Large model predictions
     cdn1024 = Scaden(
@@ -74,12 +70,10 @@ def prediction(model_dir, data_path, out_name, seed=0):
         model_name="m1024",
         seed=seed,
         hidden_units=M1024_HIDDEN_UNITS,
-        do_rates=M256_DO_RATES,
+        do_rates=M1024_DO_RATES,
     )
     # Predict ratios
-    preds_1024 = cdn1024.predict(
-        input_path=data_path
-    )
+    preds_1024 = cdn1024.predict(input_path=data_path)
 
     # Average predictions
     preds = (preds_256 + preds_512 + preds_1024) / 3

@@ -1,5 +1,9 @@
 # Scaden Changelog
 
+## Version 1.2.0
+
+* Fixed bugs in scaden model definition
+
 ## Version 1.1.0
 
 * Reduced memory usage of `scaden simulate` significantly by performing simulation for one dataset at a time.

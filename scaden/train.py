@@ -60,7 +60,7 @@ def training(
         num_steps=num_steps,
         seed=seed,
         hidden_units=M256_HIDDEN_UNITS,
-        do_rates=M512_DO_RATES,
+        do_rates=M256_DO_RATES,
     )
     cdn256.train(input_path=data_path, train_datasets=train_datasets)
     del cdn256
