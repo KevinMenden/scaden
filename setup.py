@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = "1.1.0"
+version = "1.1.1"
 
 
 with open("README.md", "r", encoding="UTF-8") as fh:
@@ -39,7 +39,7 @@ setup(
         "tensorflow>=2.0",
         "anndata",
         "click",
-        "h5py~=2.10.0",
+        "h5py",
         "rich",
     ],
 )

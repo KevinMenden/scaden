@@ -1,22 +1,16 @@
 # Installation
+
 Scaden be easily installed on a Linux system, and should also work on Mac. 
 There are currently two options for installing Scaden, either using [Bioconda](https://bioconda.github.io/) or via [pip](https://pypi.org/).
 
-
 ## pip
+
 To install Scaden via pip, simply run the following command:
 
 `pip install scaden`
 
-
-## Bioconda
-Bioconda installation is currently not supported for the newest Scaden versions, but this will hopefully change soon.
-It is therefore highly recommended to install via pip.
-
-`conda install -c bioconda scaden`
-
-
 ## Docker
+
 If you don't want to install Scaden at all, but rather use a Docker container, we provide that as well.
 For every release, we provide two version - one for CPU and one for GPU usage.
 To pull the CPU container, use this command:
@@ -28,6 +22,7 @@ For the GPU container:
 `docker pull ghcr.io/kevinmenden/scaden/scaden-gpu`
 
 ## Webtool (beta)
+
 We now also provide a webtool for you:
 
 [https://scaden.ims.bio](https://scaden.ims.bio)

@@ -5,6 +5,8 @@ import rich
 import rich.logging
 import logging
 import os
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 import tensorflow as tf
 from scaden.train import training
 from scaden.predict import prediction
@@ -12,6 +14,7 @@ from scaden.process import processing
 from scaden.simulate import simulation
 from scaden.example import exampleData
 from scaden.merge import merge_datasets
+
 """
 
 author: Kevin Menden
@@ -30,8 +33,6 @@ logger.addHandler(
         markup=True,
     )
 )
-
-os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 
 def main():
@@ -147,7 +148,7 @@ Processing mode
     "--var_cutoff",
     default=0.1,
     help="Filter out genes with a variance less than the specified cutoff. A low cutoff is recommended,"
-         "this should only remove genes that are obviously uninformative.",
+    "this should only remove genes that are obviously uninformative.",
 )
 def process(data_path, prediction_data, processed_path, var_cutoff):
     """ Process a dataset for training """
@@ -187,7 +188,7 @@ Simulate dataset
     multiple=True,
     default=["unknown"],
     help="Specifiy cell types to merge into the unknown category. Specify this flag for every cell type you want to "
-         "merge in unknown. [default: unknown]",
+    "merge in unknown. [default: unknown]",
 )
 @click.option(
     "--prefix",
@@ -211,7 +212,7 @@ def simulate(out, data, cells, n_samples, pattern, unknown, prefix, data_format)
         pattern=pattern,
         unknown_celltypes=unknown,
         out_prefix=prefix,
-        fmt=data_format
+        fmt=data_format,
     )
 
 
@@ -221,9 +222,18 @@ Merge simulated datasets
 
 
 @cli.command()
-@click.option("--data", "-d", default=".", help="Directory containing simulated datasets (in .h5ad format)")
-@click.option("--prefix", "-p", default="data", help="Prefix of output file [default: data]")
-@click.option("--files", "-f", default=None, help="Comma-separated list of filenames to merge")
+@click.option(
+    "--data",
+    "-d",
+    default=".",
+    help="Directory containing simulated datasets (in .h5ad format)",
+)
+@click.option(
+    "--prefix", "-p", default="data", help="Prefix of output file [default: data]"
+)
+@click.option(
+    "--files", "-f", default=None, help="Comma-separated list of filenames to merge"
+)
 def merge(data, prefix, files):
     """ Merge simulated datasets into on training dataset """
     merge_datasets(data_dir=data, prefix=prefix, files=files)
@@ -244,4 +254,6 @@ Generate example data
 )
 def example(cells, genes, samples, out, types):
     """ Generate an example dataset """
-    exampleData(n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out, n_types=types)
+    exampleData(
+        n_cells=cells, n_genes=genes, n_samples=samples, out_dir=out, n_types=types
+    )

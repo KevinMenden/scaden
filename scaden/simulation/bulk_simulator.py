@@ -9,6 +9,7 @@ import anndata as ad
 import numpy as np
 
 from rich.progress import BarColumn, Progress
+
 logger = logging.getLogger(__name__)
 
 
@@ -38,13 +39,16 @@ class BulkSimulator(object):
     :param fmt: the format of the input files, can be txt or h5ad
     """
 
-    def __init__(self, sample_size=100,
-                 num_samples=1000,
-                 data_path="./",
-                 out_dir="./",
-                 pattern="*_counts.txt",
-                 unknown_celltypes=None,
-                 fmt="txt"):
+    def __init__(
+        self,
+        sample_size=100,
+        num_samples=1000,
+        data_path="./",
+        out_dir="./",
+        pattern="*_counts.txt",
+        unknown_celltypes=None,
+        fmt="txt",
+    ):
         if unknown_celltypes is None:
             unknown_celltypes = ["unknown"]
 
@@ -59,8 +63,7 @@ class BulkSimulator(object):
         self.dataset_files = []
 
     def simulate(self):
-        """ simulate artificial bulk datasets
-        """
+        """simulate artificial bulk datasets"""
 
         # List available datasets
         if not self.data_path.endswith("/"):
@@ -68,10 +71,14 @@ class BulkSimulator(object):
         files = glob.glob(os.path.join(self.data_path, self.pattern))
         files = [os.path.basename(x) for x in files]
         self.datasets = [x.replace(self.pattern.replace("*", ""), "") for x in files]
-        self.dataset_files = [os.path.join(self.out_dir, x + ".h5ad") for x in self.datasets]
+        self.dataset_files = [
+            os.path.join(self.out_dir, x + ".h5ad") for x in self.datasets
+        ]
 
         if len(self.datasets) == 0:
-            logging.error("No datasets found! Have you specified the pattern correctly?")
+            logging.error(
+                "No datasets found! Have you specified the pattern correctly?"
+            )
             sys.exit(1)
 
         logger.info("Datasets: [cyan]" + str(self.datasets) + "[/]")
@@ -104,15 +111,21 @@ class BulkSimulator(object):
 
         # Extract celltypes
         celltypes = list(set(data_y["Celltype"].tolist()))
-        tmp_x, tmp_y = self.create_subsample_dataset(data_x, data_y, celltypes=celltypes)
+        tmp_x, tmp_y = self.create_subsample_dataset(
+            data_x, data_y, celltypes=celltypes
+        )
 
         tmp_x = tmp_x.sort_index(axis=1)
         ratios = pd.DataFrame(tmp_y, columns=celltypes)
         ratios["ds"] = pd.Series(np.repeat(dataset, tmp_y.shape[0]), index=ratios.index)
 
-        ann_data = ad.AnnData(X=tmp_x.to_numpy(), obs=ratios, var=pd.DataFrame(columns=[], index=list(tmp_x)))
-        ann_data.uns['unknown'] = self.unknown_celltypes
-        ann_data.uns['cell_types'] = celltypes
+        ann_data = ad.AnnData(
+            X=tmp_x.to_numpy(),
+            obs=ratios,
+            var=pd.DataFrame(columns=[], index=list(tmp_x)),
+        )
+        ann_data.uns["unknown"] = self.unknown_celltypes
+        ann_data.uns["cell_types"] = celltypes
 
         ann_data.write(os.path.join(self.out_dir, dataset + ".h5ad"))
 
@@ -130,7 +143,7 @@ class BulkSimulator(object):
         dataset_celltypes = dataset + "_celltypes.txt"
 
         # Load data in .txt format
-        if self.format == 'txt':
+        if self.format == "txt":
             # Try to load celltypes
             try:
                 y = pd.read_table(os.path.join(self.data_path, dataset_celltypes))
@@ -149,7 +162,11 @@ class BulkSimulator(object):
 
             # Try to load data file
             try:
-                x = pd.read_table(os.path.join(self.data_path, dataset_counts), index_col=0)
+                x = pd.read_table(
+                    os.path.join(self.data_path, dataset_counts),
+                    index_col=0,
+                    dtype=np.float16,
+                )
             except FileNotFoundError as e:
                 logger.error(
                     f"No counts file found for [cyan]{dataset}[/]. Was looking for file [cyan]{dataset_counts}[/]"
@@ -165,7 +182,7 @@ class BulkSimulator(object):
                 sys.exit(1)
 
         # Load data in .h5ad format
-        elif self.format == 'h5ad':
+        elif self.format == "h5ad":
             try:
                 data_h5ad = ad.read_h5ad(os.path.join(self.data_path, dataset_counts))
             except FileNotFoundError as e:
@@ -178,9 +195,7 @@ class BulkSimulator(object):
                 y = pd.DataFrame(data_h5ad.obs.Celltype)
                 y.reset_index(inplace=True, drop=True)
             except Exception as e:
-                logger.error(
-                    f"Celltype attribute not found for [cyan]{dataset}"
-                )
+                logger.error(f"Celltype attribute not found for [cyan]{dataset}")
                 sys.exit(e)
             # counts
             x = pd.DataFrame(data_h5ad.X.todense())
@@ -188,9 +203,7 @@ class BulkSimulator(object):
             x.columns = data_h5ad.var_names
             del data_h5ad
         else:
-            logger.error(
-                f"Unsupported file format {self.format}!"
-            )
+            logger.error(f"Unsupported file format {self.format}!")
             sys.exit(1)
 
         return x, y
@@ -202,7 +215,9 @@ class BulkSimulator(object):
         :return: list of cell types with unknown cell types merged into "Unknown" type
         """
         celltypes = list(y["Celltype"])
-        new_celltypes = ["Unknown" if x in self.unknown_celltypes else x for x in celltypes]
+        new_celltypes = [
+            "Unknown" if x in self.unknown_celltypes else x for x in celltypes
+        ]
         y["Celltype"] = new_celltypes
         return y
 
@@ -222,22 +237,26 @@ class BulkSimulator(object):
         progress_bar = Progress(
             "[bold blue]{task.description}",
             "[bold cyan]{task.fields[samples]}",
-            BarColumn(bar_width=None)
+            BarColumn(bar_width=None),
         )
         with progress_bar:
-            normal_samples_progress = progress_bar.add_task("Normal samples", total=self.num_samples, samples=0)
-            sparse_samples_progress = progress_bar.add_task("Sparse samples", total=self.num_samples, samples=0)
+            normal_samples_progress = progress_bar.add_task(
+                "Normal samples", total=self.num_samples, samples=0
+            )
+            sparse_samples_progress = progress_bar.add_task(
+                "Sparse samples", total=self.num_samples, samples=0
+            )
 
             # Create normal samples
             for i in range(self.num_samples):
-                progress_bar.update(normal_samples_progress, advance=1, samples=i+1)
+                progress_bar.update(normal_samples_progress, advance=1, samples=i + 1)
                 sample, label = self.create_subsample(x, y, celltypes)
                 sim_x.append(sample)
                 sim_y.append(label)
 
             # Create sparase samples
             for i in range(self.num_samples):
-                progress_bar.update(sparse_samples_progress, advance=1, samples=i+1)
+                progress_bar.update(sparse_samples_progress, advance=1, samples=i + 1)
                 sample, label = self.create_subsample(x, y, celltypes, sparse=True)
                 sim_x.append(sample)
                 sim_y.append(label)
@@ -314,9 +333,11 @@ class BulkSimulator(object):
             adata = adata.concatenate(ad.read_h5ad(files[i]), uns_merge="same")
 
         combined_celltypes = list(adata.obs.columns)
-        combined_celltypes = [x for x in combined_celltypes if not x in non_celltype_obs]
+        combined_celltypes = [
+            x for x in combined_celltypes if not x in non_celltype_obs
+        ]
         for ct in combined_celltypes:
             adata.obs[ct].fillna(0, inplace=True)
 
-        adata.uns['cell_types'] = combined_celltypes
+        adata.uns["cell_types"] = combined_celltypes
         adata.write(out_name)
