@@ -1,5 +1,9 @@
 # Scaden Changelog
 
+## Version 1.1.2
+
+* Changed datatype for data simulation back to `float32`
+
 ## Version 1.1.1
 
 * Fixed bugs in scaden model definition [[#88](https://github.com/KevinMenden/scaden/issues/88)]
