@@ -165,7 +165,7 @@ class BulkSimulator(object):
                 x = pd.read_table(
                     os.path.join(self.data_path, dataset_counts),
                     index_col=0,
-                    dtype=np.float16,
+                    dtype=np.float32,
                 )
             except FileNotFoundError as e:
                 logger.error(

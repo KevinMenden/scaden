@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = "1.1.1"
+version = "1.1.2"
 
 
 with open("README.md", "r", encoding="UTF-8") as fh:
