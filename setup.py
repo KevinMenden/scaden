@@ -2,7 +2,7 @@
 
 from setuptools import setup, find_packages
 
-version = "1.1.2"
+version = "1.1.3"
 
 
 with open("README.md", "r", encoding="UTF-8") as fh:
@@ -36,7 +36,8 @@ setup(
         "pandas",
         "numpy",
         "scikit-learn",
-        "tensorflow>=2.0",
+        "tensorflow==2.13.0",
+        "keras==2.13.1",
         "anndata",
         "click",
         "h5py",
