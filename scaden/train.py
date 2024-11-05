@@ -11,6 +11,7 @@ Contains code to
 # Imports
 import logging
 from scaden.model.scaden import Scaden
+from scaden.model.architectures import architectures
 
 
 logger = logging.getLogger(__name__)
