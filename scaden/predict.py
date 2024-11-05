@@ -52,6 +52,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
     # Predict ratios
     preds_256 = cdn256.predict(input_path=data_path)
 
+    tf.keras.backend.clear_session()
     # Mid model predictions
     cdn512 = Scaden(
         model_dir=model_dir + "/m512",
@@ -63,6 +64,7 @@ def prediction(model_dir, data_path, out_name, seed=0):
     # Predict ratios
     preds_512 = cdn512.predict(input_path=data_path)
 
+    tf.keras.backend.clear_session()
     # Large model predictions
     cdn1024 = Scaden(
         model_dir=model_dir + "/m1024",

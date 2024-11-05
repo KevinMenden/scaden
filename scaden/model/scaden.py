@@ -6,6 +6,7 @@ import logging
 import sys
 import gc
 import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 import numpy as np
 import pandas as pd
 from anndata import read_h5ad
@@ -72,6 +73,7 @@ class Scaden(object):
 
         return model
 
+    @tf.function
     def compute_loss(self, logits, targets):
         """
         Compute L1 loss
@@ -82,6 +84,7 @@ class Scaden(object):
         loss = tf.reduce_mean(input_tensor=tf.math.square(logits - targets))
         return loss
 
+    @tf.function
     def compute_accuracy(self, logits, targets, pct_cut=0.05):
         """
         Compute prediction accuracy
@@ -95,6 +98,7 @@ class Scaden(object):
         accuracy = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
         return accuracy
 
+    @tf.function
     def correlation_coefficient(self, logits, targets):
         """
         Calculate the pearson correlation coefficient
@@ -254,7 +258,7 @@ class Scaden(object):
         self.n_classes = len(self.labels)
 
         try:
-            self.model = tf.keras.models.load_model(self.model_dir, compile=False)
+            self.model = tf.keras.models.load_model(self.model_dir)
             logger.info(f"Loaded pre-trained model: [cyan]{self.model_name}")
         except:
             self.model = self.scaden_model(n_classes=self.n_classes)
