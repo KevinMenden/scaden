@@ -10,8 +10,9 @@ Contains code to
 
 # Imports
 import logging
-from scaden.model.architectures import architectures
+import tensorflow as tf
 from scaden.model.scaden import Scaden
+from scaden.model.architectures import architectures
 
 
 logger = logging.getLogger(__name__)
@@ -64,6 +65,7 @@ def training(
     )
     cdn256.train(input_path=data_path, train_datasets=train_datasets)
     del cdn256
+    tf.keras.backend.clear_session()
 
     # Training of M512 model
     logger.info("[cyan]Training M512 Model ... [/]")
@@ -79,6 +81,7 @@ def training(
     )
     cdn512.train(input_path=data_path, train_datasets=train_datasets)
     del cdn512
+    tf.keras.backend.clear_session()
 
     # Training of M1024 model
     logger.info("[cyan]Training M1024 Model ... [/]")
@@ -94,5 +97,6 @@ def training(
     )
     cdn1024.train(input_path=data_path, train_datasets=train_datasets)
     del cdn1024
+    tf.keras.backend.clear_session()
 
     logger.info("[green]Training finished.")

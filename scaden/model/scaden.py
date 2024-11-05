@@ -6,6 +6,7 @@ import logging
 import sys
 import gc
 import tensorflow as tf
+tf.compat.v1.logging.set_verbosity(tf.compat.v1.logging.ERROR)
 import numpy as np
 import pandas as pd
 from anndata import read_h5ad
@@ -72,6 +73,7 @@ class Scaden(object):
 
         return model
 
+    @tf.function
     def compute_loss(self, logits, targets):
         """
         Compute L1 loss
@@ -82,6 +84,7 @@ class Scaden(object):
         loss = tf.reduce_mean(input_tensor=tf.math.square(logits - targets))
         return loss
 
+    @tf.function
     def compute_accuracy(self, logits, targets, pct_cut=0.05):
         """
         Compute prediction accuracy
@@ -95,6 +98,7 @@ class Scaden(object):
         accuracy = tf.reduce_mean(input_tensor=tf.cast(equality, tf.float32))
         return accuracy
 
+    @tf.function
     def correlation_coefficient(self, logits, targets):
         """
         Calculate the pearson correlation coefficient
@@ -124,36 +128,23 @@ class Scaden(object):
         :return:
         """
         # add evaluation metrics
-        rmse = tf.compat.v1.metrics.root_mean_squared_error(logits, targets)[1]
+        rmse = tf.sqrt(tf.reduce_mean(tf.square(logits - targets)))
         pcor = self.correlation_coefficient(logits, targets)
         eval_metrics = {"rmse": rmse, "pcor": pcor}
 
         for i in range(logits.shape[1]):
             eval_metrics[
                 "mre_" + str(classes[i])
-            ] = tf.compat.v1.metrics.mean_relative_error(
-                targets[:, i], logits[:, i], targets[:, i]
-            )[
-                0
-            ]
+            ] = tf.reduce_mean(tf.abs((targets[:, i] - logits[:, i]) / targets[:, i]))
             eval_metrics[
                 "mae_" + str(classes[i])
-            ] = tf.compat.v1.metrics.mean_absolute_error(
-                targets[:, i], logits[:, i], targets[:, i]
-            )[
-                0
-            ]
+            ] = tf.reduce_mean(tf.abs(targets[:, i] - logits[:, i]))
             eval_metrics["pcor_" + str(classes[i])] = self.correlation_coefficient(
                 targets[:, i], logits[:, i]
             )
 
-        eval_metrics["mre_total"] = tf.compat.v1.metrics.mean_relative_error(
-            targets, logits, targets
-        )[1]
-
-        eval_metrics["mae_total"] = tf.compat.v1.metrics.mean_relative_error(
-            targets, logits, targets
-        )[1]
+        eval_metrics["mre_total"] = tf.reduce_mean(tf.abs((targets - logits) / targets))
+        eval_metrics["mae_total"] = tf.reduce_mean(tf.abs(targets - logits))
 
         eval_metrics["accuracy01"] = self.compute_accuracy(
             logits, targets, pct_cut=0.01
@@ -163,15 +154,6 @@ class Scaden(object):
         )
         eval_metrics["accuracy1"] = self.compute_accuracy(logits, targets, pct_cut=0.1)
 
-        # Create summary scalars
-        for key, value in eval_metrics.items():
-            tf.compat.v1.summary.scalar(key, value)
-
-        tf.compat.v1.summary.scalar("loss", self.loss)
-
-        merged_summary_op = tf.compat.v1.summary.merge_all()
-
-        return merged_summary_op
 
     def load_h5ad_file(self, input_path, batch_size, datasets=[]):
         """
@@ -276,7 +258,7 @@ class Scaden(object):
         self.n_classes = len(self.labels)
 
         try:
-            self.model = tf.keras.models.load_model(self.model_dir, compile=False)
+            self.model = tf.keras.models.load_model(self.model_dir)
             logger.info(f"Loaded pre-trained model: [cyan]{self.model_name}")
         except:
             self.model = self.scaden_model(n_classes=self.n_classes)

@@ -128,3 +128,4 @@ dmypy.json
 scaden.egg-info
 .vscode
 .vscode/
+.aider*
