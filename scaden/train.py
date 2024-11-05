@@ -10,7 +10,6 @@ Contains code to
 
 # Imports
 import logging
-from scaden.model.architectures import architectures
 from scaden.model.scaden import Scaden
 
 

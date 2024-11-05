@@ -5,7 +5,6 @@ import logging
 import collections
 from anndata import read_h5ad
 import numpy as np
-import tensorflow as tf
 from sklearn import preprocessing as pp
 import pandas as pd
 
