@@ -12,6 +12,7 @@ Contains code to
 import logging
 from anndata import read_h5ad
 from scaden.model.architectures import architectures
+import tensorflow as tf
 from scaden.model.scaden import Scaden
 
 logger = logging.getLogger(__name__)

@@ -10,6 +10,7 @@ Contains code to
 
 # Imports
 import logging
+import tensorflow as tf
 from scaden.model.scaden import Scaden
 from scaden.model.architectures import architectures
 
